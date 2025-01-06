@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const controller = require('./src/controller');
 const database = require('./src/modules/database');
 
 (async ()=>{
@@ -9,6 +10,7 @@ const database = require('./src/modules/database');
     // 初始化 Express 應用
     const app = express();
     app.use(bodyParser.json());
+    app.use(controller);
 
     // 啟動伺服器
     const port = 3000;
