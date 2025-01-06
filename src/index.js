@@ -1,12 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const controller = require('./src/controller');
-const database = require('./src/modules/database');
+const controller = require('./controller');
+const database = require('./modules/database');
 
 (async ()=>{
     // 初始化db
-    const db = new database();
-    await db.init();
+    await database.init();
     // 初始化 Express 應用
     const app = express();
     app.use(bodyParser.json());
