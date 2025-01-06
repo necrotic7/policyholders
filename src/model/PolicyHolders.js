@@ -14,62 +14,72 @@ class Policyholders {
 
     async queryPolicyDataByCode(args){
         const TAG = '[透過代號取得保戶資訊]';
-        const { code } = args;
-        // 查詢指定保戶編號的資料與其下級
-        const sql = `
+        try{
+            const { code } = args;
+            // 查詢指定保戶編號的資料與其下級
+            const sql = `
             SELECT 
-                *
+                ID AS "code",
+                NAME AS "name",
+                LEFT_CHILD_ID AS "left_child_id",
+                RIGHT_CHILD_ID AS "right_child_id",
+                TO_CHAR(REGISTRATION_DATE, 'YYYY-MM-DD HH24:Mi:SS') AS "registration_date",
+                INTRODUCER_ID AS "introducer_code"
             FROM policyholders
             WHERE 1 = 1
             CONNECT BY parent_id = PRIOR id
             START WITH id = :code
         `;
-        const params = {
-            code
-        };
+            const params = {
+                code
+            };
 
-        const result = await database.execute(sql, params);
-        if(!result || result?.length == 0){
-            console.log(TAG, `找不到保戶編號(${code})`);
-            throw new Error('找不到保戶');
+            const result = await database.execute(sql, params);
+            if(!result || result?.length == 0){
+                console.log(TAG, `找不到保戶編號(${code})`);
+                throw new Error('找不到保戶');
+            }
+
+            args.policyData = result;
+            return args;
+        } catch(err){
+            console.log(TAG, `發生錯誤：${err}`);
+            throw err;
         }
-
-        args.policyData = result;
-        return args;
     }
 
     fmtPolicyHolderByCode(args){
         const { policyData, code } = args;
-        const root = policyData.find(d => d.ID == code);
+        const root = policyData.find(d => d.code == code);
 
         const response = {
-            code: root.ID,
-            name: root.NAME,
-            registration_date: root.REGISTRATION_DATE,
-            introducer_code: root.INTRODUCER_CODE,
+            code: root.code,
+            name: root.name,
+            registration_date: root.registration_date,
+            introducer_code: root.introducer_code,
             l:[],
             r:[],
         };
 
         policyData.map(d => {
-            const left = d.LEFT_CHILD_ID;
-            const right = d.RIGHT_CHILD_ID;
+            const left = d.left_child_id;
+            const right = d.right_child_id;
             if(left){
-                const leftData = policyData.find(d => d.ID == left);
+                const leftData = policyData.find(d => d.code == left);
                 response.l.push({
-                    code: leftData.ID,
-                    name: leftData.NAME,
-                    registration_date: leftData.REGISTRATION_DATE,
-                    introducer_code: leftData.INTRODUCER_CODE,
+                    code: leftData.code,
+                    name: leftData.name,
+                    registration_date: leftData.registration_date,
+                    introducer_code: leftData.introducer_code,
                 });
             }
             if(right){
-                const rightData = policyData.find(d => d.ID == right);
+                const rightData = policyData.find(d => d.code == right);
                 response.r.push({
-                    code: rightData.ID,
-                    name: rightData.NAME,
-                    registration_date: rightData.REGISTRATION_DATE,
-                    introducer_code: rightData.INTRODUCER_CODE,
+                    code: rightData.code,
+                    name: rightData.name,
+                    registration_date: rightData.registration_date,
+                    introducer_code: rightData.introducer_code,
                 });
             }
         });
