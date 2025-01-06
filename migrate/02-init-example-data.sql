@@ -1,16 +1,36 @@
-INSERT INTO Policyholders (id, parent_id, left_child_id, right_child_id, code, name, registration_date, introducer_code) VALUES
-(1, NULL, 2, 3, 'PH001', 'Alice', '2025-01-03 09:00:00', NULL),
-(2, 1, 4, 5, 'PH002', 'Bob', '2025-01-03 09:30:00', 'PH001'),
-(3, 1, 6, 7, 'PH003', 'Charlie', '2025-01-03 10:00:00', 'PH001'),
-(4, 2, 8, 9, 'PH004', 'David', '2025-01-03 10:30:00', 'PH002'),
-(5, 2, 10, 11, 'PH005', 'Eve', '2025-01-03 11:00:00', 'PH002'),
-(6, 3, 12, 13, 'PH006', 'Frank', '2025-01-03 11:30:00', 'PH003'),
-(7, 3, 14, 15, 'PH007', 'Grace', '2025-01-03 12:00:00', 'PH003'),
-(8, 4, NULL, NULL, 'PH008', 'Henry', '2025-01-03 12:30:00', 'PH004'),
-(9, 4, NULL, NULL, 'PH009', 'Irene', '2025-01-03 13:00:00', 'PH004'),
-(10, 5, NULL, NULL, 'PH010', 'Jack', '2025-01-03 13:30:00', 'PH005'),
-(11, 5, NULL, NULL, 'PH011', 'Kelly', '2025-01-03 14:00:00', 'PH005'),
-(12, 6, NULL, NULL, 'PH012', 'Liam', '2025-01-03 14:30:00', 'PH006'),
-(13, 6, NULL, NULL, 'PH013', 'Mia', '2025-01-03 15:00:00', 'PH006'),
-(14, 7, NULL, NULL, 'PH014', 'Noah', '2025-01-03 15:30:00', 'PH007'),
-(15, 7, NULL, NULL, 'PH015', 'Olivia', '2025-01-03 16:00:00', 'PH007');
+-- 根節點
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (1, NULL, 2, 3, 'Alice', '2024-01-01 10:00:00', NULL);
+
+-- 第二層
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (2, 1, 4, 5, 'Bob', '2024-01-02 11:00:00', 1);
+
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (3, 1, 6, 7, 'Charlie', '2024-01-02 12:00:00', 1);
+
+-- 第三層
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (4, 2, 8, 9, 'David', '2024-01-03 09:00:00', 2);
+
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (5, 2, NULL,NULL, 'Eve', '2024-01-03 10:00:00', 2);
+
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (6, 3, 11, NULL, 'Frank', '2024-01-03 11:00:00', 3);
+
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (7, 3, NULL,NULL, 'Grace', '2024-01-03 12:00:00', 3);
+
+-- 第四層
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (8, 4, NULL, NULL, 'Henry', '2024-01-04 09:00:00', 4);
+
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (9, 4, 10, NULL, 'Ivy', '2024-01-04 10:00:00', 4);
+
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (10, 9, NULL, NULL, 'Jack', '2024-01-04 11:00:00', 9);
+
+INSERT INTO policyholders (id, parent_id, left_child_id, right_child_id, name, registration_date, introducer_id) 
+VALUES (11, 6, NULL, NULL, 'Kim', '2024-01-04 12:00:00', 6);

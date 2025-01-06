@@ -1,10 +1,11 @@
 ## 測試結構
-                 Alice (PH001)
-                /            \
-       Bob (PH002)       Charlie (PH003)
-       /        \            /        \
-David (PH004)  Eve (PH005)  Frank (PH006)  Grace (PH007)
-   /    \         /   \          /   \          /   \
-Henry (PH008)  Ivy (PH009)  Jack (PH010)  Kim (PH011)
- /  \            /   \
-Leo (PH012)  Mia (PH013)  Nora (PH014)  Owen (PH015)
+                      1 (Alice)
+                    /          \
+            2 (Bob)         3 (Charlie)
+            /      \         /         \
+    4 (David)    5 (Eve)  6 (Frank)  7 (Grace)
+       /   \             / 
+    8(Hen)  9(Ivy)     11(Kim)
+           /
+        10(Jack)
+        
