@@ -8,7 +8,7 @@ class Policyholders {
             code
         };
         args = await this.queryPolicyDataByCode(args);
-        args = this.fmtPolicyHolderByCode(args);
+        args = this.fmtPolicyHolderTree(args);
         return args.response;
     }
 
@@ -18,18 +18,21 @@ class Policyholders {
             const { code } = args;
             // 查詢指定保戶編號的資料與其下級
             const sql = `
-            SELECT 
-                ID AS "code",
-                NAME AS "name",
-                LEFT_CHILD_ID AS "left_child_id",
-                RIGHT_CHILD_ID AS "right_child_id",
-                TO_CHAR(REGISTRATION_DATE, 'YYYY-MM-DD HH24:Mi:SS') AS "registration_date",
-                INTRODUCER_ID AS "introducer_code"
-            FROM policyholders
-            WHERE 1 = 1
-            CONNECT BY parent_id = PRIOR id
-            START WITH id = :code
-        `;
+                SELECT
+                    LEVEL AS "level",
+                    ID AS "code",
+                    NAME AS "name",
+                    PARENT_ID AS "parent_id",
+                    LEFT_CHILD_ID AS "left_child_id",
+                    RIGHT_CHILD_ID AS "right_child_id",
+                    TO_CHAR(REGISTRATION_DATE, 'YYYY-MM-DD HH24:Mi:SS') AS "registration_date",
+                    INTRODUCER_ID AS "introducer_code"
+                FROM policyholders
+                WHERE 1 = 1
+                CONNECT BY parent_id = PRIOR id
+                START WITH id = :code
+                ORDER BY LEVEL ASC
+            `;
             const params = {
                 code
             };
@@ -48,39 +51,41 @@ class Policyholders {
         }
     }
 
-    fmtPolicyHolderByCode(args){
-        const { policyData, code } = args;
-        const root = policyData.find(d => d.code == code);
-
-        const response = {
-            code: root.code,
-            name: root.name,
-            registration_date: root.registration_date,
-            introducer_code: root.introducer_code,
-            l:[],
-            r:[],
+    fmtPolicyHolderData(data){
+        return {
+            code: data.code,
+            name: data.name,
+            registration_date: data.registration_date,
+            introducer_code: data.introducer_code,
+            l:data.l,
+            r:data.r,
         };
+    }
+
+    fmtPolicyHolderTree(args){
+        const { policyData } = args;
+        const nodeMap = new Map();
+        policyData.map(d => {
+            d.l = [];
+            d.r = [];
+            nodeMap.set(d.code, d);
+        });
+        let response = {};
 
         policyData.map(d => {
-            const left = d.left_child_id;
-            const right = d.right_child_id;
-            if(left){
-                const leftData = policyData.find(d => d.code == left);
-                response.l.push({
-                    code: leftData.code,
-                    name: leftData.name,
-                    registration_date: leftData.registration_date,
-                    introducer_code: leftData.introducer_code,
-                });
+            if(d.level == 1){
+                response = this.fmtPolicyHolderData(d);
+                return;
             }
-            if(right){
-                const rightData = policyData.find(d => d.code == right);
-                response.r.push({
-                    code: rightData.code,
-                    name: rightData.name,
-                    registration_date: rightData.registration_date,
-                    introducer_code: rightData.introducer_code,
-                });
+            const parent = nodeMap.get(d.parent_id);
+
+            if(parent.left_child_id == d.code){
+                parent.l.push(this.fmtPolicyHolderData(d));
+                return;
+            }
+            if(parent.right_child_id == d.code){
+                parent.r.push(this.fmtPolicyHolderData(d));
+                return;
             }
         });
 
