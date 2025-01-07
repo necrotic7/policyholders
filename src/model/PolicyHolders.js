@@ -4,6 +4,11 @@ const exception = require('../modules/exception');
 class Policyholders {
     constructor(){}
 
+    /**
+     * 執行 透過保戶編號取得保戶階層 流程
+     * @param {string} code 保戶編號
+     * @returns {object} args.response
+     */
     async getPolicyHolderByCode(code){
         let args = {
             code
@@ -13,8 +18,15 @@ class Policyholders {
         return args.response;
     }
 
+    /**
+     * 透過代號取得保戶資訊
+     * @param {object} args
+     * @param {string} args.code 保戶編號
+     * @returns {object} 返回包含保戶資料的物件
+     * @returns {Array} policyData - 保戶資料集
+     */
     async queryPolicyDataByCode(args){
-        const TAG = '[透過代號取得保戶資訊]';
+        const TAG = '[透過保戶編號取得保戶資訊]';
         try{
             const { code } = args;
             // 查詢指定保戶編號的資料與其下級
@@ -52,6 +64,11 @@ class Policyholders {
         }
     }
 
+    /**
+     * 執行 透過父級保戶編號取得保戶階層 流程
+     * @param {string} code 保戶編號
+     * @returns {object} response
+     */
     async getPolicyHolderTopByCode(code){
         let args = {
             code
@@ -61,6 +78,13 @@ class Policyholders {
         return args.response;
     }
 
+    /**
+     * 透過子代號取得父保戶資訊
+     * @param {object} args
+     * @param {string} args.code 保戶編號
+     * @returns {object} 返回包含保戶資料的物件
+     * @returns {Array} policyData - 保戶資料集
+     */
     async queryPolicyTopDataByChildCode(args){
         const TAG = '[透過子代號取得父保戶資訊]';
         try{
@@ -106,6 +130,17 @@ class Policyholders {
         }
     }
 
+    /**
+     * 整理保戶格式
+     * @param {object} data 保戶資料
+     * @param {string} data.code 保戶編號
+     * @param {string} data.name 保戶姓名
+     * @param {string} data.registration_date 註冊日期
+     * @param {string} data.introducer_code 推薦保戶編號
+     * @param {Array} data.l 左樹
+     * @param {Array} data.r 右樹
+     * @returns {object} 返回格式化保戶資料的物件
+     */
     fmtPolicyHolderData(data){
         return {
             code: data.code,
@@ -117,6 +152,12 @@ class Policyholders {
         };
     }
 
+    /**
+     * 整理保戶二元樹
+     * @param {object} args
+     * @param {Array} args.policyData 保戶資料集
+     * @returns {object} 返回格式化保戶資料的物件
+     */
     fmtPolicyHolderTree(args){
         const { policyData } = args;
         policyData.map(d => {
