@@ -20,9 +20,9 @@ class Database {
         try {
 
             this.db = await oracle.getConnection({
-                user: 'ars',          // Oracle 資料庫使用者名稱
-                password: 'ars#KniLrATs946#168',        // 密碼
-                connectString: '10.1.103.110:1521/DEV' // 例如: 'localhost:1521/ORCL'
+                user: 'root',
+                password: 'safesync',
+                connectString: 'localhost:1521/ORCL'
             });
             console.log('db connection established.');
             return this.db;
