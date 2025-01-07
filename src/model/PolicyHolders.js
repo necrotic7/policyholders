@@ -1,4 +1,5 @@
 const database = require('../modules/database');
+const exception = require('../modules/exception');
 
 class Policyholders {
     constructor(){}
@@ -40,7 +41,7 @@ class Policyholders {
             const result = await database.execute(sql, params);
             if(!result || result?.length == 0){
                 console.log(TAG, `找不到保戶編號(${code})`);
-                throw new Error('找不到保戶');
+                throw exception.BadRequest('POLICY_NOT_FOUND', 'policy not found');
             }
 
             args.policyData = result;

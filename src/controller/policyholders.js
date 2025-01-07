@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 const Policyholders = require('../model/PolicyHolders');
+const response = require('../modules/response');
 
 // API 端點：保戶查詢
 router.get('/', async (req, res) => {
@@ -13,9 +14,11 @@ router.get('/', async (req, res) => {
         const worker = new Policyholders();
         const result = await worker.getPolicyHolderByCode(code);
 
-        res.json(result);
+        response.succ(res, result);
     } catch(err){
-        return res.status(400).json({ error: err });
+        return response.fail(res, err);
+    }
+});
     }
 });
 
