@@ -65,11 +65,9 @@ class Policyholders {
 
     fmtPolicyHolderTree(args){
         const { policyData } = args;
-        const nodeMap = new Map();
         policyData.map(d => {
             d.l = [];
             d.r = [];
-            nodeMap.set(d.code, d);
         });
         let response = {};
 
@@ -78,7 +76,7 @@ class Policyholders {
                 response = this.fmtPolicyHolderData(d);
                 return;
             }
-            const parent = nodeMap.get(d.parent_id);
+            const parent = policyData.find(p => p.code == d.parent_id);
 
             if(parent.left_child_id == d.code){
                 parent.l.push(this.fmtPolicyHolderData(d));
