@@ -5,7 +5,7 @@
             /      \         /         \
     4 (David)    5 (Eve)  6 (Frank)  7 (Grace)
        /   \             / 
-    8(Hen)  9(Ivy)     11(Kim)
+ 8(Henry) 9(Ivy)     11(Kim)
            /
         10(Jack)
         
