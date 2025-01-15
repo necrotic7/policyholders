@@ -1,7 +1,6 @@
 
 class Policyholders {
-    constructor(exception, repository){
-        this.exception = exception;
+    constructor(repository){
         this.repository = repository;
     }
 

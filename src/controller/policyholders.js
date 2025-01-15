@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
             throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
         }
         const repository = new PolicyholdersRepository(database, exception);
-        const worker = new PolicyholdersService(exception, repository);
+        const worker = new PolicyholdersService(repository);
         const result = await worker.getPolicyHolderByCode(code);
 
         response.succ(res, result);
@@ -33,7 +33,7 @@ router.get('/:code/top', async (req, res) => {
             throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
         }
         const repository = new PolicyholdersRepository(database, exception);
-        const worker = new PolicyholdersService(exception, repository);
+        const worker = new PolicyholdersService(repository);
         const result = await worker.getPolicyHolderTopByCode(code);
 
         response.succ(res, result);
