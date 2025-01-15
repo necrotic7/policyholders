@@ -1,8 +1,10 @@
 const { Router } = require('express');
 const router = Router();
-const Policyholders = require('../model/PolicyHolders');
+const PolicyholdersService = require('../service/PolicyHolders');
+const PolicyholdersRepository = require('../repository/PolicyHolders');
 const response = require('../modules/response');
 const exception = require('../modules/exception');
+const database = require('../modules/database');
 
 // API 端點：保戶查詢
 router.get('/', async (req, res) => {
@@ -12,7 +14,8 @@ router.get('/', async (req, res) => {
         if(!code){
             throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
         }
-        const worker = new Policyholders();
+        const repository = new PolicyholdersRepository(database);
+        const worker = new PolicyholdersService(exception, repository);
         const result = await worker.getPolicyHolderByCode(code);
 
         response.succ(res, result);
@@ -29,7 +32,8 @@ router.get('/:code/top', async (req, res) => {
         if(!code){
             throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
         }
-        const worker = new Policyholders();
+        const repository = new PolicyholdersRepository(database);
+        const worker = new PolicyholdersService(exception, repository);
         const result = await worker.getPolicyHolderTopByCode(code);
 
         response.succ(res, result);
