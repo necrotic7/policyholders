@@ -13,12 +13,13 @@ router.get('/', async (req, res) => {
             code: Joi.number().required()
         })
 
-        const { error } = schema.validate(req.query, {allowUnknown:true});
+        const { error, value } = schema.validate(req.query, {allowUnknown:true});
         if(error){
             throw exception.BadRequest('BAD_REQUEST', error.message);
         }
         const repository = new PolicyholdersRepository(database, exception);
         const worker = new PolicyholdersService(repository);
+        const { code } = value;
         const result = await worker.getPolicyHolderByCode(code);
 
         response.succ(res, result);
@@ -34,12 +35,13 @@ router.get('/:code/top', async (req, res) => {
             code: Joi.number().required()
         })
 
-        const { error } = schema.validate(req.params, {allowUnknown:true});
+        const { error, value } = schema.validate(req.params, {allowUnknown:true});
         if(error){
             throw exception.BadRequest('BAD_REQUEST', error.message);
         }
         const repository = new PolicyholdersRepository(database, exception);
         const worker = new PolicyholdersService(repository);
+        const { code } = value;
         const result = await worker.getPolicyHolderTopByCode(code);
 
         response.succ(res, result);
