@@ -4,9 +4,9 @@ const router        = express.Router();
 router.use('*', (req, res, next)=>{
     const TAG = '[RequestInfo]';
     if(req.method == 'GET'){
-        console.log(TAG, `url：`, req.baseUrl, `query：`, req.query);
+        console.log(TAG, `method:${req.method} url:${req.baseUrl} query:`, req.query);
     }else{
-        console.log(TAG, `url：`, req.baseUrl, `body：`, req.body);
+        console.log(TAG, `method:${req.method} url:${req.baseUrl} body:`, req.body);
     }
     next();
 });
