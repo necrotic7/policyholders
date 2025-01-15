@@ -44,7 +44,6 @@ class Policyholders {
                 WHERE 1 = 1
                 CONNECT BY parent_id = PRIOR id
                 START WITH id = :code
-                ORDER BY LEVEL ASC
             `;
             const params = {
                 code
@@ -91,12 +90,6 @@ class Policyholders {
             const { code } = args;
             // 查詢指定保戶編號的父級資料與其下級
             const sql = `
-                WITH top AS (
-                    SELECT
-                        parent_id
-                    FROM policyholders
-                    WHERE id = :code
-                )
                 SELECT 
                     LEVEL AS "level",
                     p.ID AS "code",
@@ -109,8 +102,12 @@ class Policyholders {
                 FROM policyholders p
                 WHERE 1 = 1
                 CONNECT BY p.parent_id = PRIOR p.id
-                START WITH p.id = (SELECT parent_id FROM top)
-                ORDER BY LEVEL ASC
+                START WITH p.id = (
+                    SELECT
+                        parent_id
+                    FROM policyholders
+                    WHERE id = :code
+                )
             `;
             const params = {
                 code
