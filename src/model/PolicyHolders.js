@@ -157,18 +157,22 @@ class Policyholders {
      */
     fmtPolicyHolderTree(args){
         const { policyData } = args;
-        policyData.map(d => {
+        // 快取map
+        const policyMap = new Map();
+
+        policyData.forEach(d => {
             d.l = [];
             d.r = [];
+            policyMap.set(d.code, d)
         });
         let response = {};
 
-        policyData.map(d => {
+        policyData.forEach(d => {
             if(d.level == 1){
                 response = this.fmtPolicyHolderData(d);
                 return;
             }
-            const parent = policyData.find(p => p.code == d.parent_id);
+            const parent = policyMap.get(d.parent_id);
 
             if(parent.left_child_id == d.code){
                 parent.l.push(this.fmtPolicyHolderData(d));
