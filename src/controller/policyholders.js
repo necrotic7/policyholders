@@ -5,14 +5,17 @@ const PolicyholdersRepository = require('workspace-repository/PolicyHolders');
 const response = require('workspace-modules/response');
 const exception = require('workspace-modules/exception');
 const database = require('workspace-modules/database');
-
+const Joi = require('joi');
 // API 端點：保戶查詢
 router.get('/', async (req, res) => {
     try{
-        const { code } = req.query;
+        const schema = Joi.object({
+            code: Joi.number().required()
+        })
 
-        if(!code){
-            throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
+        const { error } = schema.validate(req.query, {allowUnknown:true});
+        if(error){
+            throw exception.BadRequest('BAD_REQUEST', error.message);
         }
         const repository = new PolicyholdersRepository(database, exception);
         const worker = new PolicyholdersService(repository);
@@ -27,10 +30,13 @@ router.get('/', async (req, res) => {
 // API 端點：保戶上層查詢
 router.get('/:code/top', async (req, res) => {
     try{
-        const { code } = req.params;
+        const schema = Joi.object({
+            code: Joi.number().required()
+        })
 
-        if(!code){
-            throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
+        const { error } = schema.validate(req.params, {allowUnknown:true});
+        if(error){
+            throw exception.BadRequest('BAD_REQUEST', error.message);
         }
         const repository = new PolicyholdersRepository(database, exception);
         const worker = new PolicyholdersService(repository);
