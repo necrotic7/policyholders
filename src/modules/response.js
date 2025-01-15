@@ -1,6 +1,6 @@
 'use strict';
 const httpStatus = require('http-status-codes');
-const exception  = require('./exception');
+const exception  = require('workspace-modules/exception');
 
 function succ(resp, data) {
     if (data) {

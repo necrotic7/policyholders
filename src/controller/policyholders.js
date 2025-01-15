@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const router = Router();
-const PolicyholdersService = require('../service/PolicyHolders');
-const PolicyholdersRepository = require('../repository/PolicyHolders');
-const response = require('../modules/response');
-const exception = require('../modules/exception');
-const database = require('../modules/database');
+const PolicyholdersService = require('workspace-service/PolicyHolders');
+const PolicyholdersRepository = require('workspace-repository/PolicyHolders');
+const response = require('workspace-modules/response');
+const exception = require('workspace-modules/exception');
+const database = require('workspace-modules/database');
 
 // API 端點：保戶查詢
 router.get('/', async (req, res) => {
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         if(!code){
             throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
         }
-        const repository = new PolicyholdersRepository(database);
+        const repository = new PolicyholdersRepository(database, exception);
         const worker = new PolicyholdersService(exception, repository);
         const result = await worker.getPolicyHolderByCode(code);
 
@@ -32,7 +32,7 @@ router.get('/:code/top', async (req, res) => {
         if(!code){
             throw exception.BadRequest('BAD_REQUEST', 'invalid parameters');
         }
-        const repository = new PolicyholdersRepository(database);
+        const repository = new PolicyholdersRepository(database, exception);
         const worker = new PolicyholdersService(exception, repository);
         const result = await worker.getPolicyHolderTopByCode(code);
 
