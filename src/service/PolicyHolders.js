@@ -13,7 +13,9 @@ class Policyholders {
         let args = {
             code
         };
+        // 取得保戶及其所有下級資料
         args = await this.repository.queryPolicyDataByCode(args);
+        // 格式化二元樹
         args = this.fmtPolicyHolderTree(args);
         return args.response;
     }
@@ -27,7 +29,9 @@ class Policyholders {
         let args = {
             code
         };
+        // 取得保戶上級及其所有下級資料
         args = await this.repository.queryPolicyTopDataByChildCode(args);
+        // 格式化二元樹
         args = this.fmtPolicyHolderTree(args);
         return args.response;
     }
