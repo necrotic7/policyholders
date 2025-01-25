@@ -19,12 +19,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.10",
     "chai": "^5.1.2",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
     "mocha": "^11.0.1",
+    "nodemon": "^3.1.9",
     "sinon": "^19.0.2",
-    "sinon-chai": "^4.0.0"
+    "sinon-chai": "^4.0.0",
+    "ts-node": "^10.9.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
