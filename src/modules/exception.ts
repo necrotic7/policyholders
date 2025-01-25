@@ -1,7 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 
 class WebError extends Error{
-    constructor(statusCode, code, message){
+    statusCode: number;
+    code: string;
+    message: string;
+    constructor(statusCode: number, code: string, message: string){
         super(message)
         this.statusCode = statusCode;
         this.code = code;
@@ -10,27 +13,27 @@ class WebError extends Error{
 }
 
 class _BadRequest extends WebError{
-    constructor(code, message){
+    constructor(code: string, message: string){
         super(StatusCodes.BAD_REQUEST, code, message);
     }
 }
 
 class _ServerError extends WebError {
-    constructor(code, message, data) {
-        super(StatusCodes.INTERNAL_SERVER_ERROR, code, message, data); // 500
+    constructor(code: string, message: string) {
+        super(StatusCodes.INTERNAL_SERVER_ERROR, code, message); // 500
     }
 }
 
 export default {
-    isWebError: (err) => {
+    isWebError: (err: unknown): err is WebError => {
         return err instanceof WebError;
     },
 
-    BadRequest: (code, message) => {
+    BadRequest: (code: string, message: string) => {
         return new _BadRequest(code, message);
     },
 
-    ServerError: (code, message) => {
+    ServerError: (code: string, message: string) => {
         return new _ServerError(code, message);
     }
 };
