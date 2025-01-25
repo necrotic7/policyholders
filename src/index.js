@@ -1,8 +1,8 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const controller = require('./controller');
-const database = require('./modules/database');
-const cors = require('cors');
+import express from 'express';
+import bodyParser from 'body-parser';
+import controller from './controller/index.js';
+import database from './modules/database.js';
+import cors from 'cors';
 
 (async ()=>{
     // 初始化db

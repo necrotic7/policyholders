@@ -2,7 +2,8 @@
   "name": "clinico",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
+  "type": "module",
   "dependencies": {
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",

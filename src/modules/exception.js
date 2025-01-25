@@ -1,4 +1,4 @@
-const httpStatus  = require('http-status-codes');
+import { StatusCodes } from 'http-status-codes';
 
 class WebError extends Error{
     constructor(statusCode, code, message){
@@ -9,26 +9,28 @@ class WebError extends Error{
     }
 }
 
-class BadRequest extends WebError{
+class _BadRequest extends WebError{
     constructor(code, message){
-        super(httpStatus.StatusCodes.BAD_REQUEST, code, message);
+        super(StatusCodes.BAD_REQUEST, code, message);
     }
 }
 
-class ServerError extends WebError {
+class _ServerError extends WebError {
     constructor(code, message, data) {
-        super(httpStatus.StatusCodes.INTERNAL_SERVER_ERROR, code, message, data); // 500
+        super(StatusCodes.INTERNAL_SERVER_ERROR, code, message, data); // 500
     }
 }
 
-module.exports = {
+export default {
     isWebError: (err) => {
         return err instanceof WebError;
     },
+
     BadRequest: (code, message) => {
-        return new BadRequest(code, message);
+        return new _BadRequest(code, message);
     },
+
     ServerError: (code, message) => {
-        return new ServerError(code, message);
+        return new _ServerError(code, message);
     }
 };

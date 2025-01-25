@@ -1,7 +1,7 @@
-const PolicyHoldersService = require('workspace-service/PolicyHolders');
-const chai = require('chai');
-const sinon = require('sinon');
-const expect = chai.expect;
+import PolicyHoldersService from 'workspace-service/PolicyHolders';
+import { expect as _expect } from 'chai';
+import { stub, restore } from 'sinon';
+const expect = _expect;
 
 describe('PolicyService', () => {
     let policyService;
@@ -9,13 +9,13 @@ describe('PolicyService', () => {
 
     beforeEach(() => {
         mockRepository = {
-            queryPolicyDataByCode: sinon.stub(),
+            queryPolicyDataByCode: stub(),
         };
         policyService = new PolicyHoldersService(mockRepository);
     });
 
     afterEach(() => {
-        sinon.restore();
+        restore();
     });
 
     it('搜尋最上級保戶', async () => {

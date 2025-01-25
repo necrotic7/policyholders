@@ -1,5 +1,5 @@
-const express       = require('express');
-const router        = express.Router();
+import { Router } from 'express';
+const router        = Router();
 
 router.use('*', (req, res, next)=>{
     const TAG = '[RequestInfo]';
@@ -13,6 +13,7 @@ router.use('*', (req, res, next)=>{
 
 const apiBase = '/api';
 const apiPolicyholders = apiBase + '/policyholders';
-router.use(apiPolicyholders, require('./policyholders'));
+import policyHolders from './policyholders.js';
+router.use(apiPolicyholders, policyHolders);
 
-module.exports = router;
+export default router;

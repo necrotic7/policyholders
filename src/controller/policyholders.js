@@ -1,11 +1,11 @@
-const { Router } = require('express');
+import { Router } from 'express';
 const router = Router();
-const PolicyholdersService = require('workspace-service/PolicyHolders');
-const PolicyholdersRepository = require('workspace-repository/PolicyHolders');
-const response = require('workspace-modules/response');
-const exception = require('workspace-modules/exception');
-const database = require('workspace-modules/database');
-const Joi = require('joi');
+import PolicyholdersService from 'workspace-service/PolicyHolders.js';
+import PolicyholdersRepository from 'workspace-repository/PolicyHolders.js';
+import { succ, fail } from 'workspace-modules/response.js';
+import exception from 'workspace-modules/exception.js';
+import database from 'workspace-modules/database.js';
+import Joi from 'joi';
 // API 端點：保戶查詢
 router.get('/', async (req, res) => {
     try{
@@ -22,9 +22,9 @@ router.get('/', async (req, res) => {
         const { code } = value;
         const result = await worker.getPolicyHolderByCode(code);
 
-        response.succ(res, result);
+        succ(res, result);
     } catch(err){
-        return response.fail(res, err);
+        return fail(res, err);
     }
 });
 
@@ -44,10 +44,10 @@ router.get('/:code/top', async (req, res) => {
         const { code } = value;
         const result = await worker.getPolicyHolderTopByCode(code);
 
-        response.succ(res, result);
+        succ(res, result);
     } catch(err){
-        return response.fail(res, err);
+        return fail(res, err);
     }
 });
 
-module.exports = router;
+export default router;

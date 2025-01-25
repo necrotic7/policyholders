@@ -101,4 +101,4 @@ class Policyholders {
     }
 }
 
-module.exports = Policyholders;
+export default Policyholders;

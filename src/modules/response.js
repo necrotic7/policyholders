@@ -1,16 +1,15 @@
-'use strict';
-const httpStatus = require('http-status-codes');
-const exception  = require('workspace-modules/exception');
+import { StatusCodes } from 'http-status-codes';
+import exception from 'workspace-modules/exception.js';
 
-function succ(resp, data) {
+function _succ(resp, data) {
     if (data) {
-        resp.status(httpStatus.StatusCodes.OK).json(data);
+        resp.status(StatusCodes.OK).json(data);
     } else {
-        resp.status(httpStatus.StatusCodes.OK).json();
+        resp.status(StatusCodes.OK).json();
     }
 }
 
-function fail(resp, err) {
+function _fail(resp, err) {
     /**
     * Double check err instance
     */
@@ -33,5 +32,5 @@ function fail(resp, err) {
 }
 
 
-module.exports.succ = succ;
-module.exports.fail = fail;
+export const succ = _succ;
+export const fail = _fail;
