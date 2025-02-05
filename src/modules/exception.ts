@@ -1,6 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
-
-class WebError extends Error{
+import { 
+    Exception as tException,
+    WebError as tWebError,
+    _BadRequest as tBadRequest,
+    _ServerError as tServerError
+ } from '../model/exception';
+class WebError extends Error implements tWebError{
     statusCode: number;
     code: string;
     message: string;
@@ -12,28 +17,28 @@ class WebError extends Error{
     }
 }
 
-class _BadRequest extends WebError{
+class _BadRequest extends WebError implements tBadRequest{
     constructor(code: string, message: string){
         super(StatusCodes.BAD_REQUEST, code, message);
     }
 }
 
-class _ServerError extends WebError {
+class _ServerError extends WebError implements tServerError{
     constructor(code: string, message: string) {
         super(StatusCodes.INTERNAL_SERVER_ERROR, code, message); // 500
     }
 }
 
-export default {
-    isWebError: (err: unknown): err is WebError => {
+export const Exception: tException = {
+    isWebError(err: unknown): err is WebError{
         return err instanceof WebError;
     },
 
-    BadRequest: (code: string, message: string) => {
+    BadRequest(code: string, message: string){
         return new _BadRequest(code, message);
     },
 
-    ServerError: (code: string, message: string) => {
+    ServerError(code: string, message: string){
         return new _ServerError(code, message);
     }
 };
