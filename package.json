@@ -22,6 +22,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.10",
+    "@types/oracledb": "^6.5.3",
     "chai": "^5.1.2",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
