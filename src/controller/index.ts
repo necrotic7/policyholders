@@ -1,5 +1,5 @@
 import { Router } from 'express';
-const router        = Router();
+const router = Router();
 
 router.use('*', (req, res, next)=>{
     const TAG = '[RequestInfo]';

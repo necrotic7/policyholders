@@ -1,7 +1,7 @@
+import { WebError as tWebError } from './../model/exception';
 import { StatusCodes } from 'http-status-codes';
-import exception from 'workspace-modules/exception.js';
-
-function _succ(resp, data) {
+import { Exception as exception } from 'workspace-modules/exception.js';
+function _succ(resp: any, data: object) {
     if (data) {
         resp.status(StatusCodes.OK).json(data);
     } else {
@@ -9,7 +9,7 @@ function _succ(resp, data) {
     }
 }
 
-function _fail(resp, err) {
+function _fail(resp: any, err: unknown) {
     /**
     * Double check err instance
     */
@@ -23,12 +23,14 @@ function _fail(resp, err) {
         }
     }
 
+    const e = err as tWebError
+
     const error = {
-        code: err.code,
-        message: err.message
+        code: e.code,
+        message: e.message
     };
 
-    resp.status(err.statusCode).json(error);
+    resp.status(e.statusCode).json(error);
 }
 
 

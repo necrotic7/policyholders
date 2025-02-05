@@ -3,7 +3,7 @@ const router = Router();
 import PolicyholdersService from 'workspace-service/PolicyHolders.js';
 import PolicyholdersRepository from 'workspace-repository/PolicyHolders.js';
 import { succ, fail } from 'workspace-modules/response.js';
-import exception from 'workspace-modules/exception.js';
+import { Exception as exception } from 'workspace-modules/exception.js';
 import database from 'workspace-modules/database.js';
 import Joi from 'joi';
 // API 端點：保戶查詢
