@@ -15,12 +15,16 @@
         
 ## typescript 環境
 使用 tsx（esbuild-based TypeScript runtime）：
+
   1.直接執行 TypeScript，無需額外編譯
+  
   2.支援 ESM（不需 require）
+  
   3.不強制 .js 副檔名
 
 安裝tsx
-  ```npm i -g tsx```
+
+```npm i -g tsx```
 
 package.json
 ```
