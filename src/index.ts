@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import controller from './controller/index.js';
-import database from './modules/database.js';
+import controller from './controller/index';
+import database from './modules/database';
 import cors from 'cors';
 
 (async ()=>{

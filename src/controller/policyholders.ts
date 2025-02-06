@@ -1,10 +1,10 @@
 import { Router } from 'express';
 const router = Router();
-import PolicyholdersService from 'workspace-service/PolicyHolders.js';
-import PolicyholdersRepository from 'workspace-repository/PolicyHolders.js';
-import { succ, fail } from 'workspace-modules/response.js';
-import { Exception as exception } from 'workspace-modules/exception.js';
-import database from 'workspace-modules/database.js';
+import PolicyholdersService from 'workspace-service/PolicyHolders';
+import PolicyholdersRepository from 'workspace-repository/PolicyHolders';
+import { succ, fail } from 'workspace-modules/response';
+import { Exception as exception } from 'workspace-modules/exception';
+import database from 'workspace-modules/database';
 import Joi from 'joi';
 // API 端點：保戶查詢
 router.get('/', async (req, res) => {

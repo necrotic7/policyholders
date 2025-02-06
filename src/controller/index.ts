@@ -13,7 +13,7 @@ router.use('*', (req, res, next)=>{
 
 const apiBase = '/api';
 const apiPolicyholders = apiBase + '/policyholders';
-import policyHolders from './policyholders.js';
+import policyHolders from './policyholders';
 router.use(apiPolicyholders, policyHolders);
 
 export default router;
