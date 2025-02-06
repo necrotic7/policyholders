@@ -1,5 +1,5 @@
 ## cmd
-```node src/index.js```
+```npm run dev```
 ## 注意事項
   需先執行migrate資料夾中的sql以建立測試資料
 ## 測試結構
