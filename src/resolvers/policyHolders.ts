@@ -10,7 +10,13 @@ const resolvers = {
             const worker = new PolicyholdersService(repository);
             const result = await worker.getPolicyHolderByCode(args.code);
             return result;
-        }
+        },
+        getPolicyHolderTop: async function(parent:void, args: {code: string}){
+            const repository = new PolicyholdersRepository(database, exception);
+            const worker = new PolicyholdersService(repository);
+            const result = await worker.getPolicyHolderTopByCode(args.code);
+            return result;
+        },
     }
 };
 

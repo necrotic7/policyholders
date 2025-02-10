@@ -7,7 +7,8 @@ const schema: DocumentNode = gql`
     }
 
     type Query {
-        getPolicyHolder(code: String!): PolicyHolder,
+        getPolicyHolder(code: String!): PolicyHolder
+        getPolicyHolderTop(code: String!): PolicyHolder
     }
 
     type PolicyHolder {
