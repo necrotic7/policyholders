@@ -1,15 +1,5 @@
 import { Repository as tRepository } from 'workspace-model/repository/PolicyHolders'
-
-type tPolicyData = {
-    code: string
-    name: string
-    registration_date: string
-    introducer_code: string
-    level: number
-    parent_id: number
-    l: []
-    r: []
-};
+import { PolicyData as tPolicyData } from 'workspace-model/service/PolicyHolders'
 
 class Policyholders {
     repository: tRepository
@@ -22,7 +12,7 @@ class Policyholders {
      * @param {string} code 保戶編號
      * @returns {object} args.response
      */
-    async getPolicyHolderByCode(code: string): Promise<any>{
+    async getPolicyHolderByCode(code: string): Promise<tPolicyData | {}>{
 
         // 取得保戶及其所有下級資料
         const policyData = await this.repository.queryPolicyDataByCode(code);
@@ -36,7 +26,7 @@ class Policyholders {
      * @param {string} code 保戶編號
      * @returns {object} response
      */
-    async getPolicyHolderTopByCode(code: string): Promise<any>{
+    async getPolicyHolderTopByCode(code: string): Promise<tPolicyData | {}>{
         // 取得保戶上級及其所有下級資料
         const policyData = await this.repository.queryPolicyTopDataByChildCode(code);
         // 格式化二元樹
@@ -55,7 +45,7 @@ class Policyholders {
      * @param {Array} data.r 右樹
      * @returns {object} 返回格式化保戶資料的物件
      */
-    fmtPolicyHolderData(policyData: unknown){
+    fmtPolicyHolderData(policyData: unknown): tPolicyData{
         const data = policyData as tPolicyData;
         return {
             code: data.code,
@@ -73,7 +63,7 @@ class Policyholders {
      * @param {Array} args.policyData 保戶資料集
      * @returns {object} 返回格式化保戶資料的物件
      */
-    fmtPolicyHolderTree(data: Record<string, unknown>[]){
+    fmtPolicyHolderTree(data: Record<string, unknown>[]): tPolicyData | {}{
         
         // 快取map
         const policyMap = new Map();
@@ -85,7 +75,7 @@ class Policyholders {
             policyMap.set(fmt.code, fmt);
             return fmt;
         });
-        let response = {};
+        let response: tPolicyData | {} = {};
 
         policyData.forEach(d => {
             if(d.level == 1){
