@@ -1,4 +1,4 @@
-import { Repository as tRepository } from '../model/repository/PolicyHolders'
+import { Repository as tRepository } from 'workspace-model/repository/PolicyHolders'
 
 type tPolicyData = {
     code: string

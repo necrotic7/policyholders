@@ -1,6 +1,6 @@
-import { database as tDatabase } from "../model/database";
-import { Exception as tException } from "../model/exception";
-import { Repository as tRepository } from '../model/repository/PolicyHolders'
+import { database as tDatabase } from "workspace-model/database";
+import { Exception as tException } from "workspace-model/exception";
+import { Repository as tRepository } from 'workspace-model/repository/PolicyHolders'
 
 class Policyholders implements tRepository{
     db: tDatabase

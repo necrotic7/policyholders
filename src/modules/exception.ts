@@ -4,7 +4,7 @@ import {
     WebError as tWebError,
     _BadRequest as tBadRequest,
     _ServerError as tServerError
- } from '../model/exception';
+ } from 'workspace-model/exception';
 class WebError extends Error implements tWebError{
     statusCode: number;
     code: string;

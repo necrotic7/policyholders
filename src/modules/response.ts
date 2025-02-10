@@ -1,4 +1,4 @@
-import { WebError as tWebError } from './../model/exception';
+import { WebError as tWebError } from 'workspace-model/exception';
 import { StatusCodes } from 'http-status-codes';
 import { Exception as exception } from 'workspace-modules/exception.js';
 function _succ(resp: any, data: object) {

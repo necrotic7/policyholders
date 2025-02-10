@@ -12,6 +12,7 @@
     "http-status-codes": "^2.3.0",
     "joi": "^17.13.3",
     "oracledb": "^6.7.1",
+    "workspace-model": "file:src/model",
     "workspace-modules": "file:src/modules",
     "workspace-repository": "file:src/repository",
     "workspace-service": "file:src/service"
@@ -29,7 +30,6 @@
     "nodemon": "^3.1.9",
     "sinon": "^19.0.2",
     "sinon-chai": "^4.0.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
   "scripts": {
