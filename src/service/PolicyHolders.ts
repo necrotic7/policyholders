@@ -1,6 +1,9 @@
+import { Repository as tRepository } from 'workspace-model/repository/PolicyHolders'
+import { PolicyData as tPolicyData } from 'workspace-model/service/PolicyHolders'
 
 class Policyholders {
-    constructor(repository){
+    repository: tRepository
+    constructor(repository: tRepository){
         this.repository = repository;
     }
 
@@ -9,15 +12,13 @@ class Policyholders {
      * @param {string} code 保戶編號
      * @returns {object} args.response
      */
-    async getPolicyHolderByCode(code){
-        let args = {
-            code
-        };
+    async getPolicyHolderByCode(code: string): Promise<tPolicyData | {}>{
+
         // 取得保戶及其所有下級資料
-        args = await this.repository.queryPolicyDataByCode(args);
+        const policyData = await this.repository.queryPolicyDataByCode(code);
         // 格式化二元樹
-        args = this.fmtPolicyHolderTree(args);
-        return args.response;
+        const response = this.fmtPolicyHolderTree(policyData);
+        return response;
     }
 
     /**
@@ -25,15 +26,12 @@ class Policyholders {
      * @param {string} code 保戶編號
      * @returns {object} response
      */
-    async getPolicyHolderTopByCode(code){
-        let args = {
-            code
-        };
+    async getPolicyHolderTopByCode(code: string): Promise<tPolicyData | {}>{
         // 取得保戶上級及其所有下級資料
-        args = await this.repository.queryPolicyTopDataByChildCode(args);
+        const policyData = await this.repository.queryPolicyTopDataByChildCode(code);
         // 格式化二元樹
-        args = this.fmtPolicyHolderTree(args);
-        return args.response;
+        const response = this.fmtPolicyHolderTree(policyData);
+        return response;
     }
 
     /**
@@ -47,14 +45,15 @@ class Policyholders {
      * @param {Array} data.r 右樹
      * @returns {object} 返回格式化保戶資料的物件
      */
-    fmtPolicyHolderData(data){
+    fmtPolicyHolderData(policyData: unknown): tPolicyData{
+        const data = policyData as tPolicyData;
         return {
             code: data.code,
             name: data.name,
             registration_date: data.registration_date,
             introducer_code: data.introducer_code,
-            l:data.l,
-            r:data.r,
+            l: data.l,
+            r: data.r,
         };
     }
 
@@ -64,17 +63,19 @@ class Policyholders {
      * @param {Array} args.policyData 保戶資料集
      * @returns {object} 返回格式化保戶資料的物件
      */
-    fmtPolicyHolderTree(args){
-        const { policyData } = args;
+    fmtPolicyHolderTree(data: Record<string, unknown>[]): tPolicyData | {}{
+        
         // 快取map
         const policyMap = new Map();
 
-        policyData.forEach(d => {
+        let policyData: tPolicyData[] = data.map(d => {
             d.l = [];
             d.r = [];
-            policyMap.set(d.code, d)
+            const fmt = d as tPolicyData;
+            policyMap.set(fmt.code, fmt);
+            return fmt;
         });
-        let response = {};
+        let response: tPolicyData | {} = {};
 
         policyData.forEach(d => {
             if(d.level == 1){
@@ -93,9 +94,8 @@ class Policyholders {
             }
         });
 
-        args.response = response;
-        return args;
+        return response;
     }
 }
 
-module.exports = Policyholders;
+export default Policyholders;

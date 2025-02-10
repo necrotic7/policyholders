@@ -1,6 +1,12 @@
+import { database as tDatabase } from "workspace-model/database";
+import { Exception as tException } from "workspace-model/exception";
+import { Repository as tRepository } from 'workspace-model/repository/PolicyHolders'
 
-class Policyholders {
-    constructor(database, exception){
+class Policyholders implements tRepository{
+    db: tDatabase
+    exception: tException
+
+    constructor(database: tDatabase, exception: tException){
         this.db = database;
         this.exception = exception;
     }
@@ -12,10 +18,9 @@ class Policyholders {
      * @returns {object} 返回包含保戶資料的物件
      * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyDataByCode(args){
+    async queryPolicyDataByCode(code: string): Promise<Record<string, unknown>[]>{
         const TAG = '[透過保戶編號取得保戶資訊]';
         try{
-            const { code } = args;
             // 查詢指定保戶編號的資料與其下級
             const sql = `
                 SELECT
@@ -41,9 +46,8 @@ class Policyholders {
                 console.log(TAG, `找不到保戶編號(${code})`);
                 throw this.exception.BadRequest('POLICY_NOT_FOUND', 'policy not found');
             }
-
-            args.policyData = result;
-            return args;
+            
+            return result;
         } catch(err){
             console.log(TAG, `發生錯誤：${err}`);
             throw err;
@@ -57,10 +61,9 @@ class Policyholders {
      * @returns {object} 返回包含保戶資料的物件
      * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyTopDataByChildCode(args){
+    async queryPolicyTopDataByChildCode(code: string): Promise<Record<string, unknown>[]>{
         const TAG = '[透過子代號取得父保戶資訊]';
         try{
-            const { code } = args;
             // 查詢指定保戶編號的父級資料與其下級
             const sql = `
                 SELECT 
@@ -92,8 +95,7 @@ class Policyholders {
                 throw this.exception.BadRequest('POLICY_PARENT_NOT_FOUND', 'policy parent not found');
             }
 
-            args.policyData = result;
-            return args;
+            return result;
         } catch(err){
             console.log(TAG, `發生錯誤：${err}`);
             throw err;
@@ -101,4 +103,4 @@ class Policyholders {
     }
 }
 
-module.exports = Policyholders;
+export default Policyholders;
