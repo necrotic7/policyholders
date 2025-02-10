@@ -1,23 +1,16 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import controller from './controller/index';
-import database from './modules/database';
-import cors from 'cors';
+import database from 'workspace-modules/database';
+import { ApolloServer } from "apollo-server";
 
 (async ()=>{
     // 初始化db
     await database.init();
-    // 初始化 Express 應用
-    const app = express();
-    app.use(bodyParser.json());
-    app.use(cors());
-    app.use(controller);
-
-    // 啟動伺服器
-    const port = 3000;
-    app.listen(port, () => {
-        console.log(`伺服器運行中，請訪問 http://localhost:${port}`);
+    
+    // 啟動apollo-server
+    const server: ApolloServer = new ApolloServer({
     });
+
+    const serverInfo = await server.listen();
+    console.log('server info:', JSON.stringify(serverInfo));
 
     // graceful shutdown
     process.on('SIGINT', async () => {
