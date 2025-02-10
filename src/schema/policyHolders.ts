@@ -7,13 +7,13 @@ const schema: DocumentNode = gql`
     }
 
     type Query {
-        getPolicyHolder: [PolicyHolder],
+        getPolicyHolder(code: String!): PolicyHolder,
     }
 
     type PolicyHolder {
         code: String!
         name: String!
-        registration_date: Date!
+        registration_date: String!
         introducer_code: Int
         l: [PolicyHolder]
         r: [PolicyHolder]

@@ -17,6 +17,8 @@
     "workspace-model": "file:src/model",
     "workspace-modules": "file:src/modules",
     "workspace-repository": "file:src/repository",
+    "workspace-resolvers": "file:src/resolvers",
+    "workspace-schema": "file:src/schema",
     "workspace-service": "file:src/service"
   },
   "devDependencies": {
