@@ -1,6 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
 import { 
-    Exception as tException,
     WebError as tWebError,
     _BadRequest as tBadRequest,
     _ServerError as tServerError
@@ -29,7 +28,7 @@ class _ServerError extends WebError implements tServerError{
     }
 }
 
-export const Exception: tException = {
+export default {
     isWebError(err: unknown): err is WebError{
         return err instanceof WebError;
     },

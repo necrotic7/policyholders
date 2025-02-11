@@ -1,11 +1,11 @@
-import database from 'workspace-modules/database';
-import { ApolloServer, ApolloServerPlugin } from '@apollo/server';
-import resolvers from 'workspace-resolvers/policyHolders';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
+import { ApolloServer, ApolloServerPlugin } from '@apollo/server';
 import { koaMiddleware } from '@as-integrations/koa';
 import { buildSchema } from 'type-graphql';
+import resolvers from 'workspace-resolvers/policyHolders';
+import database from 'workspace-modules/database';
 
 (async ()=>{
     // 初始化db
