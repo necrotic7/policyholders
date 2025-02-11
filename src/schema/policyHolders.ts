@@ -1,24 +1,24 @@
-import { gql } from 'apollo-server';
-import { DocumentNode } from 'graphql';
+import 'reflect-metadata';
+import { ObjectType, Field, Int } from 'type-graphql';
+@ObjectType()
+class PolicyHolder {
+    @Field(_type => String)
+    code!: string;
+    
+    @Field(_type => String)
+    name!: string;
 
-const schema: DocumentNode = gql`
-    schema {
-        query: Query
-    }
+    @Field(_type => String)
+    registration_date!: Date;
 
-    type Query {
-        getPolicyHolder(code: String!): PolicyHolder
-        getPolicyHolderTop(code: String!): PolicyHolder
-    }
+    @Field(_type => Int, {nullable: true})
+    introducer_code?: number;
 
-    type PolicyHolder {
-        code: String!
-        name: String!
-        registration_date: String!
-        introducer_code: Int
-        l: [PolicyHolder]
-        r: [PolicyHolder]
-    }
-`;
+    @Field(_type => [PolicyHolder], {nullable: true})
+    l?: PolicyHolder[];
 
-export default schema;
+    @Field(_type => [PolicyHolder], {nullable: true})
+    r?: PolicyHolder[];
+}
+
+export default PolicyHolder;

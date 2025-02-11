@@ -1,11 +1,11 @@
 import database from 'workspace-modules/database';
 import { ApolloServer, ApolloServerPlugin } from '@apollo/server';
-import typeDefs from 'workspace-schema/policyHolders';
 import resolvers from 'workspace-resolvers/policyHolders';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 import { koaMiddleware } from '@as-integrations/koa';
+import { buildSchema } from 'type-graphql';
 
 (async ()=>{
     // 初始化db
@@ -31,9 +31,11 @@ import { koaMiddleware } from '@as-integrations/koa';
     };
     
     // 啟動apollo-server
+    const schema = await buildSchema({
+        resolvers: [resolvers],
+    });
     const server = new ApolloServer({
-        typeDefs,
-        resolvers,
+        schema,
         plugins: [loggingPlugin],
     });
     await server.start();
