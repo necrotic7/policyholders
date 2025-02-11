@@ -1,5 +1,5 @@
-import { Repository as tRepository } from 'workspace-model/repository/PolicyHolders'
-import { PolicyData as tPolicyData } from 'workspace-model/service/PolicyHolders'
+import { Repository as tRepository } from 'workspace-model/repository/policyHolders'
+import { PolicyData as tPolicyData } from 'workspace-model/service/policyHolders'
 
 class Policyholders {
     repository: tRepository

@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Query, Resolver, Arg } from 'type-graphql';
-import Service from 'workspace-service/PolicyHolders';
-import Repository from 'workspace-repository/PolicyHolders';
+import Service from 'workspace-service/policyHolders';
+import Repository from 'workspace-repository/policyHolders';
 import database from 'workspace-modules/database';
 import exception from 'workspace-modules/exception';
 import schema from 'workspace-schema/policyHolders';
