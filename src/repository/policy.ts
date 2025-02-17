@@ -17,7 +17,7 @@ class Policy implements iRepository{
         await this.db.commit();
     }
 
-    async getPolicyByCode(id: number): Promise<Record<string, unknown>[]>{
+    async queryPolicyByID(id: number): Promise<Record<string, unknown>[]>{
         const TAG = '[透過保單編號取得保單]';
         try{
             const sql = `
