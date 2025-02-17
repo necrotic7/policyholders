@@ -33,7 +33,7 @@ class Database {
         }
     }
 
-    async execute(sql: string, params: oracle.BindParameters){
+    async query(sql: string, params: oracle.BindParameters){
         const db = this.getDB;
         const result = await db.execute(sql, params);
         // 轉換 rows 為物件陣列
@@ -50,6 +50,16 @@ class Database {
         });
 
         return transformedRows;
+    }
+
+    async execute(sql: string, params: oracle.BindParameters){
+        const db = this.getDB;
+        const result = await db.execute(sql, params);
+        return result;
+    }
+
+    async commit(){
+        await this.getDB.commit();
     }
 }
 

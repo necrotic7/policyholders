@@ -41,7 +41,7 @@ class Policyholders implements tRepository{
                 code
             };
 
-            const result = await this.db.execute(sql, params);
+            const result = await this.db.query(sql, params);
             if(!result || result?.length == 0){
                 console.log(TAG, `找不到保戶編號(${code})`);
                 throw this.exception.BadRequest('POLICY_NOT_FOUND', 'policy not found');
@@ -89,7 +89,7 @@ class Policyholders implements tRepository{
                 code
             };
 
-            const result = await this.db.execute(sql, params);
+            const result = await this.db.query(sql, params);
             if(!result || result?.length == 0){
                 console.log(TAG, `找不到保戶編號(${code})的父級`);
                 throw this.exception.BadRequest('POLICY_PARENT_NOT_FOUND', 'policy parent not found');
