@@ -1,5 +1,5 @@
 import { Repository as iRepository } from 'workspace-model/repository/policyHolders';
-import { PolicyData as tPolicyData } from 'workspace-model/type/policyHolders';
+import { PolicyHolderData as tPolicyData } from 'workspace-model/type/policyHolders';
 import { Exception as iException } from 'workspace-model/exception';
 class Policyholders {
     repository: iRepository

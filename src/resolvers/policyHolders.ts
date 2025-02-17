@@ -10,7 +10,7 @@ import {
     UpdatePolicyHolderInput,
 } from 'workspace-schema/policyHolders';
 @Resolver(_of => schema)
-class queryResolvers {
+class PolicyHolderResolvers {
     @Query(_returns => schema, { nullable: true })
     async getPolicyHolder(
         @Arg("code", _type => Int) code: number
@@ -52,4 +52,4 @@ class queryResolvers {
     }
 }
 
-export default queryResolvers;
+export default PolicyHolderResolvers;

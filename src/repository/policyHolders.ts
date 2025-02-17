@@ -1,7 +1,7 @@
 import { database as iDatabase } from "workspace-model/database";
 import { Exception as iException } from "workspace-model/exception";
 import { Repository as iRepository } from 'workspace-model/repository/policyHolders'
-import { PolicyData as tPolicyData } from "workspace-model/type/policyHolders";
+import { PolicyHolderData as tPolicyData } from "workspace-model/type/policyHolders";
 import oracle from 'oracledb';
 
 class Policyholders implements iRepository{
@@ -50,7 +50,7 @@ class Policyholders implements iRepository{
             const result = await this.db.query(sql, params);
             if(!result || result?.length == 0){
                 console.log(TAG, `找不到保戶編號(${code})`);
-                throw this.exception.BadRequest('POLICY_NOT_FOUND', 'policy not found');
+                throw this.exception.BadRequest('POLICYHOLDER_NOT_FOUND', 'policy not found');
             }
             
             return result;
@@ -98,7 +98,7 @@ class Policyholders implements iRepository{
             const result = await this.db.query(sql, params);
             if(!result || result?.length == 0){
                 console.log(TAG, `找不到保戶編號(${code})的父級`);
-                throw this.exception.BadRequest('POLICY_PARENT_NOT_FOUND', 'policy parent not found');
+                throw this.exception.BadRequest('POLICYHOLDER_PARENT_NOT_FOUND', 'policy parent not found');
             }
 
             return result;
@@ -176,15 +176,15 @@ class Policyholders implements iRepository{
                 throw this.exception.BadRequest('BAD_REQUEST', 'fail to insert new policy holder');
             }
 
-            const newPolicyData = outBinds as {
+            const newPolicyHolderData = outBinds as {
                 id: Array<number>,
                 registration_date: Array<string>,
             }
 
             return {
-                code: newPolicyData.id[0],
+                code: newPolicyHolderData.id[0],
                 name: name,
-                registration_date: newPolicyData.registration_date[0],
+                registration_date: newPolicyHolderData.registration_date[0],
                 introducer_code: introducerCode,
                 parent_id: parentId,
             };
