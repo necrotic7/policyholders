@@ -1,10 +1,12 @@
 export type PolicyData = {
-    code: string
-    name?: string
+    code: number
+    name: string
     registration_date: string
-    introducer_code: string
+    introducer_code?: number
     level?: number
     parent_id?: number
-    l: []
-    r: []
+    l?: PolicyData[]
+    r?: PolicyData[]
+    left_child_id?: number
+    right_child_id?: number
 };

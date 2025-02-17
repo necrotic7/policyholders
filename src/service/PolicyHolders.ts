@@ -1,5 +1,7 @@
 import { Repository as tRepository } from 'workspace-model/repository/policyHolders'
-import { PolicyData as tPolicyData } from 'workspace-model/service/policyHolders'
+import { 
+    PolicyData as tPolicyData,
+} from 'workspace-model/service/policyHolders'
 
 class Policyholders {
     repository: tRepository
@@ -32,6 +34,22 @@ class Policyholders {
         // 格式化二元樹
         const response = this.fmtPolicyHolderTree(policyData);
         return response;
+    }
+
+    /**
+     * 執行 新增保戶流程
+     */
+    async createPolicyHolder(name: string, introducerCode?: number){
+        const parentData = await this.repository.queryParentForCreate() as tPolicyData;
+        const newPolicyData = await this.repository.insertPolicyHolder(parentData?.code, name, introducerCode) as tPolicyData;
+        if(parentData){
+            (!parentData.left_child_id) ? 
+                await this.repository.updatePolicyHolder(parentData.code, parentData.name, newPolicyData.code, parentData.right_child_id) :
+                await this.repository.updatePolicyHolder(parentData.code, parentData.name, parentData.left_child_id, newPolicyData.code);
+        }
+        
+        await this.repository.save();
+        return newPolicyData;
     }
 
     /**
