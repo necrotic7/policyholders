@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import { ObjectType, InputType, Field, Int } from 'type-graphql';
 @ObjectType()
 class PolicyHolder {
-    @Field(_type => String)
-    code!: string;
+    @Field(_type => Int)
+    code!: number;
     
     @Field(_type => String)
     name!: string;
@@ -22,7 +22,7 @@ class PolicyHolder {
 }
 
 @InputType()
-class PolicyHolderInput implements Partial<PolicyHolder>{
+class CreatePolicyHolderInput implements Partial<PolicyHolder>{
     @Field(_type => String)
     name!: string;
 
@@ -30,7 +30,20 @@ class PolicyHolderInput implements Partial<PolicyHolder>{
     introducer_code?: number;
 }
 
+@InputType()
+class UpdatePolicyHolderInput implements Partial<PolicyHolder>{
+    @Field(_type => Int)
+    code!: number;
+
+    @Field(_type => String, {nullable: true})
+    name?: string;
+
+    @Field(_type => Int, {nullable: true})
+    introducer_code?: number;
+}
+
 export {
     PolicyHolder,
-    PolicyHolderInput
+    CreatePolicyHolderInput,
+    UpdatePolicyHolderInput,
 };

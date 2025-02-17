@@ -1,7 +1,7 @@
 import { database as iDatabase } from "workspace-model/database";
 import { Exception as iException } from "workspace-model/exception";
 import { Repository as iRepository } from 'workspace-model/repository/policyHolders'
-import { PolicyData as tPolicyData } from "workspace-model/service/policyHolders";
+import { PolicyData as tPolicyData } from "workspace-model/type/policyHolders";
 import oracle from 'oracledb';
 
 class Policyholders implements iRepository{
@@ -24,7 +24,7 @@ class Policyholders implements iRepository{
      * @returns {object} 返回包含保戶資料的物件
      * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyDataByCode(code: string): Promise<Record<string, unknown>[]>{
+    async queryPolicyDataByCode(code: number): Promise<Record<string, unknown>[]>{
         const TAG = '[透過保戶編號取得保戶資訊]';
         try{
             // 查詢指定保戶編號的資料與其下級
@@ -67,7 +67,7 @@ class Policyholders implements iRepository{
      * @returns {object} 返回包含保戶資料的物件
      * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyTopDataByChildCode(code: string): Promise<Record<string, unknown>[]>{
+    async queryPolicyTopDataByChildCode(code: number): Promise<Record<string, unknown>[]>{
         const TAG = '[透過子代號取得父保戶資訊]';
         try{
             // 查詢指定保戶編號的父級資料與其下級
@@ -126,6 +126,7 @@ class Policyholders implements iRepository{
                 FROM POLICYHOLDERS p 
                 WHERE (p.LEFT_CHILD_ID IS NULL OR p.RIGHT_CHILD_ID IS NULL)
                 ORDER BY id ASC, 
+                -- 左子樹空白者優先
                 DECODE(p.LEFT_CHILD_ID, NULL, 1, p.RIGHT_CHILD_ID, NULL, 2, 3) ASC
                 FETCH FIRST ROWS ONLY
             `;
@@ -193,15 +194,16 @@ class Policyholders implements iRepository{
         }
     }
 
-    async updatePolicyHolder(code: number, name: string, leftChildId: number | undefined, rightChildId: number | undefined): Promise<void>{
+    async updatePolicyHolder(code: number, name: string, leftChildId: number | undefined, rightChildId: number | undefined, introducerCode: number | undefined): Promise<void>{
         const TAG = '[更新保戶資訊]';
         try{
             const sql = `
                 UPDATE POLICYHOLDERS
                 SET 
-                    name = :name,
-                    left_child_id = :left_child_id,
-                    right_child_id = :right_child_id
+                    name = NVL(:name, name),
+                    left_child_id = NVL(:left_child_id, left_child_id),
+                    right_child_id = NVL(:right_child_id, right_child_id),
+                    introducer_id = NVL(:introducer_id, introducer_id)
                 WHERE id = :code
             `;
 
@@ -210,6 +212,7 @@ class Policyholders implements iRepository{
                 name,
                 left_child_id: leftChildId,
                 right_child_id: rightChildId,
+                introducer_id: introducerCode,
             });
 
             if(rowsAffected != 1){
