@@ -1,11 +1,9 @@
-import { Repository as tRepository } from 'workspace-model/repository/policyHolders'
-import { 
-    PolicyData as tPolicyData,
-} from 'workspace-model/service/policyHolders'
+import { Repository as iRepository } from 'workspace-model/repository/policyHolders'
+import { PolicyData as tPolicyData } from 'workspace-model/service/policyHolders'
 
 class Policyholders {
-    repository: tRepository
-    constructor(repository: tRepository){
+    repository: iRepository
+    constructor(repository: iRepository){
         this.repository = repository;
     }
 

@@ -1,14 +1,14 @@
-import { database as tDatabase } from "workspace-model/database";
-import { Exception as tException } from "workspace-model/exception";
-import { Repository as tRepository } from 'workspace-model/repository/policyHolders'
-import { PolicyData as tPolicyData } from "workspace-model/service/PolicyHolders";
+import { database as iDatabase } from "workspace-model/database";
+import { Exception as iException } from "workspace-model/exception";
+import { Repository as iRepository } from 'workspace-model/repository/policyHolders'
+import { PolicyData as tPolicyData } from "workspace-model/service/policyHolders";
 import oracle from 'oracledb';
 
-class Policyholders implements tRepository{
-    db: tDatabase
-    exception: tException
+class Policyholders implements iRepository{
+    db: iDatabase
+    exception: iException
 
-    constructor(database: tDatabase, exception: tException){
+    constructor(database: iDatabase, exception: iException){
         this.db = database;
         this.exception = exception;
     }

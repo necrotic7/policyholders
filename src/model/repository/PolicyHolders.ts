@@ -1,4 +1,4 @@
-export type Repository = {
+export interface Repository {
     save(): Promise<void>
     queryPolicyDataByCode(code: string): Promise<Record<string, unknown>[]>
     queryPolicyTopDataByChildCode(code: string): Promise<Record<string, unknown>[]>

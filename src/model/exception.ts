@@ -6,10 +6,7 @@ export interface WebError {
 }
 
 export interface _BadRequest {}
-
 export interface _ServerError {}
-
-
 export interface Exception {
     isWebError(err: unknown): err is WebError
     BadRequest(code: string, message: string) : _BadRequest

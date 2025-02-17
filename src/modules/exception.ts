@@ -1,10 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 import { 
-    WebError as tWebError,
-    _BadRequest as tBadRequest,
-    _ServerError as tServerError
+    WebError as iWebError,
+    _BadRequest as iBadRequest,
+    _ServerError as iServerError
  } from 'workspace-model/exception';
-class WebError extends Error implements tWebError{
+class WebError extends Error implements iWebError{
     statusCode: number;
     code: string;
     message: string;
@@ -16,13 +16,13 @@ class WebError extends Error implements tWebError{
     }
 }
 
-class _BadRequest extends WebError implements tBadRequest{
+class _BadRequest extends WebError implements iBadRequest{
     constructor(code: string, message: string){
         super(StatusCodes.BAD_REQUEST, code, message);
     }
 }
 
-class _ServerError extends WebError implements tServerError{
+class _ServerError extends WebError implements iServerError{
     constructor(code: string, message: string) {
         super(StatusCodes.INTERNAL_SERVER_ERROR, code, message); // 500
     }
