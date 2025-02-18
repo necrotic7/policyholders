@@ -2,7 +2,6 @@ import { queryPolicyArgs as iQueryPolicyArgs } from "workspace-model/repository/
 import { database as iDatabase } from "workspace-model/database";
 import { Exception as iException } from "workspace-model/exception";
 import { Repository as iRepository } from "workspace-model/repository/policy";
-import { PolicyData as tPolicyData } from "workspace-model/type/policy";
 import oracle from 'oracledb';
 
 class Policy implements iRepository{
