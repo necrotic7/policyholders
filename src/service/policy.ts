@@ -22,6 +22,14 @@ class Policy {
         await this.repository.save();
         return policyList[0];
     }
+
+    async updatePolicy(id: number, description: string|undefined, premium: number|undefined){
+        await this.repository.updatePolicy(id, description, premium);
+        const result = await this.repository.queryPolicy({ policyID: id });
+        const policyList = result.map(r => r as tPolicyData);
+        await this.repository.save();
+        return policyList[0];
+    }
 }
 
 export default Policy;

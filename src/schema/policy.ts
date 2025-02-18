@@ -43,7 +43,23 @@ class CreatePolicyInput implements Partial<Policy>{
     premium!: number;
 }
 
+@InputType()
+class UpdatePolicyInput implements Partial<Policy>{
+    // 保單id
+    @Field(_type => ID)
+    id!: number;
+
+    // 保單描述
+    @Field(_type => String, {nullable: true})
+    description?: string;
+
+    // 保費
+    @Field(_type => Int, {nullable: true})
+    premium?: number;
+}
+
 export {
     Policy,
     CreatePolicyInput,
+    UpdatePolicyInput,
 }

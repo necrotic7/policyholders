@@ -98,6 +98,36 @@ class Policy implements iRepository{
             throw err;
         }
     }
+
+    async updatePolicy(id: number, description: string|undefined, premium: number|undefined): Promise<void>{
+        const TAG = '[更新保單]';
+        try{
+            const sql = `
+                UPDATE POLICY
+                SET 
+                    DESCRIPTION = NVL(:description, DESCRIPTION),
+                    PREMIUM = NVL(:premium, PREMIUM)
+                WHERE 
+                    ID = :id
+            `;
+
+            const { rowsAffected } = await this.db.execute(sql, {
+                description,
+                premium,
+                id,
+            });
+
+            if(rowsAffected != 1){
+                console.log(TAG, `更新保單失敗，rowsAffected(${rowsAffected}) != 1`);
+                throw this.exception.BadRequest('BAD_REQUEST', 'fail to update policy');
+            }
+
+            return;
+        } catch(err) {
+            console.log(TAG, `寫入失敗：${err}`);
+            throw err;
+        }
+    }
 }
 
 export default Policy;

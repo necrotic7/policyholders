@@ -6,7 +6,8 @@ import exception from 'workspace-modules/exception';
 import Service from 'workspace-service/policy';
 import { 
     Policy as schema,
-    CreatePolicyInput, 
+    CreatePolicyInput,
+    UpdatePolicyInput,
 } from 'workspace-schema/policy';
 
 @Resolver(_of => schema)
@@ -29,6 +30,16 @@ class PolicyResolver {
         const repository = new Repository(database, exception);
         const worker = new Service(repository, exception);
         const result = await worker.createPolicy(args.description, args.holder_code, args.premium);
+        return result;
+    }
+
+    @Mutation(_returns => schema)
+    async updatePolicy(
+        @Arg("policy", _type => UpdatePolicyInput) args: UpdatePolicyInput
+    ): Promise<schema|{}>{
+        const repository = new Repository(database, exception);
+        const worker = new Service(repository, exception);
+        const result = await worker.updatePolicy(args.id, args.description, args.premium);
         return result;
     }
 }

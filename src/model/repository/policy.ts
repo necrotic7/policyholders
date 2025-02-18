@@ -3,7 +3,8 @@ export interface queryPolicyArgs {
     policyHolderCode?: number|undefined
 }
 export interface Repository {
+    save(): Promise<void>
     queryPolicy({policyID, policyHolderCode}: queryPolicyArgs): Promise<Record<string, unknown>[]>
     insertPolicy(description: string, holderId: number, premium: number): Promise<number>
-    save(): Promise<void>
+    updatePolicy(id: number, description: string|undefined, premium: number|undefined): Promise<void>
 };
