@@ -83,7 +83,7 @@ launch.json
   
 ```
 ### 快速產生GraphQL API Doc
-
+#### 方法1
 先安裝SpectaQL
 ```
   npx spectaql
@@ -113,4 +113,9 @@ output:
 根據schema產生api doc
 ```
 npx spectaql spectaql.yml 
+```
+#### 方法2
+使用 graphdoc 透過 schema 快速產生 apidoc
+```
+graphdoc -s ./schema.graphql -o ./graphdoc
 ```
