@@ -12,10 +12,10 @@ import {
 
 @Resolver(_of => schema)
 class PolicyResolver {
-    @Query(_returns => [schema], { nullable: true })
+    @Query(_returns => [schema], { description:"查詢保單", nullable: true })
     async getPolicy(
-        @Arg("policyID", _type => Int, {nullable: true}) policyID?: number|undefined,
-        @Arg("policyHolderCode", _type => Int, {nullable: true}) policyHolderCode?: number|undefined,
+        @Arg("policyID", _type => Int, {description:"保單ID", nullable: true}) policyID?: number|undefined,
+        @Arg("policyHolderCode", _type => Int, {description:"保戶編號", nullable: true}) policyHolderCode?: number|undefined,
     ): Promise<schema[]|[]>{
         const repository = new Repository(database, exception);
         const worker = new Service(repository, exception);
@@ -23,9 +23,9 @@ class PolicyResolver {
         return result;
     }
 
-    @Mutation(_returns => schema)
+    @Mutation(_returns => schema, {description:"創建保單"})
     async createPolicy(
-        @Arg("policy", _type => CreatePolicyInput) args: CreatePolicyInput
+        @Arg("policy", _type => CreatePolicyInput, {description:"創建保單表單"}) args: CreatePolicyInput
     ): Promise<schema|{}>{
         const repository = new Repository(database, exception);
         const worker = new Service(repository, exception);
@@ -35,7 +35,7 @@ class PolicyResolver {
 
     @Mutation(_returns => schema)
     async updatePolicy(
-        @Arg("policy", _type => UpdatePolicyInput) args: UpdatePolicyInput
+        @Arg("policy", _type => UpdatePolicyInput, {description:"更新保單表單"}) args: UpdatePolicyInput
     ): Promise<schema|{}>{
         const repository = new Repository(database, exception);
         const worker = new Service(repository, exception);

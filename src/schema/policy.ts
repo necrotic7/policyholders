@@ -1,60 +1,48 @@
 import 'reflect-metadata';
 import { ObjectType, Field, ID, Int, InputType } from 'type-graphql';
 
-@ObjectType()
+@ObjectType({description:"保單資訊"})
 class Policy {
-    // 保單id
-    @Field(_type => ID)
+    @Field(_type => ID, {description:"保單id"})
     id!: number;
 
-    // 保單描述
-    @Field(_type => String)
+    @Field(_type => String, {description:"保單描述"})
     description!: string;
 
-    // 保戶姓名
-    @Field(_type => String)
+    @Field(_type => String, {description:"保戶姓名"})
     holder_name!: string;
 
-    // 保戶代號
-    @Field(_type => Int)
+    @Field(_type => Int, {description:"保戶代號"})
     holder_code!: number;
 
-    // 保費
-    @Field(_type => Int)
+    @Field(_type => Int, {description:"保費"})
     premium!: number;
 
-    // 創建時間
-    @Field(_type => String)
+    @Field(_type => String, {description:"創建時間"})
     create_date!: string;
 }
 
-@InputType()
+@InputType({description:"創建保單表單"})
 class CreatePolicyInput implements Partial<Policy>{
-    // 保單描述
-    @Field(_type => String)
+    @Field(_type => String, {description:"保單描述"})
     description!: string;
 
-    // 保戶代號
-    @Field(_type => Int)
+    @Field(_type => Int, {description:"保戶代號"})
     holder_code!: number;
 
-    // 保費
-    @Field(_type => Int)
+    @Field(_type => Int, {description:"保費"})
     premium!: number;
 }
 
-@InputType()
+@InputType({description:"更新保單表單"})
 class UpdatePolicyInput implements Partial<Policy>{
-    // 保單id
-    @Field(_type => ID)
+    @Field(_type => ID, {description:"保單id"})
     id!: number;
 
-    // 保單描述
-    @Field(_type => String, {nullable: true})
+    @Field(_type => String, {description:"保單描述", nullable: true})
     description?: string;
 
-    // 保費
-    @Field(_type => Int, {nullable: true})
+    @Field(_type => Int, {description:"保費", nullable: true})
     premium?: number;
 }
 

@@ -1,44 +1,44 @@
 import 'reflect-metadata';
 import { ObjectType, InputType, Field, Int } from 'type-graphql';
-@ObjectType()
+@ObjectType({description:"保戶資訊"})
 class PolicyHolder {
-    @Field(_type => Int)
+    @Field(_type => Int, {description:"保戶編號"})
     code!: number;
     
-    @Field(_type => String)
+    @Field(_type => String, {description:"保戶姓名"})
     name!: string;
 
-    @Field(_type => String)
+    @Field(_type => String, {description:"註冊日期"})
     registration_date!: Date;
 
-    @Field(_type => Int, {nullable: true})
+    @Field(_type => Int, {description:"介紹人編號", nullable: true})
     introducer_code?: number;
 
-    @Field(_type => [PolicyHolder], {nullable: true})
+    @Field(_type => [PolicyHolder], {description:"左樹", nullable: true})
     l?: PolicyHolder[];
 
-    @Field(_type => [PolicyHolder], {nullable: true})
+    @Field(_type => [PolicyHolder], {description:"右樹", nullable: true})
     r?: PolicyHolder[];
 }
 
-@InputType()
+@InputType({description:"創建保戶表單"})
 class CreatePolicyHolderInput implements Partial<PolicyHolder>{
-    @Field(_type => String)
+    @Field(_type => String, {description:"保戶姓名"})
     name!: string;
 
-    @Field(_type => Int, {nullable: true})
+    @Field(_type => Int, {description:"介紹人編號", nullable: true})
     introducer_code?: number;
 }
 
-@InputType()
+@InputType({description:"更新保戶表單"})
 class UpdatePolicyHolderInput implements Partial<PolicyHolder>{
-    @Field(_type => Int)
+    @Field(_type => Int, {description:"保戶編號"})
     code!: number;
 
-    @Field(_type => String, {nullable: true})
+    @Field(_type => String, {description:"保戶姓名", nullable: true})
     name?: string;
 
-    @Field(_type => Int, {nullable: true})
+    @Field(_type => Int, {description:"介紹人編號", nullable: true})
     introducer_code?: number;
 }
 

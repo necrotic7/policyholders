@@ -1,5 +1,5 @@
 introspection:
-  schemaFile: ../schema.graphql
+  url: http://localhost:3000
 
 info:
   title: PolicyHolder

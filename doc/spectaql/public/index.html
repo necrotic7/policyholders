@@ -119,6 +119,14 @@
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="operation-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>查詢保單</p>
+                </div>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
                 <div class="operation-response doc-copy-section">
                   <h5>Response</h5>
                   <p> Returns <a href="#definition-Policy"><code>[Policy!]</code></a>
@@ -138,15 +146,13 @@
                         <td>
                           <span class="property-name"><code>policyHolderCode</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶編號 </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>policyID</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保單ID </td>
                       </tr>
                     </tbody>
                   </table>
@@ -182,7 +188,7 @@
                   <h5>Variables</h5>
                   <html>
                     <head></head>
-                    <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span><span class="hljs-attr">"policyHolderCode"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">"policyID"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">}</span>
+                    <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span><span class="hljs-attr">"policyHolderCode"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">"policyID"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">}</span>
 </code></pre>
                     </body>
                   </html>
@@ -196,11 +202,11 @@
     <span class="hljs-attr">"getPolicy"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
       <span class="hljs-punctuation">{</span>
         <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"4"</span><span class="hljs-punctuation">,</span>
-        <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-        <span class="hljs-attr">"holder_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-        <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"holder_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
         <span class="hljs-attr">"premium"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
-        <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span>
+        <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span>
       <span class="hljs-punctuation">}</span>
     <span class="hljs-punctuation">]</span>
   <span class="hljs-punctuation">}</span>
@@ -219,6 +225,14 @@
             <h2 class="operation-heading ">
               <code>getPolicyHolder</code>
             </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <div class="operation-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>查詢保戶</p>
+                </div>
+              </div>
+            </div>
             <div class="doc-row">
               <div class="doc-copy">
                 <div class="operation-response doc-copy-section">
@@ -240,8 +254,7 @@
                         <td>
                           <span class="property-name"><code>code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶編號 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -289,8 +302,8 @@
     <span class="hljs-attr">"getPolicyHolder"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"l"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"r"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span>
     <span class="hljs-punctuation">}</span>
@@ -312,6 +325,14 @@
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="operation-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>查詢保戶上級</p>
+                </div>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
                 <div class="operation-response doc-copy-section">
                   <h5>Response</h5>
                   <p> Returns a <a href="#definition-PolicyHolder"><code>PolicyHolder</code></a>
@@ -331,8 +352,7 @@
                         <td>
                           <span class="property-name"><code>code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶編號 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -366,7 +386,7 @@
                   <h5>Variables</h5>
                   <html>
                     <head></head>
-                    <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span><span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">}</span>
+                    <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span><span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">}</span>
 </code></pre>
                     </body>
                   </html>
@@ -378,8 +398,8 @@
                     <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">"data"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
     <span class="hljs-attr">"getPolicyHolderTop"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"l"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
@@ -401,6 +421,14 @@
             </h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="operation-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>創建保單</p>
+                </div>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
                 <div class="operation-response doc-copy-section">
                   <h5>Response</h5>
                   <p> Returns a <a href="#definition-Policy"><code>Policy!</code></a>
@@ -420,8 +448,7 @@
                         <td>
                           <span class="property-name"><code>policy</code></span> - <span class="property-type"><a href="#definition-CreatePolicyInput"><code>CreatePolicyInput!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 創建保單表單 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -466,9 +493,9 @@
       <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"holder_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"premium"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span>
+      <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span>
     <span class="hljs-punctuation">}</span>
   <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span>
@@ -486,6 +513,14 @@
             <h2 class="operation-heading ">
               <code>createPolicyHolder</code>
             </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <div class="operation-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>創建保戶</p>
+                </div>
+              </div>
+            </div>
             <div class="doc-row">
               <div class="doc-copy">
                 <div class="operation-response doc-copy-section">
@@ -507,8 +542,7 @@
                         <td>
                           <span class="property-name"><code>policyholder</code></span> - <span class="property-type"><a href="#definition-CreatePolicyHolderInput"><code>CreatePolicyHolderInput!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 創建保戶表單 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -556,7 +590,7 @@
     <span class="hljs-attr">"createPolicyHolder"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
       <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"l"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"r"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span>
@@ -598,8 +632,7 @@
                         <td>
                           <span class="property-name"><code>policy</code></span> - <span class="property-type"><a href="#definition-UpdatePolicyInput"><code>UpdatePolicyInput!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 更新保單表單 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -641,12 +674,12 @@
                     <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">"data"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
     <span class="hljs-attr">"updatePolicy"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"4"</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"holder_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"premium"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span>
+      <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span>
     <span class="hljs-punctuation">}</span>
   <span class="hljs-punctuation">}</span>
 <span class="hljs-punctuation">}</span>
@@ -664,6 +697,14 @@
             <h2 class="operation-heading ">
               <code>updatePolicyHolder</code>
             </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <div class="operation-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>更新保戶</p>
+                </div>
+              </div>
+            </div>
             <div class="doc-row">
               <div class="doc-copy">
                 <div class="operation-response doc-copy-section">
@@ -685,8 +726,7 @@
                         <td>
                           <span class="property-name"><code>policyHolder</code></span> - <span class="property-type"><a href="#definition-UpdatePolicyHolderInput"><code>UpdatePolicyHolderInput!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 更新保戶表單 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -732,10 +772,10 @@
                     <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">"data"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
     <span class="hljs-attr">"updatePolicyHolder"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"l"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
       <span class="hljs-attr">"r"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span>
     <span class="hljs-punctuation">}</span>
@@ -778,6 +818,10 @@
             <h2 class="definition-heading">CreatePolicyHolderInput</h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="definition-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>創建保戶表單</p>
+                </div>
                 <div class="definition-properties doc-copy-section">
                   <h5>Fields</h5>
                   <table>
@@ -792,15 +836,13 @@
                         <td>
                           <span class="property-name"><code>name</code></span> - <span class="property-type"><a href="#definition-String"><code>String!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶姓名 </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>introducer_code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 介紹人編號 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -811,7 +853,7 @@
                   <h5>Example</h5>
                   <html>
                     <head></head>
-                    <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span><span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">}</span>
+                    <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span><span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">}</span>
 </code></pre>
                     </body>
                   </html>
@@ -826,6 +868,10 @@
             <h2 class="definition-heading">CreatePolicyInput</h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="definition-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>創建保單表單</p>
+                </div>
                 <div class="definition-properties doc-copy-section">
                   <h5>Fields</h5>
                   <table>
@@ -840,22 +886,19 @@
                         <td>
                           <span class="property-name"><code>description</code></span> - <span class="property-type"><a href="#definition-String"><code>String!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保單描述 </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>holder_code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶代號 </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>premium</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保費 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -867,9 +910,9 @@
                   <html>
                     <head></head>
                     <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"premium"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span>
+  <span class="hljs-attr">"premium"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
                     </body>
@@ -920,7 +963,7 @@
                   <h5>Example</h5>
                   <html>
                     <head></head>
-                    <body><pre><code class="hljs language-json"><span class="hljs-number">987</span>
+                    <body><pre><code class="hljs language-json"><span class="hljs-number">123</span>
 </code></pre>
                     </body>
                   </html>
@@ -935,6 +978,10 @@
             <h2 class="definition-heading">Policy</h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="definition-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>保單資訊</p>
+                </div>
                 <div class="definition-properties doc-copy-section">
                   <h5>Fields</h5>
                   <table>
@@ -948,38 +995,32 @@
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>id</code></span> - <span class="property-type"><a href="#definition-ID"><code>ID!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保單id </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>description</code></span> - <span class="property-type"><a href="#definition-String"><code>String!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保單描述 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>holder_name</code></span> - <span class="property-type"><a href="#definition-String"><code>String!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶姓名 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>holder_code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶代號 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>premium</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保費 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>create_date</code></span> - <span class="property-type"><a href="#definition-String"><code>String!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 創建時間 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -992,11 +1033,11 @@
                     <head></head>
                     <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
   <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"holder_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"premium"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span>
+  <span class="hljs-attr">"description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"holder_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"holder_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"premium"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"create_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
                     </body>
@@ -1012,6 +1053,10 @@
             <h2 class="definition-heading">PolicyHolder</h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="definition-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>保戶資訊</p>
+                </div>
                 <div class="definition-properties doc-copy-section">
                   <h5>Fields</h5>
                   <table>
@@ -1025,38 +1070,32 @@
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶編號 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>name</code></span> - <span class="property-type"><a href="#definition-String"><code>String!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶姓名 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>registration_date</code></span> - <span class="property-type"><a href="#definition-String"><code>String!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 註冊日期 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>introducer_code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 介紹人編號 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>l</code></span> - <span class="property-type"><a href="#definition-PolicyHolder"><code>[PolicyHolder!]</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 左樹 </td>
                       </tr>
                       <tr>
                         <td data-property-name=""><span class="property-name"><code>r</code></span> - <span class="property-type"><a href="#definition-PolicyHolder"><code>[PolicyHolder!]</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 右樹 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -1068,10 +1107,10 @@
                   <html>
                     <head></head>
                     <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"xyz789"</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">"registration_date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">"l"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">"r"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">PolicyHolder</span><span class="hljs-punctuation">]</span>
 <span class="hljs-punctuation">}</span>
@@ -1099,7 +1138,7 @@
                   <h5>Example</h5>
                   <html>
                     <head></head>
-                    <body><pre><code class="hljs language-gql"><span class="hljs-symbol">"xyz789"</span>
+                    <body><pre><code class="hljs language-gql"><span class="hljs-symbol">"abc123"</span>
 </code></pre>
                     </body>
                   </html>
@@ -1114,6 +1153,10 @@
             <h2 class="definition-heading">UpdatePolicyHolderInput</h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="definition-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>更新保戶表單</p>
+                </div>
                 <div class="definition-properties doc-copy-section">
                   <h5>Fields</h5>
                   <table>
@@ -1128,22 +1171,19 @@
                         <td>
                           <span class="property-name"><code>code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶編號 </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>name</code></span> - <span class="property-type"><a href="#definition-String"><code>String</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保戶姓名 </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>introducer_code</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 介紹人編號 </td>
                       </tr>
                     </tbody>
                   </table>
@@ -1155,9 +1195,9 @@
                   <html>
                     <head></head>
                     <body><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"abc123"</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">123</span>
+  <span class="hljs-attr">"introducer_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">987</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
                     </body>
@@ -1173,6 +1213,10 @@
             <h2 class="definition-heading">UpdatePolicyInput</h2>
             <div class="doc-row">
               <div class="doc-copy">
+                <div class="definition-description doc-copy-section">
+                  <h5>Description</h5>
+                  <p>更新保單表單</p>
+                </div>
                 <div class="definition-properties doc-copy-section">
                   <h5>Fields</h5>
                   <table>
@@ -1187,22 +1231,19 @@
                         <td>
                           <span class="property-name"><code>id</code></span> - <span class="property-type"><a href="#definition-ID"><code>ID!</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保單id </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>description</code></span> - <span class="property-type"><a href="#definition-String"><code>String</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保單描述 </td>
                       </tr>
                       <tr>
                         <td>
                           <span class="property-name"><code>premium</code></span> - <span class="property-type"><a href="#definition-Int"><code>Int</code></a></span>
                         </td>
-                        <td>
-                        </td>
+                        <td> 保費 </td>
                       </tr>
                     </tbody>
                   </table>
