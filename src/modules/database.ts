@@ -1,6 +1,6 @@
 import oracle from 'oracledb';
-const { getConnection } = oracle;
-class Database {
+import { database as iDatabase } from 'workspace-model/database';
+class Database implements iDatabase{
     db: oracle.Connection | null
     constructor() {
         this.db = null; // 儲存資料庫連線
@@ -20,7 +20,7 @@ class Database {
         }
         try {
 
-            this.db = await getConnection({
+            this.db = await oracle.getConnection({
                 user: 'ars', // Oracle 資料庫使用者名稱
                 password: 'ars#KniLrATs946#168', // 密碼
                 connectString: '10.1.103.110:1521/DEV'
@@ -33,7 +33,7 @@ class Database {
         }
     }
 
-    async execute(sql: string, params: oracle.BindParameters){
+    async query(sql: string, params: oracle.BindParameters){
         const db = this.getDB;
         const result = await db.execute(sql, params);
         // 轉換 rows 為物件陣列
@@ -50,6 +50,16 @@ class Database {
         });
 
         return transformedRows;
+    }
+
+    async execute(sql: string, params: oracle.BindParameters){
+        const db = this.getDB;
+        const result = await db.execute(sql, params);
+        return result;
+    }
+
+    async commit(){
+        await this.getDB.commit();
     }
 }
 

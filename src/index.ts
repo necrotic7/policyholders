@@ -3,8 +3,7 @@ import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 import { ApolloServer, ApolloServerPlugin } from '@apollo/server';
 import { koaMiddleware } from '@as-integrations/koa';
-import { buildSchema } from 'type-graphql';
-import resolvers from 'workspace-resolvers/policyHolders';
+import schema from 'workspace-resolvers/index';
 import database from 'workspace-modules/database';
 
 (async ()=>{
@@ -31,9 +30,6 @@ import database from 'workspace-modules/database';
     };
     
     // 啟動apollo-server
-    const schema = await buildSchema({
-        resolvers: [resolvers],
-    });
     const server = new ApolloServer({
         schema,
         plugins: [loggingPlugin],

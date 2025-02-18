@@ -1,0 +1,26 @@
+introspection:
+  url: http://localhost:3000
+
+info:
+  title: PolicyHolder
+  description: |
+    一個簡易的api server，用於管理保戶與保單的新增/修改/查詢功能。
+
+    使用以下工具進行開發：
+      - typescript
+        - ESModule
+        - 使用 tsx
+      - GraphQL
+        - 使用 Apollo Server
+        - schema 與 resolver 使用 type-graphql 撰寫
+      - Koa
+        - 作為 Server 框架
+      - Oracle
+        - 作為主要資料庫語言
+
+servers:
+  - url: http://localhost:3000
+
+output:
+  format: html
+  targetDir: ./

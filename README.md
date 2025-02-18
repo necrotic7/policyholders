@@ -1,19 +1,11 @@
+## Description
+一個簡易的api server，用於管理保戶與保單的新增/修改/查詢功能。
 ## cmd
-```npm run dev```
-## 注意事項
-  需先執行migrate資料夾中的sql以建立測試資料
-## 測試結構
-                          1 (Alice)
-                        /          \
-                2 (Bob)         3 (Charlie)
-                /      \         /         \
-        4 (David)    5 (Eve)  6 (Frank)  7 (Grace)
-           /   \             / 
-     8(Henry) 9(Ivy)     11(Kim)
-               /
-            10(Jack)
-        
-## typescript 環境
+```
+npm run dev
+```     
+
+### typescript 環境
 使用 tsx（esbuild-based TypeScript runtime）：
 
   1.直接執行 TypeScript，無需額外編譯
@@ -24,7 +16,9 @@
 
 安裝tsx
 
-```npm i -g tsx```
+```
+npm i -g tsx
+```
 
 package.json
 ```
@@ -37,14 +31,91 @@ package.json
 ```
 
 tsconfig.json
-  module: "ESNext" → 使用最新 ESM
-  moduleResolution: "bundler" → 允許省略 .js（這是 tsx 的特性）
 ```
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "ESNext", → 使用最新 ESM
+    "moduleResolution": "bundler",(或node) → 允許import時省略.js（tsx的特性）
     "strict": true
   }
 }
+```
+
+### debug設置
+launch.json
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "tsx",
+        "type": "node",
+        "request": "launch",
+        "restart": true,
+        // Debug current file in VSCode
+        "cwd": "${workspaceFolder}/src",
+        "program": "${workspaceFolder}/src/index.ts",
+    
+        /*
+         * Path to tsx binary
+         * Assuming locally installed
+         */
+        "runtimeExecutable": "tsx",
+    
+        /*
+         * Open terminal when debugging starts (Optional)
+         * Useful to see console.logs
+         */
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+    
+        // Files to exclude from debugger (e.g. call stack)
+        "skipFiles": [
+            // Node.js internal core modules
+            "<node_internals>/**",
+    
+            // Ignore all dependencies (optional)
+            "${workspaceFolder}/node_modules/**",
+        ],
+    }
+    ]
+  }
+  
+```
+### 快速產生GraphQL API Doc
+#### 方法1
+先安裝SpectaQL
+```
+  npx spectaql
+```
+
+設定config檔 spectaql.yml
+
+```
+introspection:
+  // schema 路徑
+  schemaFile: "./schema.graphql"
+
+info:
+  title: "sample doc"
+  description: "..."
+
+servers:
+  - url: "http://localhost:3000"
+
+// 輸出api doc路徑
+output:
+  format: "html"
+  targetDir: "./spectaql-output"
+
+```
+
+根據schema產生api doc
+```
+npx spectaql spectaql.yml 
+```
+#### 方法2
+使用 graphdoc 透過 schema 快速產生 apidoc
+```
+graphdoc -s ./schema.graphql -o ./graphdoc
 ```

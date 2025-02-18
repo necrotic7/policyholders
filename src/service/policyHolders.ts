@@ -1,10 +1,12 @@
-import { Repository as tRepository } from 'workspace-model/repository/PolicyHolders'
-import { PolicyData as tPolicyData } from 'workspace-model/service/PolicyHolders'
-
+import { Repository as iRepository } from 'workspace-model/repository/policyHolders';
+import { PolicyHolderData as tPolicyData } from 'workspace-model/type/policyHolders';
+import { Exception as iException } from 'workspace-model/exception';
 class Policyholders {
-    repository: tRepository
-    constructor(repository: tRepository){
+    repository: iRepository
+    exception: iException
+    constructor(repository: iRepository, exception: iException){
         this.repository = repository;
+        this.exception = exception;
     }
 
     /**
@@ -12,8 +14,7 @@ class Policyholders {
      * @param {string} code 保戶編號
      * @returns {object} args.response
      */
-    async getPolicyHolderByCode(code: string): Promise<tPolicyData | {}>{
-
+    async getPolicyHolderByCode(code: number): Promise<tPolicyData | {}>{
         // 取得保戶及其所有下級資料
         const policyData = await this.repository.queryPolicyDataByCode(code);
         // 格式化二元樹
@@ -26,11 +27,42 @@ class Policyholders {
      * @param {string} code 保戶編號
      * @returns {object} response
      */
-    async getPolicyHolderTopByCode(code: string): Promise<tPolicyData | {}>{
+    async getPolicyHolderTopByCode(code: number): Promise<tPolicyData | {}>{
         // 取得保戶上級及其所有下級資料
         const policyData = await this.repository.queryPolicyTopDataByChildCode(code);
         // 格式化二元樹
         const response = this.fmtPolicyHolderTree(policyData);
+        return response;
+    }
+
+    /**
+     * 執行 新增保戶流程
+     */
+    async createPolicyHolder(name: string, introducerCode?: number){
+        const parentData = await this.repository.queryParentForCreate() as tPolicyData;
+        const newPolicyData = await this.repository.insertPolicyHolder(parentData?.code, name, introducerCode) as tPolicyData;
+        if(parentData){
+            (!parentData.left_child_id) ? 
+                await this.repository.updatePolicyHolder(parentData.code, undefined, newPolicyData.code, undefined, undefined) :
+                await this.repository.updatePolicyHolder(parentData.code, undefined, undefined, newPolicyData.code, undefined);
+        }
+        
+        await this.repository.save();
+        return newPolicyData;
+    }
+
+    async updatePolicyHolder(code: number, name: string | undefined, introducerCode: number | undefined): Promise<tPolicyData|{}>{
+        const TAG = '[更新保戶資訊]';
+        if(!name && !introducerCode){
+            console.log(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
+            throw this.exception.BadRequest('BAD_REQUEST', 'invalid parameters');
+        }
+        await this.repository.updatePolicyHolder(code, name, undefined, undefined, introducerCode);
+        // 取得保戶及其所有下級資料
+        const policyData = await this.repository.queryPolicyDataByCode(code);
+        // 格式化二元樹
+        const response = this.fmtPolicyHolderTree(policyData);
+        await this.repository.save();
         return response;
     }
 
