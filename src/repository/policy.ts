@@ -1,3 +1,4 @@
+import { queryPolicyArgs as iQueryPolicyArgs } from "workspace-model/repository/policy";
 import { database as iDatabase } from "workspace-model/database";
 import { Exception as iException } from "workspace-model/exception";
 import { Repository as iRepository } from "workspace-model/repository/policy";
@@ -17,10 +18,13 @@ class Policy implements iRepository{
         await this.db.commit();
     }
 
-    async queryPolicyByID(id: number): Promise<Record<string, unknown>[]>{
+    async queryPolicy({
+        policyID,
+        policyHolderCode,
+    }: iQueryPolicyArgs): Promise<Record<string, unknown>[]>{
         const TAG = '[透過保單編號取得保單]';
         try{
-            const sql = `
+            let sql = `
                 SELECT
                     p.id AS "id",
                     p.description AS "description",
@@ -30,15 +34,26 @@ class Policy implements iRepository{
                     TO_CHAR(p.create_date, 'YYYY-MM-DD HH24:Mi:SS') AS "create_date"
                 FROM POLICY p
                 INNER JOIN POLICYHOLDERS h ON h.id = p.holder_id
-                WHERE p.id = :id
+                WHERE 1=1
             `;
 
-            const rows = await this.db.query(sql, {id});
-
-            if(!rows || rows.length == 0){
-                console.log(TAG, `找不到保單編號(${id})的資料`);
-                throw this.exception.BadRequest('POLICY_NOT_FOUND', 'policy not found');
+            const params: Record<string, any> = {};
+            if(policyID){
+                sql += `AND p.id = :policyID
+                `;
+                params.policyID = policyID;
             }
+
+            if(policyHolderCode){
+                sql += `AND h.id = :policyHolderCode
+                `;
+                params.policyHolderCode = policyHolderCode;
+            }
+
+            sql += `ORDER BY p.create_date DESC
+            `;
+
+            const rows = await this.db.query(sql, params);
 
             return rows;
         } catch(err) {

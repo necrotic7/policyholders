@@ -11,13 +11,14 @@ import {
 
 @Resolver(_of => schema)
 class PolicyResolver {
-    @Query(_returns => schema)
-    async getPolicyByID(
-        @Arg("id", _type => Int) id: number
-    ){
+    @Query(_returns => [schema], { nullable: true })
+    async getPolicy(
+        @Arg("policyID", _type => Int, {nullable: true}) policyID?: number|undefined,
+        @Arg("policyHolderCode", _type => Int, {nullable: true}) policyHolderCode?: number|undefined,
+    ): Promise<schema[]|[]>{
         const repository = new Repository(database, exception);
         const worker = new Service(repository, exception);
-        const result = await worker.getPolicyByID(id);
+        const result = await worker.getPolicy(policyID, policyHolderCode);
         return result;
     }
 

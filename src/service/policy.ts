@@ -9,16 +9,15 @@ class Policy {
         this.exception = exception;
     }
 
-    async getPolicyByID(id: number): Promise<tPolicyData>{
-        const result = await this.repository.queryPolicyByID(id);
+    async getPolicy(policyID: number|undefined, policyHolderCode: number|undefined): Promise<tPolicyData[]>{
+        const result = await this.repository.queryPolicy({ policyID, policyHolderCode });
         const policyList = result.map(r => r as tPolicyData);
-        await this.repository.save();
-        return policyList[0];
+        return policyList;
     }
 
     async createPolicy(description: string, holderId: number, premium: number): Promise<tPolicyData>{
         const newPolicyID = await this.repository.insertPolicy(description, holderId, premium);
-        const result = await this.repository.queryPolicyByID(newPolicyID);
+        const result = await this.repository.queryPolicy({ policyID: newPolicyID });
         const policyList = result.map(r => r as tPolicyData);
         await this.repository.save();
         return policyList[0];

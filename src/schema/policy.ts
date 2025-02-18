@@ -25,7 +25,7 @@ class Policy {
 
     // 創建時間
     @Field(_type => String)
-    create_date!: Date;
+    create_date!: string;
 }
 
 @InputType()
