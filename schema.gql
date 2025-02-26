@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+"""保單資訊"""
+type Policy {
+  """保單id"""
+  id: ID!
+
+  """保單描述"""
+  description: String!
+
+  """保戶姓名"""
+  holder_name: String!
+
+  """保戶代號"""
+  holder_code: Int!
+
+  """保費"""
+  premium: Int!
+
+  """創建時間"""
+  create_date: String!
+}
+
+type Query {
+  """查詢保單"""
+  getPolicy(
+    """保單ID"""
+    policyID: Int
+
+    """保戶編號"""
+    policyholderCode: Int
+  ): [Policy!]
+}
+
+type Mutation {
+  """創建保單"""
+  createPolicy(
+    """創建保單表單"""
+    args: CreatePolicyInput!
+  ): Policy!
+  updatePolicy(
+    """更新保單表單"""
+    args: UpdatePolicyInput!
+  ): Policy!
+}
+
+"""創建保單表單"""
+input CreatePolicyInput {
+  """保單描述"""
+  description: String!
+
+  """保戶代號"""
+  holder_code: Int!
+
+  """保費"""
+  premium: Int!
+}
+
+"""更新保單表單"""
+input UpdatePolicyInput {
+  """保單id"""
+  id: ID!
+
+  """保單描述"""
+  description: String
+
+  """保費"""
+  premium: Int
+}
