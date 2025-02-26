@@ -25,11 +25,47 @@
 ## Description
 一個簡易的api server，用於管理保戶與保單的新增/修改/查詢功能。
 
+
+根據不同branch使用不同工具進行開發:
+
+master 
+  1. typescript
+  2. nestjs
+  3. GraphQL
+  4. Apollo Server
+  5. Oracle
+
+ts-graphql
+  1. typescript
+  2. tsx
+  3. Koa
+  4. GraphQL
+  5. Apollo Server
+  6. type-graphql
+  7. Oracle
+
+js-RESTful
+  1. javascript
+  2. express
+  3. RESTful
+  4. Oracle
+
+
+
 ## Project setup
 
 ```bash
 $ npm install
 ```
+
+## Init env
+在根目錄創建.env檔案，並填入以下資料
+```
+ORACLE_USER=root
+ORACLE_PASSWORD=root
+ORACLE_CONNECT_STRING=127.0.0.1:1521/DEV
+```
+
 
 ## Compile and run the project
 
