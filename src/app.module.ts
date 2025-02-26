@@ -5,10 +5,12 @@ import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import { PolicyModule } from './policy/policy.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }), // 載入 .env 設定
     DatabaseModule,
+    PolicyModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
