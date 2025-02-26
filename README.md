@@ -1,87 +1,50 @@
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
+
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
+
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+
 ## Description
 一個簡易的api server，用於管理保戶與保單的新增/修改/查詢功能。
-## cmd
-```
-npm run dev
-```     
 
-### typescript 環境
-使用 tsx（esbuild-based TypeScript runtime）：
+## Project setup
 
-  1.直接執行 TypeScript，無需額外編譯
-  
-  2.支援 ESM（不需 require）
-  
-  3.不強制 .js 副檔名
-
-安裝tsx
-
-```
-npm i -g tsx
+```bash
+$ npm install
 ```
 
-package.json
-```
-{
-  "type": "module",
-  "scripts": {
-    "dev": "tsx src/index.ts"
-  }
-}
+## Compile and run the project
+
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
-tsconfig.json
-```
-{
-  "compilerOptions": {
-    "module": "ESNext", → 使用最新 ESM
-    "moduleResolution": "bundler",(或node) → 允許import時省略.js（tsx的特性）
-    "strict": true
-  }
-}
-```
 
-### debug設置
-launch.json
-```
-{
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "tsx",
-        "type": "node",
-        "request": "launch",
-        "restart": true,
-        // Debug current file in VSCode
-        "cwd": "${workspaceFolder}/src",
-        "program": "${workspaceFolder}/src/index.ts",
-    
-        /*
-         * Path to tsx binary
-         * Assuming locally installed
-         */
-        "runtimeExecutable": "tsx",
-    
-        /*
-         * Open terminal when debugging starts (Optional)
-         * Useful to see console.logs
-         */
-        "console": "integratedTerminal",
-        "internalConsoleOptions": "neverOpen",
-    
-        // Files to exclude from debugger (e.g. call stack)
-        "skipFiles": [
-            // Node.js internal core modules
-            "<node_internals>/**",
-    
-            // Ignore all dependencies (optional)
-            "${workspaceFolder}/node_modules/**",
-        ],
-    }
-    ]
-  }
-  
-```
 ### 快速產生GraphQL API Doc
 #### 方法1
 先安裝SpectaQL
