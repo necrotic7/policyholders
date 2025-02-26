@@ -1,11 +1,12 @@
-import { PolicyRepository } from "./policy.repository";
+import { PolicyRepository as Repository } from "./policy.repository";
 import { PolicyData } from "./models/policy.model";
 import { Injectable, Scope } from "@nestjs/common";
 
 // 讓 Service 變成 Request Scoped，每個請求都會有新的 instance
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyService {
-    constructor(private readonly repository: PolicyRepository) {}
+    constructor(private readonly repository: Repository) {}
+
     async getPolicy(policyID: number|undefined, policyHolderCode: number|undefined): Promise<PolicyData[]>{
         const result = await this.repository.queryPolicy({ policyID, policyHolderCode });
         const policyList = result.map(r => r as PolicyData);
