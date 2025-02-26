@@ -25,6 +25,27 @@ type Policy {
   create_date: String!
 }
 
+"""保戶資訊"""
+type PolicyHolder {
+  """保戶編號"""
+  code: Int!
+
+  """保戶姓名"""
+  name: String!
+
+  """註冊日期"""
+  registration_date: String!
+
+  """介紹人編號"""
+  introducer_code: Int
+
+  """左樹"""
+  l: [PolicyHolder!]
+
+  """右樹"""
+  r: [PolicyHolder!]
+}
+
 type Query {
   """查詢保單"""
   getPolicy(
@@ -34,6 +55,18 @@ type Query {
     """保戶編號"""
     policyholderCode: Int
   ): [Policy!]
+
+  """查詢保戶"""
+  getPolicyHolder(
+    """保戶編號"""
+    code: Float!
+  ): PolicyHolder
+
+  """查詢保戶上級"""
+  getPolicyHolderTop(
+    """保戶編號"""
+    code: Float!
+  ): PolicyHolder
 }
 
 type Mutation {
@@ -46,6 +79,18 @@ type Mutation {
     """更新保單表單"""
     args: UpdatePolicyInput!
   ): Policy!
+
+  """創建保戶"""
+  createPolicyHolder(
+    """創建保戶表單"""
+    policyholder: CreatePolicyHolderInput!
+  ): PolicyHolder!
+
+  """更新保戶"""
+  updatePolicyHolder(
+    """更新保戶表單"""
+    policyHolder: UpdatePolicyHolderInput!
+  ): PolicyHolder!
 }
 
 """創建保單表單"""
@@ -70,4 +115,25 @@ input UpdatePolicyInput {
 
   """保費"""
   premium: Int
+}
+
+"""創建保戶表單"""
+input CreatePolicyHolderInput {
+  """保戶姓名"""
+  name: String!
+
+  """介紹人編號"""
+  introducer_code: Int
+}
+
+"""更新保戶表單"""
+input UpdatePolicyHolderInput {
+  """保戶編號"""
+  code: Int!
+
+  """保戶姓名"""
+  name: String
+
+  """介紹人編號"""
+  introducer_code: Int
 }

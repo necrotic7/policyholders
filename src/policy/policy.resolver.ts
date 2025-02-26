@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
-import { IsOptional, IsInt, Min, ValidateNested } from 'class-validator';
 import { PolicyService as Service } from './policy.service'
 import { Policy as schema } from './schema/policy.schema';
 import { PolicyArgs } from './schema/dto/policy.args';
