@@ -8,27 +8,27 @@ import { ConfigModule } from '@nestjs/config';
 import { PolicyModule } from './policy/policy.module';
 import { PolicyHolderModule } from './policyHolder/policyHolder.moudle';
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // 載入 .env 設定
-    DatabaseModule,
-    PolicyModule,
-    PolicyHolderModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql',
-      // 禁用playground
-      playground: false,
-      // 啟用sandbox
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      buildSchemaOptions: {
-        directives: [
-          new GraphQLDirective({
-            name: 'upper',
-            locations: [DirectiveLocation.FIELD_DEFINITION],
-          }),
-        ],
-      },
-    }),
-  ],
+    imports: [
+        ConfigModule.forRoot({ isGlobal: true }), // 載入 .env 設定
+        DatabaseModule,
+        PolicyModule,
+        PolicyHolderModule,
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+            driver: ApolloDriver,
+            autoSchemaFile: 'schema.gql',
+            // 禁用playground
+            playground: false,
+            // 啟用sandbox
+            plugins: [ApolloServerPluginLandingPageLocalDefault()],
+            buildSchemaOptions: {
+                directives: [
+                    new GraphQLDirective({
+                        name: 'upper',
+                        locations: [DirectiveLocation.FIELD_DEFINITION],
+                    }),
+                ],
+            },
+        }),
+    ],
 })
 export class AppModule {}
