@@ -1,30 +1,50 @@
-import { PolicyRepository as Repository } from "./policy.repository";
-import { PolicyData } from "./models/policy.model";
-import { Injectable, Scope } from "@nestjs/common";
+import { PolicyRepository as Repository } from './policy.repository';
+import { PolicyData } from './models/policy.model';
+import { Injectable, Scope } from '@nestjs/common';
 
 // 讓 Service 變成 Request Scoped，每個請求都會有新的 instance
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyService {
     constructor(private readonly repository: Repository) {}
 
-    async getPolicy(policyID: number|undefined, policyHolderCode: number|undefined): Promise<PolicyData[]>{
-        const result = await this.repository.queryPolicy({ policyID, policyHolderCode });
-        const policyList = result.map(r => r as PolicyData);
+    async getPolicy(
+        policyID: number | undefined,
+        policyHolderCode: number | undefined,
+    ): Promise<PolicyData[]> {
+        const result = await this.repository.queryPolicy({
+            policyID,
+            policyHolderCode,
+        });
+        const policyList = result.map((r) => r as PolicyData);
         return policyList;
     }
 
-    async createPolicy(description: string, holderId: number, premium: number): Promise<PolicyData>{
-        const newPolicyID = await this.repository.insertPolicy(description, holderId, premium);
-        const result = await this.repository.queryPolicy({ policyID: newPolicyID });
-        const policyList = result.map(r => r as PolicyData);
+    async createPolicy(
+        description: string,
+        holderId: number,
+        premium: number,
+    ): Promise<PolicyData> {
+        const newPolicyID = await this.repository.insertPolicy(
+            description,
+            holderId,
+            premium,
+        );
+        const result = await this.repository.queryPolicy({
+            policyID: newPolicyID,
+        });
+        const policyList = result.map((r) => r as PolicyData);
         await this.repository.save();
         return policyList[0];
     }
 
-    async updatePolicy(id: number, description: string|undefined, premium: number|undefined){
+    async updatePolicy(
+        id: number,
+        description: string | undefined,
+        premium: number | undefined,
+    ) {
         await this.repository.updatePolicy(id, description, premium);
         const result = await this.repository.queryPolicy({ policyID: id });
-        const policyList = result.map(r => r as PolicyData);
+        const policyList = result.map((r) => r as PolicyData);
         await this.repository.save();
         return policyList[0];
     }

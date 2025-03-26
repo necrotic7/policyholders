@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
-import { PolicyHolderData } from './model/policyHolder.model'
-import oracle from 'oracledb';
+import { PolicyHolderData } from './model/policyHolder.model';
+import * as oracle from 'oracledb';
 
 @Injectable()
-export class PolicyHolderRepository{
-    constructor(private readonly db: DatabaseService){}
+export class PolicyHolderRepository {
+    constructor(private readonly db: DatabaseService) {}
 
-    async save(){
+    async save() {
         await this.db.commit();
     }
 
@@ -18,9 +18,11 @@ export class PolicyHolderRepository{
      * @returns {object} 返回包含保戶資料的物件
      * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyDataByCode(code: number): Promise<Record<string, unknown>[]>{
+    async queryPolicyDataByCode(
+        code: number,
+    ): Promise<Record<string, unknown>[]> {
         const TAG = '[透過保戶編號取得保戶資訊]';
-        try{
+        try {
             // 查詢指定保戶編號的資料與其下級
             const sql = `
                 SELECT
@@ -38,17 +40,17 @@ export class PolicyHolderRepository{
                 START WITH id = :code
             `;
             const params = {
-                code
+                code,
             };
 
             const result = await this.db.query(sql, params);
-            if(!result || result?.length == 0){
+            if (!result || result?.length == 0) {
                 console.log(TAG, `找不到保戶編號(${code})`);
                 throw Error('policy not found');
             }
-            
+
             return result;
-        } catch(err){
+        } catch (err) {
             console.log(TAG, `發生錯誤：${err}`);
             throw err;
         }
@@ -61,9 +63,11 @@ export class PolicyHolderRepository{
      * @returns {object} 返回包含保戶資料的物件
      * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyTopDataByChildCode(code: number): Promise<Record<string, unknown>[]>{
+    async queryPolicyTopDataByChildCode(
+        code: number,
+    ): Promise<Record<string, unknown>[]> {
         const TAG = '[透過子代號取得父保戶資訊]';
-        try{
+        try {
             // 查詢指定保戶編號的父級資料與其下級
             const sql = `
                 SELECT 
@@ -86,17 +90,17 @@ export class PolicyHolderRepository{
                 )
             `;
             const params = {
-                code
+                code,
             };
 
             const result = await this.db.query(sql, params);
-            if(!result || result?.length == 0){
+            if (!result || result?.length == 0) {
                 console.log(TAG, `找不到保戶編號(${code})的父級`);
                 throw Error('policy parent not found');
             }
 
             return result;
-        } catch(err){
+        } catch (err) {
             console.log(TAG, `發生錯誤：${err}`);
             throw err;
         }
@@ -105,9 +109,9 @@ export class PolicyHolderRepository{
     /**
      * 找出新保戶的上線
      */
-    async queryParentForCreate(){
+    async queryParentForCreate() {
         const TAG = '[找出新保戶的上線]';
-        try{
+        try {
             const sql = `
                 SELECT
                     p.ID AS "code",
@@ -127,7 +131,7 @@ export class PolicyHolderRepository{
 
             const result = await this.db.query(sql, {});
 
-            if(!result || result?.length != 1){
+            if (!result || result?.length != 1) {
                 console.log(TAG, '找不到上線資料');
             }
 
@@ -138,9 +142,13 @@ export class PolicyHolderRepository{
         }
     }
 
-    async insertPolicyHolder(parentId: number|undefined, name: string, introducerCode:number|undefined): Promise<PolicyHolderData>{
+    async insertPolicyHolder(
+        parentId: number | undefined,
+        name: string,
+        introducerCode: number | undefined,
+    ): Promise<PolicyHolderData> {
         const TAG = '[寫入新保戶資料]';
-        try{
+        try {
             const sql = `
                 INSERT INTO POLICYHOLDERS
                     (PARENT_ID, NAME, REGISTRATION_DATE, INTRODUCER_ID)
@@ -162,18 +170,24 @@ export class PolicyHolderRepository{
                 registration_date: {
                     dir: oracle.BIND_OUT,
                     type: oracle.STRING,
-                }
+                },
             };
-            const { rowsAffected, outBinds } = await this.db.execute(sql, params);
-            if(rowsAffected != 1){
-                console.log(TAG, `寫入新保戶失敗，rowsAffected(${rowsAffected}) != 1`);
+            const { rowsAffected, outBinds } = await this.db.execute(
+                sql,
+                params,
+            );
+            if (rowsAffected != 1) {
+                console.log(
+                    TAG,
+                    `寫入新保戶失敗，rowsAffected(${rowsAffected}) != 1`,
+                );
                 throw Error('fail to insert new policy holder');
             }
 
             const newPolicyHolderData = outBinds as {
-                id: Array<number>,
-                registration_date: Array<string>,
-            }
+                id: Array<number>;
+                registration_date: Array<string>;
+            };
 
             return {
                 code: newPolicyHolderData.id[0],
@@ -182,15 +196,21 @@ export class PolicyHolderRepository{
                 introducer_code: introducerCode,
                 parent_id: parentId,
             };
-        } catch(err) {
+        } catch (err) {
             console.log(TAG, `發生錯誤：${err}`);
             throw err;
         }
     }
 
-    async updatePolicyHolder(code: number, name: string | undefined, leftChildId: number | undefined, rightChildId: number | undefined, introducerCode: number | undefined): Promise<void>{
+    async updatePolicyHolder(
+        code: number,
+        name: string | undefined,
+        leftChildId: number | undefined,
+        rightChildId: number | undefined,
+        introducerCode: number | undefined,
+    ): Promise<void> {
         const TAG = '[更新保戶資訊]';
-        try{
+        try {
             const sql = `
                 UPDATE POLICYHOLDERS
                 SET 
@@ -209,13 +229,16 @@ export class PolicyHolderRepository{
                 introducer_id: introducerCode,
             });
 
-            if(rowsAffected != 1){
-                console.log(TAG, `更新保戶失敗，rowsAffected(${rowsAffected}) != 1`);
+            if (rowsAffected != 1) {
+                console.log(
+                    TAG,
+                    `更新保戶失敗，rowsAffected(${rowsAffected}) != 1`,
+                );
                 throw Error('fail to update policy holder');
             }
 
             return;
-        } catch(err) {
+        } catch (err) {
             console.log(TAG, `發生錯誤：${err}`);
             throw err;
         }
