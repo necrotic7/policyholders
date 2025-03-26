@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
-  private connection: oracledb.Connection;
+    private connection: oracledb.Connection;
 
-  constructor(private configService: ConfigService) {}
+    constructor(private configService: ConfigService) {}
 
     // 初始化連線
     async onModuleInit() {
@@ -24,7 +24,6 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
             throw error;
         }
     }
-  }
 
     // 釋放連線
     async onModuleDestroy() {
@@ -37,11 +36,10 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
             }
         }
     }
-  }
 
-  // 執行查詢
-  async executeQuery(sql: string, params: oracledb.BindParameters = {}) {
-    if (!this.connection) throw new Error('No Oracle DB connection.');
+    // 執行查詢
+    async executeQuery(sql: string, params: oracledb.BindParameters = {}) {
+        if (!this.connection) throw new Error('No Oracle DB connection.');
 
         const result = await this.connection.execute(sql, params, {
             outFormat: oracledb.OUT_FORMAT_OBJECT, // 回傳物件格式
@@ -65,8 +63,8 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
             return obj;
         });
 
-    return transformedRows;
-  }
+        return transformedRows;
+    }
 
     async execute(sql: string, params: oracledb.BindParameters) {
         const db = this.connection;
