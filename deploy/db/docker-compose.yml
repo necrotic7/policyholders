@@ -9,6 +9,7 @@ services:
       - "1521:1521"
     volumes:
       - ./data/oracle/v8data:/opt/oracle/oradata
+      - ./scripts:/docker-entrypoint-initdb.d  # 掛載腳本
     networks:
       - my_network  # 讓 Oracle DB 連到自訂的 network
 

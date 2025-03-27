@@ -46,6 +46,16 @@ done
 
 echo "Oracle DB container is healthy. Proceeding..."
 
+# 進入db容器執行所有 init SQL 腳本
+for sql_file in $(docker exec oracle ls /docker-entrypoint-initdb.d); do
+    echo "Executing $sql_file"
+    docker exec -i oracle bash -c "sqlplus -S sys/system@localhost:1521/ORCLPDB1 as sysdba @/docker-entrypoint-initdb.d/${sql_file} <<EOF
+EXIT;
+EOF"
+done
+
+echo "SQL scripts executed successfully."
+
 # 4. 複製env檔
 echo "Starting copy env file..."
 cp .env deploy/app/
