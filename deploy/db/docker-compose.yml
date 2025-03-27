@@ -1,5 +1,3 @@
-# docker network create my_network
-# docker network inspect my_network
 services:
   oracle:
     platform: linux/arm64/v8

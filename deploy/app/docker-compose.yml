@@ -5,7 +5,7 @@ services:
     container_name: policyholders
     restart: always
     env_file:
-      - ../../.env
+      - .env
     ports:
       - "3000:3000"
     networks:
