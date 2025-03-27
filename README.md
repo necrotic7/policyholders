@@ -23,34 +23,21 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
-一個簡易的api server，用於管理保戶與保單的新增/修改/查詢功能。
 
+一個簡易的 node[.](http://一個簡易的node.sj)js api server，用於管理保戶與保單的新增/修改/查詢功能。
 
 根據不同branch使用不同工具進行開發:
 
-master 
-  1. typescript
-  2. nestjs
-  3. GraphQL
-  4. Apollo Server
-  5. Oracle
+| 分支名稱 | 語言 | api 框架 | api架構 | 其他 | 說明 |
+| --- | --- | --- | --- | --- | --- |
+| 01-js-RESTful | javascript | express | RESTful | Oracle | 這個專案一開始的雛形 |
+| 02-ts | typescript | express | RESTful | Oracle, tsx | 基於01版，將語言改寫成ts |
+| 03-koa | typescript | koa | GraphQL | Oracle, tsx | 基於02版，更改api框架為koa，並且將api架構改為GraphQL |
+| 04-type-graphql | typescript | koa | GraphQL | Oracle, tsx, type-graphql | 基於03版，將原生graphQL schema寫法改為用type-graphql撰寫 |
+| 05-nestjs | typescript | NestJS | GraphQL | Oracle, nestjs/graphql, nestjs/apollo | 基於04版，將api框架改為NestJS，並且編譯與schema撰寫都改用nestjs的依賴庫 |
+| 06-deploy | typescript | NestJS | GraphQL | Oracle, nestjs/graphql, nestjs/apollo, Docker | 基於05版，加入部署腳本，可在本地啟動oracle db與主程式的container |
 
-ts-graphql
-  1. typescript
-  2. tsx
-  3. Koa
-  4. GraphQL
-  5. Apollo Server
-  6. type-graphql
-  7. Oracle
-
-js-RESTful
-  1. javascript
-  2. express
-  3. RESTful
-  4. Oracle
-
-
+# Local Startup
 
 ## Project setup
 
@@ -59,13 +46,14 @@ $ npm install
 ```
 
 ## Init env
-在根目錄創建.env檔案，並填入以下資料
-```
-ORACLE_USER=root
-ORACLE_PASSWORD=root
-ORACLE_CONNECT_STRING=127.0.0.1:1521/DEV
-```
 
+在專案根目錄創建.env檔案，並填入以下資料
+
+```
+ORACLE_USER=POLICYHOLDERS
+ORACLE_PASSWORD=safesync
+ORACLE_CONNECT_STRING=//oracle:1521/ORCLPDB1
+```
 
 ## Compile and run the project
 
@@ -78,14 +66,26 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
 ```
 
+# Local Deploy
 
-### 快速產生GraphQL API Doc
-#### 方法1
+直接於專案根目錄執行
+
+```bash
+$ ./deploy/deploy.sh
+```
+
+### 附錄 快速產生GraphQL API Doc
+
+### 方法1
+
 先安裝SpectaQL
+
 ```
   npx spectaql
+
 ```
 
 設定config檔 spectaql.yml
@@ -100,7 +100,7 @@ info:
   description: "..."
 
 servers:
-  - url: "http://localhost:3000"
+  - url: "<http://localhost:3000>"
 
 // 輸出api doc路徑
 output:
@@ -110,11 +110,17 @@ output:
 ```
 
 根據schema產生api doc
+
 ```
-npx spectaql spectaql.yml 
+npx spectaql spectaql.yml
+
 ```
-#### 方法2
+
+### 方法2
+
 使用 graphdoc 透過 schema 快速產生 apidoc
+
 ```
 graphdoc -s ./schema.graphql -o ./graphdoc
+
 ```
