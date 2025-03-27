@@ -1,0 +1,31 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - 06-deploy  # 設定觸發條件
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 檢出代碼
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 設置 Docker 環境變數
+      - name: Set up Docker environment
+        run: |
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
+
+      # 安裝 Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 運行你的 deploy.sh 腳本
+      - name: Run deploy.sh
+        run: |
+          chmod +x ./deploy.sh  # 確保腳本有執行權限
+          ./deploy.sh

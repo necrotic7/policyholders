@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # 1. 檢查 Docker network 是否存在，若不存在則建立
 NETWORK_NAME="my_network"
 docker network inspect $NETWORK_NAME > /dev/null 2>&1
@@ -53,3 +55,29 @@ EOF"
 done
 
 echo "SQL scripts executed successfully."
+
+# 4. 複製env檔
+echo "Starting copy env file..."
+cp .env deploy/app/
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to copy .env file to deploy/app/"
+    exit 1  # 停止腳本執行
+fi
+
+# 5. Build Policyholders 的 Docker image
+echo "Building Policyholders Docker image..."
+docker build --platform linux/amd64 -f deploy/app/Dockerfile -t policyholders .
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to docker build policyholders"
+    exit 1  # 停止腳本執行
+fi
+
+# 6. 使用 docker-compose 啟動 Policyholders 容器
+echo "Starting Policyholders container..."
+docker-compose -f deploy/app/docker-compose.yml up -d
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to start policyholders"
+    exit 1  # 停止腳本執行
+fi
+
+echo "Setup completed successfully!"
