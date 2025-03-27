@@ -27,5 +27,5 @@ jobs:
       # 運行你的 deploy.sh 腳本
       - name: Run deploy.sh
         run: |
-          chmod +x ./deploy.sh  # 確保腳本有執行權限
-          ./deploy.sh
+          chmod +x ./deploy/docker-build.sh  # 確保腳本有執行權限
+          ./deploy/docker-build.sh
