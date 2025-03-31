@@ -1,15 +1,12 @@
-# 讀取 GitHub Actions 傳進來的變數
-SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
-SSH_USER=${SSH_USER}
-SSH_HOST=${SSH_HOST}
+#!/bin/bash
 
 mkdir -p ~/.ssh
-echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+echo "$SSH_PRIVATE_KEY" | sed 's/\\n/\n/g' > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
-ssh-keyscan -H ${SSH_HOST} >> ~/.ssh/known_hosts
+ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
 echo "SSH Test"
-ssh -i ~/.ssh/id_rsa -o "StrictHostKeyChecking=no" ${SSH_USER}@${SSH_HOST}
+ssh -i ~/.ssh/id_rsa -o "StrictHostKeyChecking=no" "$SSH_USER@$SSH_HOST"
 
 # echo "Deploying to ${SSH_USER}@${SSH_HOST}..."
 # # 把專案程式碼複製到遠端 VPS
