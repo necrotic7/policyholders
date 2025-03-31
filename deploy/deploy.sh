@@ -1,8 +1,8 @@
 #!/bin/bash
 
-mkdir -p ~/.ssh
-echo "$SSH_PRIVATE_KEY" | sed 's/\\n/\n/g' > ~/.ssh/id_rsa
-chmod 600 ~/.ssh/id_rsa
+# mkdir -p ~/.ssh
+# echo "$SSH_PRIVATE_KEY" | sed 's/\\n/\n/g' > ~/.ssh/id_rsa
+# chmod 600 ~/.ssh/id_rsa
 
 ssh-keyscan -H 35.209.10.171 >> ~/.ssh/known_hosts
 
