@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 檢出代碼
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -24,8 +23,26 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 運行你的 deploy.sh 腳本
+      - name: Run docker-build.sh
+        run: |
+          chmod +x ./deploy/docker-build.sh
+          ./deploy/docker-build.sh
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.GCP_SSH_HOST }} >> ~/.ssh/known_hosts
+
       - name: Run deploy.sh
         run: |
-          chmod +x ./deploy/docker-build.sh  # 確保腳本有執行權限
-          ./deploy/docker-build.sh
+            chmod +x ./deploy/deploy.sh
+            ./deploy/deploy.sh
+        env:
+          SSH_USER: ${{ secrets.GCP_SSH_USER }}
+          SSH_HOST: ${{ secrets.GCP_SSH_HOST }}
+
