@@ -8,7 +8,7 @@ ssh-keyscan -H 35.209.10.171 >> ~/.ssh/known_hosts
 
 chmod 600 ./deploy/github_actions01
 echo "SSH Test"
-ssh -i ./deploy/github_actions01 -o "StrictHostKeyChecking=no" -t github_actions_01@35.209.10.171
+ssh -i ./deploy/github_actions01 -o "StrictHostKeyChecking=no" -tt github_actions_01@35.209.10.171
 
 # echo "Deploying to ${SSH_USER}@${SSH_HOST}..."
 # # 把專案程式碼複製到遠端 VPS
