@@ -28,16 +28,13 @@ jobs:
           chmod +x ./deploy/docker-build.sh
           ./deploy/docker-build.sh
 
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.GCP_SSH_HOST }} >> ~/.ssh/known_hosts
-
+      
       - name: Run deploy.sh
         run: |
             chmod +x ./deploy/deploy.sh
@@ -45,4 +42,3 @@ jobs:
         env:
           SSH_USER: ${{ secrets.GCP_SSH_USER }}
           SSH_HOST: ${{ secrets.GCP_SSH_HOST }}
-
