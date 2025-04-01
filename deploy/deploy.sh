@@ -4,7 +4,7 @@ SSH_CMD="ssh -o StrictHostKeyChecking=no${SSH_USER}@${SSH_HOST}"
 
 # 把專案程式碼複製到遠端 VPS
 $SSH_CMD 'mkdir -p /web/policyholders/'
-scp -o StrictHostKeyChecking=no -r ./deploy/* ${SSH_USER}@${SSH_HOST}:/web/policyholders/deploy/
+scp -o StrictHostKeyChecking=no -r ./deploy ${SSH_USER}@${SSH_HOST}:/web/policyholders/
 
 if [ $? -ne 0 ]; then
     echo "Error: SCP failed"
