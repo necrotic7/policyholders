@@ -32,8 +32,12 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-      
+
       - name: Run deploy.sh
         run: |
             chmod +x ./deploy/deploy.sh
             ./deploy/deploy.sh
+        env:
+          SSH_USER: ${{ secrets.GCP_SSH_USER }}
+          SSH_HOST: ${{ secrets.GCP_SSH_HOST }}
+
