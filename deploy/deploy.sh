@@ -1,8 +1,10 @@
 #!/bin/bash
 echo "Deploy to ${SSH_USER}@${SSH_HOST}..."
+SSH_CMD="ssh -o StrictHostKeyChecking=no${SSH_USER}@${SSH_HOST}"
 
-# # 把專案程式碼複製到遠端 VPS
-scp -r ./deploy/* ${SSH_USER}@${SSH_HOST}:/web/policyholders/deploy/
+# 把專案程式碼複製到遠端 VPS
+$SSH_CMD 'mkdir -p /web/policyholders/'
+scp -o StrictHostKeyChecking=no -r ./deploy/* ${SSH_USER}@${SSH_HOST}:/web/policyholders/deploy/
 
 if [ $? -ne 0 ]; then
     echo "Error: SCP failed"
@@ -10,7 +12,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 遠端登入並執行 deploy.sh
-ssh ${SSH_USER}@${SSH_HOST} << 'EOF'
+$SSH_CMD << 'EOF'
     cd /web/policyholders/
     ls
 EOF
