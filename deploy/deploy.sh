@@ -11,8 +11,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-$SSH_CMD 'export DOCKER_USERNAME="${DOCKER_USERNAME}"'
-$SSH_CMD 'export DOCKER_PASSWORD="${DOCKER_PASSWORD}"'
+$SSH_CMD "export DOCKER_USERNAME=\"${DOCKER_USERNAME}\""
+$SSH_CMD "export DOCKER_PASSWORD=\"${DOCKER_PASSWORD}\""
 
 # 遠端登入並執行 gcp.sh
 $SSH_CMD << 'EOF'
