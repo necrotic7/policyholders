@@ -21,7 +21,7 @@ fi
 
 # 3. 使用 docker-compose 啟動 Oracle DB 容器
 echo "Starting Oracle DB container..."
-docker-compose -f db/docker-compose.yml up -d
+docker compose -f db/docker-compose.yml up -d
 if [ $? -ne 0 ]; then
     echo "Error: Failed to establish oracle db"
     exit 1  # 停止腳本執行
@@ -57,21 +57,13 @@ done
 
 echo "SQL scripts executed successfully."
 
-# 4. 複製env檔
-echo "Starting copy env file..."
-cp .env app/
-if [ $? -ne 0 ]; then
-    echo "Error: Failed to copy .env file to app/"
-    exit 1  # 停止腳本執行
-fi
-
-# 5. docker pull Policyholders
+# 4. docker pull Policyholders
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 docker pull $DOCKER_USERNAME/policyholders:latest
 
-# 6. 使用 docker-compose 啟動 Policyholders 容器
+# 5. 使用 docker-compose 啟動 Policyholders 容器
 echo "Starting Policyholders container..."
-docker-compose -f app/docker-compose.yml up -d
+docker compose -f app/docker-compose.yml up -d
 if [ $? -ne 0 ]; then
     echo "Error: Failed to start policyholders"
     exit 1  # 停止腳本執行
