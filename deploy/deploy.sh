@@ -16,6 +16,7 @@ $SSH_CMD << 'EOF'
     cd /web/policyholders/deploy/
     export DOCKER_USERNAME="${DOCKER_USERNAME}"
     export DOCKER_PASSWORD="${DOCKER_PASSWORD}"
+    export TEST="123"
     chmod +x ./gcp.sh
     ./gcp.sh
 EOF

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "${TEST}"
+echo "${DOCKER_USERNAME}"
+echo "${DOCKER_PASSWORD}"
+
 # docker pull
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 docker pull $DOCKER_USERNAME/policyholders:latest
