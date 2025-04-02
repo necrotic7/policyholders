@@ -40,4 +40,6 @@ jobs:
         env:
           SSH_USER: ${{ secrets.GCP_SSH_USER }}
           SSH_HOST: ${{ secrets.GCP_SSH_HOST }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
