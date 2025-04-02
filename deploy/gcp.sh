@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source /web/policyholders/.env
 echo "test: ${TEST}"
 echo "usr: ${DOCKER_USERNAME}"
 echo "pwd: ${DOCKER_PASSWORD}"
