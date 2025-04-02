@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Enable debug mode
+        run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
+
       # 設置 Docker 環境變數
       - name: Set up Docker environment
         run: |

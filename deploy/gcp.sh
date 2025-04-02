@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # docker pull
-docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 docker pull $DOCKER_USERNAME/policyholders:latest
 
 # # 1. 檢查 Docker network 是否存在，若不存在則建立
