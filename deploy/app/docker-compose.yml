@@ -1,16 +1,18 @@
-# docker compose -f deploy/docker-compose.yml up     
+version: '3'
 services:
   policyholders:
-    image: policyholders  # 這裡換成你的主程式鏡像名稱
+    image: ${DOCKER_USERNAME}/policyholders  # 使用環境變數來指定鏡像名稱
     container_name: policyholders
     restart: always
+    environment:
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
     env_file:
-      - ../.env
+      - ../.env  # 確保路徑正確，或者調整為正確的相對路徑
     ports:
       - "3000:3000"
     networks:
-      - my_network  # 讓應用程式加入相同的 network
+      - my_network
 
 networks:
   my_network:
-    external: true  # 這裡使用已經存在的 network
+    external: true  # 使用已存在的 external network
