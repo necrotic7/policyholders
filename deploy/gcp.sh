@@ -17,6 +17,7 @@ docker pull $DOCKER_USERNAME/policyholders:latest
 
 # 5. 使用 docker-compose 啟動 Policyholders 容器
 echo "Starting Policyholders container..."
+export DOCKER_USERNAME=$DOCKER_USERNAME
 docker compose -f app/docker-compose.yml up -d
 if [ $? -ne 0 ]; then
     echo "Error: Failed to start policyholders"
