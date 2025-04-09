@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# 此為部署在 local 上的流程，僅做留存
 # 1. 檢查 Docker network 是否存在，若不存在則建立
 NETWORK_NAME="my_network"
 docker network inspect $NETWORK_NAME > /dev/null 2>&1
