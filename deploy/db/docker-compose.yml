@@ -1,18 +1,23 @@
+version: '3.9'
 services:
-  oracle:
-    platform: linux/arm64/v8
-    container_name: oracle
-    image: rollernaut/oracle19c:latest
-    environment:
-      - "ORACLE_PWD=system"
+  postgres:
+    image: postgres:16
+    container_name: my_postgres
+    restart: always
     ports:
-      - "1521:1521"
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
-      - ./data/oracle/v8data:/opt/oracle/oradata
-      - ./scripts:/docker-entrypoint-initdb.d  # 掛載腳本
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - my_network  # 讓 Oracle DB 連到自訂的 network
 
 networks:
   my_network:
     external: true  # 這裡使用已經存在的 network
+
+volumes:
+  postgres_data:
