@@ -28,8 +28,8 @@ jobs:
 
       - name: Run docker-build.sh
         run: |
-          chmod +x ./deploy/docker-build.sh
-          ./deploy/docker-build.sh
+          chmod +x ./deploy/remote/docker-build.sh
+          ./deploy/remote/docker-build.sh
       
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
@@ -46,8 +46,8 @@ jobs:
 
       - name: Run deploy.sh
         run: |
-            chmod +x ./deploy/deploy.sh
-            ./deploy/deploy.sh
+            chmod +x ./deploy/remote/deploy.sh
+            ./deploy/remote/deploy.sh
         env:
           SSH_USER: ${{ secrets.GCP_SSH_USER }}
           SSH_HOST: ${{ secrets.GCP_SSH_HOST }}

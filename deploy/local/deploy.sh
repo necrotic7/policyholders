@@ -1,4 +1,5 @@
 #!/bin/bash
+source .env
 # 此為部署在 local 上的流程，僅做留存
 # 1. 檢查 Docker network 是否存在，若不存在則建立
 NETWORK_NAME="my_network"
@@ -58,9 +59,9 @@ echo "SQL scripts executed successfully."
 
 # 4. 複製env檔
 echo "Starting copy env file..."
-cp .env deploy/app/
+cp .env deploy/
 if [ $? -ne 0 ]; then
-    echo "Error: Failed to copy .env file to deploy/app/"
+    echo "Error: Failed to copy .env file to deploy/"
     exit 1  # 停止腳本執行
 fi
 
@@ -74,7 +75,7 @@ fi
 
 # 6. 使用 docker-compose 啟動 Policyholders 容器
 echo "Starting Policyholders container..."
-docker-compose -f deploy/app/docker-compose.yml up -d
+docker-compose -f deploy/app/docker-compose.yml --env-file deploy/.env up -d
 if [ $? -ne 0 ]; then
     echo "Error: Failed to start policyholders"
     exit 1  # 停止腳本執行
