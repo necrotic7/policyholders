@@ -13,7 +13,7 @@ fi
 
 # 遠端登入並執行 gcp.sh
 $SSH_CMD << 'EOF'
-    cd /web/policyholders/deploy/
+    cd /web/policyholders/deploy/remote
     chmod +x ./gcp.sh
     ./gcp.sh
 EOF
