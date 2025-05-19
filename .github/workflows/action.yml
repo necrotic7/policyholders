@@ -38,11 +38,11 @@ jobs:
 
       - name: Setup deploy env
         run: |
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > ./deploy/remote/.env
-            echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> ./deploy/remote/.env
-            echo "ORACLE_USER=${{ secrets.ORACLE_USER }}" >> ./deploy/remote/.env
-            echo "ORACLE_PASSWORD=${{ secrets.ORACLE_PASSWORD }}" >> ./deploy/remote/.env
-            echo "ORACLE_CONNECT_STRING=${{ secrets.ORACLE_CONNECT_STRING }}" >> ./deploy/remote/.env
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > ./deploy/.env
+            echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> ./deploy/.env
+            echo "ORACLE_USER=${{ secrets.ORACLE_USER }}" >> ./deploy/.env
+            echo "ORACLE_PASSWORD=${{ secrets.ORACLE_PASSWORD }}" >> ./deploy/.env
+            echo "ORACLE_CONNECT_STRING=${{ secrets.ORACLE_CONNECT_STRING }}" >> ./deploy/.env
 
       - name: Run deploy.sh
         run: |

@@ -3,6 +3,7 @@ echo "Deploy to ${SSH_USER}@${SSH_HOST}..."
 SSH_CMD="ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST}"
 
 # 把專案程式碼複製到遠端 VPS
+$SSH_CMD 'rm -rf /web/policyholders'
 $SSH_CMD 'mkdir -p /web/policyholders/'
 scp -o "StrictHostKeyChecking=no" -r ./deploy ${SSH_USER}@${SSH_HOST}:/web/policyholders
 

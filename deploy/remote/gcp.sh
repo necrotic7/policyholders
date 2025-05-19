@@ -1,6 +1,6 @@
 #!/bin/bash
 # NOTICE: 礙於 gcp 機器限制，無法在遠端上起一個 oracle db，因此僅做 app 部署
-source .env
+source ../.env
 
 # 1. 檢查 Docker network 是否存在，若不存在則建立
 NETWORK_NAME="my_network"
