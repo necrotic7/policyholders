@@ -34,7 +34,7 @@ type PolicyHolder {
   name: String!
 
   """註冊日期"""
-  registration_date: String!
+  registration_date: DateTime!
 
   """介紹人編號"""
   introducer_code: Int
@@ -45,6 +45,11 @@ type PolicyHolder {
   """右樹"""
   r: [PolicyHolder!]
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
   """查詢保單"""

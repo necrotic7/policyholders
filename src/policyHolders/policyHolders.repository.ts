@@ -66,24 +66,27 @@ export class PolicyHoldersRepository {
         try {
             // 查詢指定保戶編號的父級資料與其下級
             const sql = `
-                SELECT 
-                    LEVEL AS "level",
-                    p.ID AS "code",
-                    p.NAME AS "name",
-                    p.PARENT_ID AS "parent_id",
-                    p.LEFT_CHILD_ID AS "left_child_id",
-                    p.RIGHT_CHILD_ID AS "right_child_id",
-                    TO_CHAR(p.REGISTRATION_DATE, 'YYYY-MM-DD HH24:Mi:SS') AS "registration_date",
-                    p.INTRODUCER_ID AS "introducer_code"
-                FROM policyholders p
-                WHERE 1 = 1
-                CONNECT BY p.parent_id = PRIOR p.id
-                START WITH p.id = (
-                    SELECT
-                        parent_id
-                    FROM policyholders
-                    WHERE id = :code
+                WITH RECURSIVE tree AS (
+                    SELECT p.*, 1 as level
+                    FROM policyholders p 
+                    JOIN policyholders origin ON p.id = origin.parent_id
+                    WHERE origin.id = $1
+                    UNION ALL
+                    SELECT p.*, t.level + 1
+                    FROM policyholders p 
+                    JOIN tree t ON p.parent_id = t.id
                 )
+                SELECT 
+                    t.id AS code,
+                    t.parent_id AS parent_code,
+                    t.left_child_id AS left_child_code,
+                    t.right_child_id AS right_child_code,
+                    t.name,
+                    t.introducer_id AS introducer_code,
+                    t.created_at AS registration_date,
+                    t.updated_at,
+                    t.level
+                FROM tree t
             `;
 
             const result = (await this.db.dataSource.query(sql, [
@@ -108,23 +111,32 @@ export class PolicyHoldersRepository {
         const TAG = '[找出新保戶的上線]';
         try {
             const sql = `
-                SELECT
-                    p.ID AS "code",
-                    p.NAME AS "name",
-                    p.PARENT_ID AS "parent_id",
-                    p.LEFT_CHILD_ID AS "left_child_id",
-                    p.RIGHT_CHILD_ID AS "right_child_id",
-                    TO_CHAR(p.REGISTRATION_DATE, 'YYYY-MM-DD HH24:Mi:SS') AS "registration_date",
-                    p.INTRODUCER_ID AS "introducer_code"
-                FROM POLICYHOLDERS p 
-                WHERE (p.LEFT_CHILD_ID IS NULL OR p.RIGHT_CHILD_ID IS NULL)
-                ORDER BY id ASC, 
-                -- 左子樹空白者優先
-                DECODE(p.LEFT_CHILD_ID, NULL, 1, p.RIGHT_CHILD_ID, NULL, 2, 3) ASC
-                FETCH FIRST ROWS ONLY
+                with p as (
+                    SELECT 
+                        p.id AS code,
+                        p.parent_id AS parent_code,
+                        p.left_child_id AS left_child_code,
+                        p.right_child_id AS right_child_code,
+                        p.name,
+                        case 
+                            when p.left_child_id is null then 1
+                            when p.right_child_id is null then 2
+                            else 3
+                        end as priority,
+                        p.introducer_id AS introducer_code,
+                        p.created_at AS registration_date,
+                        p.updated_at
+                    FROM policyholders p
+                )
+                select * from p
+                where priority < 3
+                order by code asc, priority asc
+                limit 1
             `;
 
-            const result = await this.db.dataSource.query(sql, []);
+            const result = (await this.db.dataSource.query(
+                sql,
+            )) as PolicyHolderData[];
 
             if (!result || result?.length != 1) {
                 console.log(TAG, '找不到上線資料');
@@ -138,59 +150,19 @@ export class PolicyHoldersRepository {
     }
 
     async insertPolicyHolder(
-        parentId: number | undefined,
+        parentId: number,
         name: string,
-        introducerCode: number | undefined,
-    ): Promise<PolicyHolderData> {
+        introducerId: number | undefined,
+    ) {
         const TAG = '[寫入新保戶資料]';
         try {
-            const sql = `
-                INSERT INTO POLICYHOLDERS
-                    (PARENT_ID, NAME, REGISTRATION_DATE, INTRODUCER_ID)
-                VALUES
-                    (:parent_id, :name, SYSDATE, :introducer_id)
-                RETURNING 
-                    id, TO_CHAR(REGISTRATION_DATE, 'YYYY-MM-DD HH24:Mi:SS')
-                INTO :id, :registration_date
-            `;
-
-            const params = {
-                parent_id: parentId,
-                name: name,
-                introducer_id: introducerCode,
-                id: {
-                    dir: oracle.BIND_OUT,
-                    type: oracle.NUMBER,
-                },
-                registration_date: {
-                    dir: oracle.BIND_OUT,
-                    type: oracle.STRING,
-                },
-            };
-            const { rowsAffected, outBinds } = await this.db.dataSource.query(
-                sql,
-                [params],
-            );
-            if (rowsAffected != 1) {
-                console.log(
-                    TAG,
-                    `寫入新保戶失敗，rowsAffected(${rowsAffected}) != 1`,
-                );
-                throw Error('fail to insert new policy holder');
-            }
-
-            const newPolicyHolderData = outBinds as {
-                id: Array<number>;
-                registration_date: Array<Date>;
-            };
-
-            return {
-                code: newPolicyHolderData.id[0],
-                name: name,
-                registration_date: newPolicyHolderData.registration_date[0],
-                introducer_code: introducerCode,
-                parent_code: parentId,
-            };
+            const repo = this.db.dataSource.getRepository(PolicyholdersDB);
+            const newPolicyholder = repo.create({
+                name,
+                parentId,
+                introducerId,
+            });
+            return repo.save(newPolicyholder);
         } catch (err) {
             console.log(TAG, `發生錯誤：${err}`);
             throw err;
@@ -198,43 +170,24 @@ export class PolicyHoldersRepository {
     }
 
     async updatePolicyHolder(
-        code: number,
+        id: number,
         name: string | undefined,
         leftChildId: number | undefined,
         rightChildId: number | undefined,
-        introducerCode: number | undefined,
-    ): Promise<void> {
+        introducerId: number | undefined,
+    ) {
         const TAG = '[更新保戶資訊]';
         try {
-            const sql = `
-                UPDATE POLICYHOLDERS
-                SET 
-                    name = NVL(:name, name),
-                    left_child_id = NVL(:left_child_id, left_child_id),
-                    right_child_id = NVL(:right_child_id, right_child_id),
-                    introducer_id = NVL(:introducer_id, introducer_id)
-                WHERE id = :code
-            `;
+            const repo = this.db.dataSource.getRepository(PolicyholdersDB);
+            const holder = await repo.findOneBy({ id });
+            if (!holder) throw Error(`cant find policyholder code ${id}`);
 
-            const { rowsAffected } = await this.db.dataSource.query(sql, [
-                {
-                    code,
-                    name,
-                    left_child_id: leftChildId,
-                    right_child_id: rightChildId,
-                    introducer_id: introducerCode,
-                },
-            ]);
+            if (name) holder.name = name;
+            if (leftChildId) holder.leftChildId = leftChildId;
+            if (rightChildId) holder.rightChildId = rightChildId;
+            if (introducerId) holder.introducerId = introducerId;
 
-            if (rowsAffected != 1) {
-                console.log(
-                    TAG,
-                    `更新保戶失敗，rowsAffected(${rowsAffected}) != 1`,
-                );
-                throw Error('fail to update policy holder');
-            }
-
-            return;
+            return repo.save(holder);
         } catch (err) {
             console.log(TAG, `發生錯誤：${err}`);
             throw err;

@@ -46,7 +46,7 @@ export class PolicyHolderService {
         const parentData =
             (await this.repository.queryParentForCreate()) as PolicyHolderData;
         const newPolicyData = await this.repository.insertPolicyHolder(
-            parentData?.code,
+            parentData?.code ?? 0,
             name,
             introducerCode,
         );
@@ -55,7 +55,7 @@ export class PolicyHolderService {
                 await this.repository.updatePolicyHolder(
                     parentData.code,
                     undefined,
-                    newPolicyData.code,
+                    newPolicyData.id,
                     undefined,
                     undefined,
                 );
@@ -64,13 +64,13 @@ export class PolicyHolderService {
                     parentData.code,
                     undefined,
                     undefined,
-                    newPolicyData.code,
+                    newPolicyData.id,
                     undefined,
                 );
             }
         }
 
-        return newPolicyData;
+        return this.getPolicyHolderByCode(newPolicyData.id);
     }
 
     async updatePolicyHolder(
@@ -90,11 +90,8 @@ export class PolicyHolderService {
             undefined,
             introducerCode,
         );
-        // 取得保戶及其所有下級資料
-        const policyData = await this.repository.queryPolicyDataByCode(code);
-        // 格式化二元樹
-        const response = this.fmtPolicyHolderTree(policyData);
-        return response;
+
+        return this.getPolicyHolderByCode(code);
     }
 
     /**

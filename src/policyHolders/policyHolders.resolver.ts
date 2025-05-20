@@ -17,7 +17,7 @@ export class PolicyHolderResolver {
     })
     async getPolicyHolder(
         @Args('code', { description: '保戶編號' }) code: number,
-    ): Promise<PolicyHolder | object> {
+    ) {
         const result = await this.service.getPolicyHolderByCode(code);
         return result;
     }
@@ -28,7 +28,7 @@ export class PolicyHolderResolver {
     })
     async getPolicyHolderTop(
         @Args('code', { description: '保戶編號' }) code: number,
-    ): Promise<PolicyHolder | object> {
+    ) {
         const result = await this.service.getPolicyHolderTopByCode(code);
         return result;
     }
@@ -37,7 +37,7 @@ export class PolicyHolderResolver {
     async createPolicyHolder(
         @Args('policyholder', { description: '創建保戶表單' })
         args: CreatePolicyHolderInput,
-    ): Promise<PolicyHolder | object> {
+    ) {
         const result = await this.service.createPolicyHolder(
             args.name,
             args.introducer_code,

@@ -9,7 +9,7 @@ export class PolicyHolder {
     @Field(() => String, { description: '保戶姓名' })
     name!: string;
 
-    @Field(() => String, { description: '註冊日期' })
+    @Field(() => Date, { description: '註冊日期' })
     registration_date!: Date;
 
     @Field(() => Int, { description: '介紹人編號', nullable: true })
