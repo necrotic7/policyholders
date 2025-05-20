@@ -1,4 +1,3 @@
-import { PolicyholdersDB } from 'src/database/schema/policyHolders.schema';
 import {
     Entity,
     PrimaryGeneratedColumn,
@@ -8,6 +7,7 @@ import {
     UpdateDateColumn,
     JoinColumn,
 } from 'typeorm';
+import { PolicyholdersDB } from './policyholders.schema';
 
 @Entity('policies')
 export class PoliciesDB {

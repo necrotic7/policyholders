@@ -9,11 +9,11 @@ export class PolicyService {
 
     async getPolicy(
         policyID: number | undefined,
-        policyHolderCode: number | undefined,
+        policyholderCode: number | undefined,
     ): Promise<PolicyData[]> {
         const result = await this.repository.queryPolicy({
             policyID,
-            policyHolderCode,
+            policyholderCode: policyholderCode,
         });
         return result;
     }

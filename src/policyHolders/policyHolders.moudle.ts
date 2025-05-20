@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { PolicyHolderResolver } from './policyHolders.resolver';
-import { PolicyHolderService } from './policyHolders.service';
-import { PolicyHoldersRepository } from './policyHolders.repository';
+import { PolicyholderResolver } from './policyholders.resolver';
+import { PolicyholderService } from './policyholders.service';
+import { PolicyholdersRepository } from './policyholders.repository';
 @Module({
     providers: [
-        PolicyHolderResolver,
-        PolicyHolderService,
-        PolicyHoldersRepository,
+        PolicyholderResolver,
+        PolicyholderService,
+        PolicyholdersRepository,
     ],
 })
-export class PolicyHolderModule {}
+export class PolicyholderModule {}

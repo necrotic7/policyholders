@@ -9,10 +9,10 @@ export class PolicyRepository {
 
     async queryPolicy({
         policyID,
-        policyHolderCode,
+        policyholderCode,
     }: {
         policyID?: number | undefined;
-        policyHolderCode?: number | undefined;
+        policyholderCode?: number | undefined;
     }) {
         const TAG = '[透過保單編號取得保單]';
         try {
@@ -33,9 +33,9 @@ export class PolicyRepository {
 
             if (policyID) repo.andWhere('p.id = :policyID', { policyID });
 
-            if (policyHolderCode)
+            if (policyholderCode)
                 repo.andWhere('p.holder_id = policyholderCode', {
-                    policyHolderCode,
+                    policyholderCode,
                 });
 
             const rows = (await repo.getRawMany()) as PolicyData[];

@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
-import { PolicyHolderData } from './types/policyHolders.type';
-import * as oracle from 'oracledb';
-import { PolicyholdersDB } from 'src/database/schema/policyHolders.schema';
+import { PolicyholderData } from './types/policyholders.type';
+import { PolicyholdersDB } from 'src/database/schema/policyholders.schema';
 
 @Injectable()
-export class PolicyHoldersRepository {
+export class PolicyholdersRepository {
     constructor(private readonly db: DatabaseService) {}
 
     /**
@@ -41,7 +40,7 @@ export class PolicyHoldersRepository {
                 FROM tree t
             `;
 
-            const result = (await db.query(sql, [code])) as PolicyHolderData[];
+            const result = (await db.query(sql, [code])) as PolicyholderData[];
             if (!result || result?.length == 0) {
                 console.log(TAG, `找不到保戶編號(${code})`);
                 throw Error('policy not found');
@@ -91,7 +90,7 @@ export class PolicyHoldersRepository {
 
             const result = (await this.db.dataSource.query(sql, [
                 code,
-            ])) as PolicyHolderData[];
+            ])) as PolicyholderData[];
             if (!result || result?.length == 0) {
                 console.log(TAG, `找不到保戶編號(${code})的父級`);
                 throw Error('policy parent not found');
@@ -136,7 +135,7 @@ export class PolicyHoldersRepository {
 
             const result = (await this.db.dataSource.query(
                 sql,
-            )) as PolicyHolderData[];
+            )) as PolicyholderData[];
 
             if (!result || result?.length != 1) {
                 console.log(TAG, '找不到上線資料');
@@ -149,7 +148,7 @@ export class PolicyHoldersRepository {
         }
     }
 
-    async insertPolicyHolder(
+    async insertPolicyholder(
         parentId: number,
         name: string,
         introducerId: number | undefined,

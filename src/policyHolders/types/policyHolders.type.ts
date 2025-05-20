@@ -1,4 +1,4 @@
-export type PolicyHolderData = {
+export type PolicyholderData = {
     code: number;
     name: string;
     registration_date: Date;
@@ -6,8 +6,8 @@ export type PolicyHolderData = {
     introducer_code?: number;
     level?: number;
     parent_code?: number;
-    l?: PolicyHolderData[];
-    r?: PolicyHolderData[];
+    l?: PolicyholderData[];
+    r?: PolicyholderData[];
     left_child_code?: number;
     right_child_code?: number;
 };

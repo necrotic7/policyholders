@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
 
 @ObjectType({ description: '保戶資訊' })
-export class PolicyHolder {
+export class Policyholder {
     @Field(() => Int, { description: '保戶編號' })
     code!: number;
 
@@ -15,15 +15,15 @@ export class PolicyHolder {
     @Field(() => Int, { description: '介紹人編號', nullable: true })
     introducer_code?: number;
 
-    @Field(() => [PolicyHolder], { description: '左樹', nullable: true })
-    l?: PolicyHolder[];
+    @Field(() => [Policyholder], { description: '左樹', nullable: true })
+    l?: Policyholder[];
 
-    @Field(() => [PolicyHolder], { description: '右樹', nullable: true })
-    r?: PolicyHolder[];
+    @Field(() => [Policyholder], { description: '右樹', nullable: true })
+    r?: Policyholder[];
 }
 
 @InputType({ description: '創建保戶表單' })
-export class CreatePolicyHolderInput {
+export class CreatePolicyholderInput {
     @Field(() => String, { description: '保戶姓名' })
     name!: string;
 
@@ -32,7 +32,7 @@ export class CreatePolicyHolderInput {
 }
 
 @InputType({ description: '更新保戶表單' })
-export class UpdatePolicyHolderInput {
+export class UpdatePolicyholderInput {
     @Field(() => Int, { description: '保戶編號' })
     code!: number;
 

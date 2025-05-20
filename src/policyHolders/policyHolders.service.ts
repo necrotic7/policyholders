@@ -1,11 +1,11 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { PolicyHolderData } from './types/policyHolders.type';
-import { PolicyHoldersRepository as Repository } from './policyHolders.repository';
-import { PolicyholdersDB } from 'src/database/schema/policyHolders.schema';
-import { PolicyHolder } from './types/policyHolders.gql.type';
+import { PolicyholderData } from './types/policyholders.type';
+import { PolicyholdersRepository as Repository } from './policyholders.repository';
+import { PolicyholdersDB } from 'src/database/schema/policyholders.schema';
+import { Policyholder } from './types/policyholders.gql.type';
 
 @Injectable({ scope: Scope.REQUEST })
-export class PolicyHolderService {
+export class PolicyholderService {
     constructor(private readonly repository: Repository) {}
 
     /**
@@ -13,13 +13,13 @@ export class PolicyHolderService {
      * @param {string} code 保戶編號
      * @returns {object} args.response
      */
-    async getPolicyHolderByCode(
+    async getPolicyholderByCode(
         code: number,
-    ): Promise<PolicyHolderData | object> {
+    ): Promise<PolicyholderData | object> {
         // 取得保戶及其所有下級資料
         const policyData = await this.repository.queryPolicyDataByCode(code);
         // 格式化二元樹
-        const response = this.fmtPolicyHolderTree(policyData);
+        const response = this.fmtPolicyholderTree(policyData);
         return response;
     }
 
@@ -28,24 +28,24 @@ export class PolicyHolderService {
      * @param {string} code 保戶編號
      * @returns {object} response
      */
-    async getPolicyHolderTopByCode(
+    async getPolicyholderTopByCode(
         code: number,
-    ): Promise<PolicyHolderData | object> {
+    ): Promise<PolicyholderData | object> {
         // 取得保戶上級及其所有下級資料
         const policyData =
             await this.repository.queryPolicyTopDataByChildCode(code);
         // 格式化二元樹
-        const response = this.fmtPolicyHolderTree(policyData);
+        const response = this.fmtPolicyholderTree(policyData);
         return response;
     }
 
     /**
      * 執行 新增保戶流程
      */
-    async createPolicyHolder(name: string, introducerCode?: number) {
+    async createPolicyholder(name: string, introducerCode?: number) {
         const parentData =
-            (await this.repository.queryParentForCreate()) as PolicyHolderData;
-        const newPolicyData = await this.repository.insertPolicyHolder(
+            (await this.repository.queryParentForCreate()) as PolicyholderData;
+        const newPolicyData = await this.repository.insertPolicyholder(
             parentData?.code ?? 0,
             name,
             introducerCode,
@@ -70,14 +70,14 @@ export class PolicyHolderService {
             }
         }
 
-        return this.getPolicyHolderByCode(newPolicyData.id);
+        return this.getPolicyholderByCode(newPolicyData.id);
     }
 
-    async updatePolicyHolder(
+    async updatePolicyholder(
         code: number,
         name: string | undefined,
         introducerCode: number | undefined,
-    ): Promise<PolicyHolderData | object> {
+    ): Promise<PolicyholderData | object> {
         const TAG = '[更新保戶資訊]';
         if (!name && !introducerCode) {
             console.log(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
@@ -91,7 +91,7 @@ export class PolicyHolderService {
             introducerCode,
         );
 
-        return this.getPolicyHolderByCode(code);
+        return this.getPolicyholderByCode(code);
     }
 
     /**
@@ -100,7 +100,7 @@ export class PolicyHolderService {
      * @param {Array} args.policyData 保戶資料集
      * @returns {object} 返回格式化保戶資料的物件
      */
-    fmtPolicyHolderTree(data: PolicyHolderData[]): PolicyHolder {
+    fmtPolicyholderTree(data: PolicyholderData[]): Policyholder {
         data.map((d) => {
             d.l = [];
             d.r = [];

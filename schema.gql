@@ -31,7 +31,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 """保戶資訊"""
-type PolicyHolder {
+type Policyholder {
   """保戶編號"""
   code: Int!
 
@@ -45,10 +45,10 @@ type PolicyHolder {
   introducer_code: Int
 
   """左樹"""
-  l: [PolicyHolder!]
+  l: [Policyholder!]
 
   """右樹"""
-  r: [PolicyHolder!]
+  r: [Policyholder!]
 }
 
 type Query {
@@ -62,16 +62,16 @@ type Query {
   ): [Policy!]
 
   """查詢保戶"""
-  getPolicyHolder(
+  getPolicyholder(
     """保戶編號"""
     code: Float!
-  ): PolicyHolder
+  ): Policyholder
 
   """查詢保戶上級"""
-  getPolicyHolderTop(
+  getPolicyholderTop(
     """保戶編號"""
     code: Float!
-  ): PolicyHolder
+  ): Policyholder
 }
 
 type Mutation {
@@ -86,16 +86,16 @@ type Mutation {
   ): Policy!
 
   """創建保戶"""
-  createPolicyHolder(
+  createPolicyholder(
     """創建保戶表單"""
-    policyholder: CreatePolicyHolderInput!
-  ): PolicyHolder!
+    policyholder: CreatePolicyholderInput!
+  ): Policyholder!
 
   """更新保戶"""
-  updatePolicyHolder(
+  updatePolicyholder(
     """更新保戶表單"""
-    policyHolder: UpdatePolicyHolderInput!
-  ): PolicyHolder!
+    policyholder: UpdatePolicyholderInput!
+  ): Policyholder!
 }
 
 """創建保單表單"""
@@ -123,7 +123,7 @@ input UpdatePolicyInput {
 }
 
 """創建保戶表單"""
-input CreatePolicyHolderInput {
+input CreatePolicyholderInput {
   """保戶姓名"""
   name: String!
 
@@ -132,7 +132,7 @@ input CreatePolicyHolderInput {
 }
 
 """更新保戶表單"""
-input UpdatePolicyHolderInput {
+input UpdatePolicyholderInput {
   """保戶編號"""
   code: Int!
 
