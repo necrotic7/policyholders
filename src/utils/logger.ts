@@ -25,7 +25,7 @@ const customLevels = {
     },
 };
 
-class Logger {
+export class Logger {
     private instance?: winston.Logger;
 
     customFormat = winston.format.printf(({ level, message }) => {
