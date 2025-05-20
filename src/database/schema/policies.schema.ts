@@ -33,6 +33,7 @@ export class PoliciesDB {
     @CreateDateColumn({
         type: 'timestamptz',
         nullable: false,
+        name: 'created_at',
         comment: '創建時間',
     })
     createdAt: Date;
@@ -40,9 +41,10 @@ export class PoliciesDB {
     @UpdateDateColumn({
         type: 'timestamptz',
         nullable: false,
+        name: 'updated_at',
         comment: '更新時間',
     })
-    updated_at: Date;
+    updatedAt: Date;
 
     @Column({
         type: 'int',

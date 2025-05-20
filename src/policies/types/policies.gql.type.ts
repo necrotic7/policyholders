@@ -24,8 +24,8 @@ export class Policy {
     @Field(() => Int, { description: '保費' })
     premium!: number;
 
-    @Field(() => String, { description: '創建時間' })
-    create_date!: string;
+    @Field(() => Date, { description: '創建時間' })
+    created_at!: Date;
 }
 
 @InputType({ description: '創建保單表單' })

@@ -22,8 +22,13 @@ type Policy {
   premium: Int!
 
   """創建時間"""
-  create_date: String!
+  created_at: DateTime!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 """保戶資訊"""
 type PolicyHolder {
@@ -45,11 +50,6 @@ type PolicyHolder {
   """右樹"""
   r: [PolicyHolder!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Query {
   """查詢保單"""
