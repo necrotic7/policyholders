@@ -2,6 +2,7 @@ import { DatabaseService } from '../database/database.service';
 import { Injectable } from '@nestjs/common';
 import { PoliciesDB } from 'src/database/schema/policies.schema';
 import { PolicyData } from './types/policies.type';
+import { getLogger } from 'src/utils/logger';
 
 @Injectable()
 export class PolicyRepository {
@@ -15,6 +16,7 @@ export class PolicyRepository {
         policyholderCode?: number | undefined;
     }) {
         const TAG = '[透過保單編號取得保單]';
+        const logger = getLogger();
         try {
             const repo = this.db.dataSource
                 .getRepository(PoliciesDB)
@@ -42,13 +44,14 @@ export class PolicyRepository {
 
             return rows;
         } catch (err) {
-            console.log(TAG, `取得失敗：${err}`);
+            logger.error(TAG, `取得失敗：${err}`);
             throw err;
         }
     }
 
     async insertPolicy(description: string, holderId: number, premium: number) {
         const TAG = '[寫入保單]';
+        const logger = getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PoliciesDB);
             const newPolicy = repo.create({
@@ -59,7 +62,7 @@ export class PolicyRepository {
 
             return repo.save(newPolicy);
         } catch (err) {
-            console.log(TAG, `寫入失敗：${err}`);
+            logger.error(TAG, `寫入失敗：${err}`);
             throw err;
         }
     }
@@ -70,6 +73,7 @@ export class PolicyRepository {
         premium: number | undefined,
     ) {
         const TAG = '[更新保單]';
+        const logger = getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PoliciesDB);
             const policy = await repo.findOneBy({ id });
@@ -80,7 +84,7 @@ export class PolicyRepository {
 
             return repo.save(policy);
         } catch (err) {
-            console.log(TAG, `寫入失敗：${err}`);
+            logger.error(TAG, `寫入失敗：${err}`);
             throw err;
         }
     }

@@ -3,6 +3,7 @@ import { PolicyholderData } from './types/policyholders.type';
 import { PolicyholdersRepository as Repository } from './policyholders.repository';
 import { PolicyholdersDB } from 'src/database/schema/policyholders.schema';
 import { Policyholder } from './types/policyholders.gql.type';
+import { getLogger } from 'src/utils/logger';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyholderService {
@@ -77,10 +78,11 @@ export class PolicyholderService {
         code: number,
         name: string | undefined,
         introducerCode: number | undefined,
-    ): Promise<PolicyholderData | object> {
+    ) {
         const TAG = '[更新保戶資訊]';
+        const logger = getLogger();
         if (!name && !introducerCode) {
-            console.log(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
+            logger.error(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
             throw Error('invalid parameters');
         }
         await this.repository.updatePolicyHolder(

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { PolicyholderData } from './types/policyholders.type';
 import { PolicyholdersDB } from 'src/database/schema/policyholders.schema';
+import { getLogger } from 'src/utils/logger';
 
 @Injectable()
 export class PolicyholdersRepository {
@@ -14,8 +15,10 @@ export class PolicyholdersRepository {
      */
     async queryPolicyDataByCode(code: number) {
         const TAG = '[透過保戶編號取得保戶資訊]';
-        const db = this.db.dataSource;
+        const logger = getLogger();
+
         try {
+            const db = this.db.dataSource;
             // 查詢指定保戶編號的資料與其下級
             const sql = `
                 WITH RECURSIVE tree AS (
@@ -42,13 +45,13 @@ export class PolicyholdersRepository {
 
             const result = (await db.query(sql, [code])) as PolicyholderData[];
             if (!result || result?.length == 0) {
-                console.log(TAG, `找不到保戶編號(${code})`);
+                logger.error(TAG, `找不到保戶編號(${code})`);
                 throw Error('policy not found');
             }
 
             return result;
         } catch (err) {
-            console.log(TAG, `發生錯誤：${err}`);
+            logger.error(TAG, `發生錯誤：${err}`);
             throw err;
         }
     }
@@ -62,6 +65,7 @@ export class PolicyholdersRepository {
      */
     async queryPolicyTopDataByChildCode(code: number) {
         const TAG = '[透過子代號取得父保戶資訊]';
+        const logger = getLogger();
         try {
             // 查詢指定保戶編號的父級資料與其下級
             const sql = `
@@ -92,13 +96,13 @@ export class PolicyholdersRepository {
                 code,
             ])) as PolicyholderData[];
             if (!result || result?.length == 0) {
-                console.log(TAG, `找不到保戶編號(${code})的父級`);
+                logger.error(TAG, `找不到保戶編號(${code})的父級`);
                 throw Error('policy parent not found');
             }
 
             return result;
         } catch (err) {
-            console.log(TAG, `發生錯誤：${err}`);
+            logger.error(TAG, `發生錯誤：${err}`);
             throw err;
         }
     }
@@ -108,6 +112,7 @@ export class PolicyholdersRepository {
      */
     async queryParentForCreate() {
         const TAG = '[找出新保戶的上線]';
+        const logger = getLogger();
         try {
             const sql = `
                 with p as (
@@ -138,12 +143,12 @@ export class PolicyholdersRepository {
             )) as PolicyholderData[];
 
             if (!result || result?.length != 1) {
-                console.log(TAG, '找不到上線資料');
+                logger.error(TAG, '找不到上線資料');
             }
 
             return result?.[0];
         } catch (err) {
-            console.log(TAG, `發生錯誤：${err}`);
+            logger.error(TAG, `發生錯誤：${err}`);
             throw err;
         }
     }
@@ -154,6 +159,7 @@ export class PolicyholdersRepository {
         introducerId: number | undefined,
     ) {
         const TAG = '[寫入新保戶資料]';
+        const logger = getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PolicyholdersDB);
             const newPolicyholder = repo.create({
@@ -163,7 +169,7 @@ export class PolicyholdersRepository {
             });
             return repo.save(newPolicyholder);
         } catch (err) {
-            console.log(TAG, `發生錯誤：${err}`);
+            logger.error(TAG, `發生錯誤：${err}`);
             throw err;
         }
     }
@@ -176,6 +182,7 @@ export class PolicyholdersRepository {
         introducerId: number | undefined,
     ) {
         const TAG = '[更新保戶資訊]';
+        const logger = getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PolicyholdersDB);
             const holder = await repo.findOneBy({ id });
@@ -188,7 +195,7 @@ export class PolicyholdersRepository {
 
             return repo.save(holder);
         } catch (err) {
-            console.log(TAG, `發生錯誤：${err}`);
+            logger.error(TAG, `發生錯誤：${err}`);
             throw err;
         }
     }
