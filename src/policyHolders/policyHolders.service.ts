@@ -1,6 +1,8 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { PolicyHolderData } from './model/policyHolder.model';
-import { PolicyHolderRepository as Repository } from './policyHolder.repository';
+import { PolicyHolderData } from './types/policyHolders.type';
+import { PolicyHoldersRepository as Repository } from './policyHolders.repository';
+import { PolicyholdersDB } from 'src/database/schema/policyHolders.schema';
+import { PolicyHolder } from './types/policyHolders.gql.type';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyHolderService {
@@ -49,7 +51,7 @@ export class PolicyHolderService {
             introducerCode,
         );
         if (parentData) {
-            if (!parentData.left_child_id) {
+            if (!parentData.left_child_code) {
                 await this.repository.updatePolicyHolder(
                     parentData.code,
                     undefined,
@@ -68,7 +70,6 @@ export class PolicyHolderService {
             }
         }
 
-        await this.repository.save();
         return newPolicyData;
     }
 
@@ -93,31 +94,7 @@ export class PolicyHolderService {
         const policyData = await this.repository.queryPolicyDataByCode(code);
         // 格式化二元樹
         const response = this.fmtPolicyHolderTree(policyData);
-        await this.repository.save();
         return response;
-    }
-
-    /**
-     * 整理保戶格式
-     * @param {object} data 保戶資料
-     * @param {string} data.code 保戶編號
-     * @param {string} data.name 保戶姓名
-     * @param {string} data.registration_date 註冊日期
-     * @param {string} data.introducer_code 推薦保戶編號
-     * @param {Array} data.l 左樹
-     * @param {Array} data.r 右樹
-     * @returns {object} 返回格式化保戶資料的物件
-     */
-    fmtPolicyHolderData(policyData: unknown): PolicyHolderData {
-        const data = policyData as PolicyHolderData;
-        return {
-            code: data.code,
-            name: data.name,
-            registration_date: data.registration_date,
-            introducer_code: data.introducer_code,
-            l: data.l,
-            r: data.r,
-        };
     }
 
     /**
@@ -126,38 +103,27 @@ export class PolicyHolderService {
      * @param {Array} args.policyData 保戶資料集
      * @returns {object} 返回格式化保戶資料的物件
      */
-    fmtPolicyHolderTree(
-        data: Record<string, unknown>[],
-    ): PolicyHolderData | object {
-        // 快取map
-        const policyMap = new Map();
-
-        const policyData: PolicyHolderData[] = data.map((d) => {
+    fmtPolicyHolderTree(data: PolicyHolderData[]): PolicyHolder {
+        data.map((d) => {
             d.l = [];
             d.r = [];
-            const fmt = d as PolicyHolderData;
-            policyMap.set(fmt.code, fmt);
-            return fmt;
-        });
-        let response: PolicyHolderData | object = {};
 
-        policyData.forEach((d) => {
-            if (d.level == 1) {
-                response = this.fmtPolicyHolderData(d);
+            const parent = data.find((p) => p.code == d.parent_code);
+            if (!parent) return;
+
+            if (parent.left_child_code == d.code) {
+                parent.l?.push(d);
                 return;
             }
-            const parent = policyMap.get(d.parent_id) as PolicyHolderData;
-
-            if (parent.left_child_id == d.code) {
-                parent.l!.push(this.fmtPolicyHolderData(d));
-                return;
-            }
-            if (parent.right_child_id == d.code) {
-                parent.r!.push(this.fmtPolicyHolderData(d));
+            if (parent.right_child_code == d.code) {
+                parent.r?.push(d);
                 return;
             }
         });
 
-        return response;
+        const root = data.find((d) => d.level == 1);
+        if (!root) throw Error('fail to find policyholder root');
+
+        return root;
     }
 }

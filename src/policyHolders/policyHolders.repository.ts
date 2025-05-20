@@ -1,49 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
-import { PolicyHolderData } from './model/policyHolder.model';
+import { PolicyHolderData } from './types/policyHolders.type';
 import * as oracle from 'oracledb';
+import { PolicyholdersDB } from 'src/database/schema/policyHolders.schema';
 
 @Injectable()
-export class PolicyHolderRepository {
+export class PolicyHoldersRepository {
     constructor(private readonly db: DatabaseService) {}
-
-    async save() {
-        await this.db.commit();
-    }
 
     /**
      * 透過代號取得保戶資訊
      * @param {object} args
      * @param {string} args.code 保戶編號
-     * @returns {object} 返回包含保戶資料的物件
-     * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyDataByCode(
-        code: number,
-    ): Promise<Record<string, unknown>[]> {
+    async queryPolicyDataByCode(code: number) {
         const TAG = '[透過保戶編號取得保戶資訊]';
+        const db = this.db.dataSource;
         try {
             // 查詢指定保戶編號的資料與其下級
             const sql = `
-                SELECT
-                    LEVEL AS "level",
-                    ID AS "code",
-                    NAME AS "name",
-                    PARENT_ID AS "parent_id",
-                    LEFT_CHILD_ID AS "left_child_id",
-                    RIGHT_CHILD_ID AS "right_child_id",
-                    TO_CHAR(REGISTRATION_DATE, 'YYYY-MM-DD HH24:Mi:SS') AS "registration_date",
-                    INTRODUCER_ID AS "introducer_code"
-                FROM policyholders
-                WHERE 1 = 1
-                CONNECT BY parent_id = PRIOR id
-                START WITH id = :code
+                WITH RECURSIVE tree AS (
+                    SELECT p.*, 1 as level
+                    FROM policyholders p 
+                    WHERE p.id = $1
+                    UNION ALL
+                    SELECT p.*, t.level + 1
+                    FROM policyholders p 
+                    JOIN tree t ON p.parent_id = t.id
+                )
+                SELECT 
+                    t.id as code,
+                    t.parent_id as parent_code,
+                    t.left_child_id as left_child_code,
+                    t.right_child_id as right_child_code,
+                    t."name",
+                    t.introducer_id as introducer_code,
+                    t.created_at as registration_date,
+                    t.updated_at,
+                    t.level
+                FROM tree t
             `;
-            const params = {
-                code,
-            };
 
-            const result = await this.db.query(sql, params);
+            const result = (await db.query(sql, [code])) as PolicyHolderData[];
             if (!result || result?.length == 0) {
                 console.log(TAG, `找不到保戶編號(${code})`);
                 throw Error('policy not found');
@@ -63,9 +61,7 @@ export class PolicyHolderRepository {
      * @returns {object} 返回包含保戶資料的物件
      * @returns {Array} policyData - 保戶資料集
      */
-    async queryPolicyTopDataByChildCode(
-        code: number,
-    ): Promise<Record<string, unknown>[]> {
+    async queryPolicyTopDataByChildCode(code: number) {
         const TAG = '[透過子代號取得父保戶資訊]';
         try {
             // 查詢指定保戶編號的父級資料與其下級
@@ -89,11 +85,10 @@ export class PolicyHolderRepository {
                     WHERE id = :code
                 )
             `;
-            const params = {
-                code,
-            };
 
-            const result = await this.db.query(sql, params);
+            const result = (await this.db.dataSource.query(sql, [
+                code,
+            ])) as PolicyHolderData[];
             if (!result || result?.length == 0) {
                 console.log(TAG, `找不到保戶編號(${code})的父級`);
                 throw Error('policy parent not found');
@@ -129,7 +124,7 @@ export class PolicyHolderRepository {
                 FETCH FIRST ROWS ONLY
             `;
 
-            const result = await this.db.query(sql, {});
+            const result = await this.db.dataSource.query(sql, []);
 
             if (!result || result?.length != 1) {
                 console.log(TAG, '找不到上線資料');
@@ -172,9 +167,9 @@ export class PolicyHolderRepository {
                     type: oracle.STRING,
                 },
             };
-            const { rowsAffected, outBinds } = await this.db.execute(
+            const { rowsAffected, outBinds } = await this.db.dataSource.query(
                 sql,
-                params,
+                [params],
             );
             if (rowsAffected != 1) {
                 console.log(
@@ -186,7 +181,7 @@ export class PolicyHolderRepository {
 
             const newPolicyHolderData = outBinds as {
                 id: Array<number>;
-                registration_date: Array<string>;
+                registration_date: Array<Date>;
             };
 
             return {
@@ -194,7 +189,7 @@ export class PolicyHolderRepository {
                 name: name,
                 registration_date: newPolicyHolderData.registration_date[0],
                 introducer_code: introducerCode,
-                parent_id: parentId,
+                parent_code: parentId,
             };
         } catch (err) {
             console.log(TAG, `發生錯誤：${err}`);
@@ -221,13 +216,15 @@ export class PolicyHolderRepository {
                 WHERE id = :code
             `;
 
-            const { rowsAffected } = await this.db.execute(sql, {
-                code,
-                name,
-                left_child_id: leftChildId,
-                right_child_id: rightChildId,
-                introducer_id: introducerCode,
-            });
+            const { rowsAffected } = await this.db.dataSource.query(sql, [
+                {
+                    code,
+                    name,
+                    left_child_id: leftChildId,
+                    right_child_id: rightChildId,
+                    introducer_id: introducerCode,
+                },
+            ]);
 
             if (rowsAffected != 1) {
                 console.log(

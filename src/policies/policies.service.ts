@@ -1,5 +1,5 @@
-import { PolicyRepository as Repository } from './policy.repository';
-import { PolicyData } from './models/policy.model';
+import { PolicyRepository as Repository } from './policies.repository';
+import { PolicyData } from './types/policies.model';
 import { Injectable, Scope } from '@nestjs/common';
 
 // 讓 Service 變成 Request Scoped，每個請求都會有新的 instance
@@ -33,7 +33,6 @@ export class PolicyService {
             policyID: newPolicyID,
         });
         const policyList = result.map((r) => r as PolicyData);
-        await this.repository.save();
         return policyList[0];
     }
 
@@ -45,7 +44,6 @@ export class PolicyService {
         await this.repository.updatePolicy(id, description, premium);
         const result = await this.repository.queryPolicy({ policyID: id });
         const policyList = result.map((r) => r as PolicyData);
-        await this.repository.save();
         return policyList[0];
     }
 }

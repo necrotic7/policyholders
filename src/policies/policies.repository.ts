@@ -6,10 +6,6 @@ import { Injectable } from '@nestjs/common';
 export class PolicyRepository {
     constructor(private readonly db: DatabaseService) {}
 
-    async save() {
-        await this.db.commit();
-    }
-
     async queryPolicy({
         policyID,
         policyHolderCode,
@@ -48,7 +44,7 @@ export class PolicyRepository {
             sql += `ORDER BY p.create_date DESC
             `;
 
-            const rows = await this.db.query(sql, params);
+            const rows = await this.db.dataSource.query(sql, [params]);
 
             return rows;
         } catch (err) {
@@ -72,15 +68,20 @@ export class PolicyRepository {
                 RETURN id INTO :id
             `;
 
-            const { rowsAffected, outBinds } = await this.db.execute(sql, {
-                description,
-                holder_id: holderId,
-                premium,
-                id: {
-                    dir: oracle.BIND_OUT,
-                    type: oracle.NUMBER,
-                },
-            });
+            const { rowsAffected, outBinds } = await this.db.dataSource.query(
+                sql,
+                [
+                    {
+                        description,
+                        holder_id: holderId,
+                        premium,
+                        id: {
+                            dir: oracle.BIND_OUT,
+                            type: oracle.NUMBER,
+                        },
+                    },
+                ],
+            );
 
             if (rowsAffected != 1) {
                 console.log(
@@ -117,11 +118,13 @@ export class PolicyRepository {
                     ID = :id
             `;
 
-            const { rowsAffected } = await this.db.execute(sql, {
-                description,
-                premium,
-                id,
-            });
+            const { rowsAffected } = await this.db.dataSource.query(sql, [
+                {
+                    description,
+                    premium,
+                    id,
+                },
+            ]);
 
             if (rowsAffected != 1) {
                 console.log(

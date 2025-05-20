@@ -5,8 +5,8 @@ import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { PolicyModule } from './policy/policy.module';
-import { PolicyHolderModule } from './policyHolder/policyHolder.moudle';
+import { PolicyModule } from './policies/policies.module';
+import { PolicyHolderModule } from './policyHolders/policyHolders.moudle';
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }), // 載入 .env 設定
