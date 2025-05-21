@@ -8,10 +8,11 @@ WORKDIR /app
 COPY . .
 RUN ls -al
 RUN ls -alR src
-RUN npx tsc --showConfig
-RUN npx tsc --project tsconfig.build.json --showConfig
+
 # 安裝 Node 依賴
 RUN npm install
+RUN npx tsc --showConfig
+RUN npx tsc --project tsconfig.build.json --showConfig
 
 # 編譯 TypeScript 程式
 RUN npm run build
