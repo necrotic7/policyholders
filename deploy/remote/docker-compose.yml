@@ -14,10 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   app:
-    build: 
-      context: ../../  # 以yml檔為基準，指向專案根目錄
-      dockerfile: deploy/Dockerfile # 明確指定 Dockerfile 的位置
-    image: policyholders:latest
+    image: ${DOCKER_USERNAME}/policyholders
     depends_on:
       - db
     container_name: policyholders

@@ -9,7 +9,7 @@ services:
     env_file:
       - ../.env
     ports:
-      - "3000:3000"
+      - "10300:10300"
     networks:
       - my_network
 

@@ -1,6 +1,8 @@
 #!/bin/bash
+source deploy/.env
+
 echo "Building Policyholders Docker image..."
-docker build --platform linux/amd64 -f deploy/app/Dockerfile -t policyholders .
+docker build -f deploy/Dockerfile -t policyholders .
 if [ $? -ne 0 ]; then
     echo "Error: Failed to docker build policyholders"
     exit 1  # 停止腳本執行

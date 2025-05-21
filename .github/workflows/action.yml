@@ -3,7 +3,7 @@ name: Docker Build and Push
 on:
   push:
     branches:
-      - master  # 設定觸發條件
+      - 07-typeorm-postgresql  # 設定觸發條件
 
 jobs:
   build:
@@ -17,10 +17,15 @@ jobs:
         run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
 
       # 設置 Docker 環境變數
-      - name: Set up Docker environment
+      - name: Setup deploy env
         run: |
-          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
-          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > ./deploy/.env
+            echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> ./deploy/.env
+            echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> ./deploy/.env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ./deploy/.env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> ./deploy/.env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> ./deploy/.env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> ./deploy/.env
 
       # 安裝 Docker
       - name: Set up Docker Buildx
@@ -35,14 +40,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-
-      - name: Setup deploy env
-        run: |
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > ./deploy/.env
-            echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> ./deploy/.env
-            echo "ORACLE_USER=${{ secrets.ORACLE_USER }}" >> ./deploy/.env
-            echo "ORACLE_PASSWORD=${{ secrets.ORACLE_PASSWORD }}" >> ./deploy/.env
-            echo "ORACLE_CONNECT_STRING=${{ secrets.ORACLE_CONNECT_STRING }}" >> ./deploy/.env
 
       - name: Run deploy.sh
         run: |
