@@ -4,5 +4,5 @@ export type PolicyData = {
     holder_code: number;
     holder_name: string;
     premium: number;
-    create_date: string;
+    created_at: Date;
 };

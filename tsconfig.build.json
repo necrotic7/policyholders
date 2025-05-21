@@ -1,4 +1,10 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+  "compilerOptions": {
+    "outDir": "./dist",         // 編譯輸出的資料夾
+    "declaration": true,        // 產出 .d.ts 宣告檔（可選）
+    "noEmit": false             // 要記得打開 emit，不然不會輸出任何東西
+  },
+  "include": ["src/**/*"],      // 要編譯的檔案
+  "exclude": ["node_modules", "test", "dist"]  // 不要編譯的資料夾
 }

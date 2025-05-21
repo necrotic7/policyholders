@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: postgres:16
+    container_name: my_postgres
+    restart: always
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    image: ${DOCKER_USERNAME}/policyholders
+    depends_on:
+      - db
+    container_name: policyholders
+    restart: always
+    environment:
+      DB_HOST: my_postgres
+    env_file:
+      - ../.env
+    ports:
+      - "10300:10300"
+
+volumes:
+  postgres_data:

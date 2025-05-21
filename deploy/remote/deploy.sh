@@ -1,4 +1,6 @@
 #!/bin/bash
+source deploy/.env
+
 echo "Deploy to ${SSH_USER}@${SSH_HOST}..."
 SSH_CMD="ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST}"
 

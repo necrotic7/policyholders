@@ -1,5 +1,5 @@
-import { PolicyRepository as Repository } from './policy.repository';
-import { PolicyData } from './models/policy.model';
+import { PolicyRepository as Repository } from './policies.repository';
+import { PolicyData } from './types/policies.type';
 import { Injectable, Scope } from '@nestjs/common';
 
 // 讓 Service 變成 Request Scoped，每個請求都會有新的 instance
@@ -9,14 +9,13 @@ export class PolicyService {
 
     async getPolicy(
         policyID: number | undefined,
-        policyHolderCode: number | undefined,
+        policyholderCode: number | undefined,
     ): Promise<PolicyData[]> {
         const result = await this.repository.queryPolicy({
             policyID,
-            policyHolderCode,
+            policyholderCode: policyholderCode,
         });
-        const policyList = result.map((r) => r as PolicyData);
-        return policyList;
+        return result;
     }
 
     async createPolicy(
@@ -24,17 +23,15 @@ export class PolicyService {
         holderId: number,
         premium: number,
     ): Promise<PolicyData> {
-        const newPolicyID = await this.repository.insertPolicy(
+        const newPolicy = await this.repository.insertPolicy(
             description,
             holderId,
             premium,
         );
         const result = await this.repository.queryPolicy({
-            policyID: newPolicyID,
+            policyID: newPolicy.id,
         });
-        const policyList = result.map((r) => r as PolicyData);
-        await this.repository.save();
-        return policyList[0];
+        return result[0];
     }
 
     async updatePolicy(
@@ -44,8 +41,6 @@ export class PolicyService {
     ) {
         await this.repository.updatePolicy(id, description, premium);
         const result = await this.repository.queryPolicy({ policyID: id });
-        const policyList = result.map((r) => r as PolicyData);
-        await this.repository.save();
-        return policyList[0];
+        return result[0];
     }
 }

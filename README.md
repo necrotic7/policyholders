@@ -6,7 +6,7 @@
 
 一個簡單的 Node.js API Server，負責管理保戶與保單，提供新增、修改、查詢等功能。  
 
-> 🚀 **當前 `master` 分支對應 `06-deploy`**，此版本已支援 Docker 部署。
+> 🚀 **當前 `master` 分支對應 `07-typeorm-postgresql`**
 
 本專案透過不同分支（branch）來測試各種技術組合，每個分支代表不同的技術演進階段：  
 
@@ -18,6 +18,7 @@
 | 04-type-graphql | TypeScript | Koa | GraphQL | Oracle, tsx, type-graphql | 以 03 版為基礎，改用 TypeGraphQL 來定義 GraphQL Schema |
 | 05-nestjs | TypeScript | NestJS | GraphQL | Oracle, nestjs/graphql, nestjs/apollo | 在 04 版基礎上，改用 NestJS 作為 API 框架，並使用 NestJS 相關套件來撰寫與編譯 Schema |
 | 06-deploy | TypeScript | NestJS | GraphQL | Oracle, nestjs/graphql, nestjs/apollo, Docker | 在 05 版基礎上，新增部署腳本，可透過 Docker 啟動本地 Oracle DB 與 API Server |
+| 07-typeorm-postgresql | TypeScript | NestJS | GraphQL | PostgreSql, typeorm, nestjs/graphql, nestjs/apollo, Docker | 在 06 版基礎上，將db換成postgresql並搭配typeorm做使用，並且調整部署腳本支援本地與遠端部署 |
 
 
 # Local Startup
@@ -26,16 +27,6 @@
 
 ```bash
 $ npm install
-```
-
-## Init env
-
-在專案根目錄創建.env檔案，並填入以下資料
-
-```
-ORACLE_USER=POLICYHOLDERS
-ORACLE_PASSWORD=safesync
-ORACLE_CONNECT_STRING=//oracle:1521/ORCLPDB1
 ```
 
 ## Compile and run the project
@@ -57,7 +48,7 @@ $ npm run start:prod
 直接於專案根目錄執行
 
 ```bash
-$ ./deploy/deploy.sh
+$ ./deploy/local/deploy.sh
 ```
 
 ### 附錄 快速產生GraphQL API Doc
