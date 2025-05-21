@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { PolicyholderData } from './types/policyholders.type';
-import { PolicyholdersDB } from 'src/database/schema/policyholders.schema';
-import { getLogger } from 'src/utils/logger';
+import { PolicyholdersDB } from '@/database/schema/policyholders.schema';
+import { getLogger } from '@/utils/logger';
 
 @Injectable()
 export class PolicyholdersRepository {
