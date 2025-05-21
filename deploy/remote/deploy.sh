@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source deploy/.env
 
 echo "Deploy to ${SSH_USER}@${SSH_HOST}..."

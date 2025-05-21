@@ -3,7 +3,7 @@ name: Docker Build and Push
 on:
   push:
     branches:
-      - 07-typeorm-postgresql  # 設定觸發條件
+      - master  # 設定觸發條件
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
       - name: Enable debug mode
         run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
 
-      # 設置 Docker 環境變數
+      # 設置環境變數
       - name: Setup deploy env
         run: |
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > ./deploy/.env
