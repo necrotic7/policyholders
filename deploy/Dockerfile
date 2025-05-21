@@ -7,6 +7,9 @@ WORKDIR /app
 # 複製配置
 COPY . .
 RUN ls -al
+RUN ls -alR src
+RUN npx tsc --showConfig
+RUN npx tsc --project tsconfig.build.json --showConfig
 # 安裝 Node 依賴
 RUN npm install
 
