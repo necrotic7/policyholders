@@ -6,7 +6,7 @@ WORKDIR /app
 
 # 複製配置
 COPY . .
-
+RUN ls -al
 # 安裝 Node 依賴
 RUN npm install
 

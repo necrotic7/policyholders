@@ -2,7 +2,7 @@
 source deploy/.env
 
 echo "Building Policyholders Docker image..."
-docker build -f deploy/Dockerfile -t policyholders .
+docker build --progress=plain -f deploy/Dockerfile -t policyholders .
 if [ $? -ne 0 ]; then
     echo "Error: Failed to docker build policyholders"
     exit 1  # 停止腳本執行
