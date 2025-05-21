@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { getLogger } from '@/utils/logger';
+import { getLogger } from '@/logger/logger.service';
 import { DataSource } from 'typeorm';
 
 @Injectable()

@@ -1,25 +1,34 @@
 import * as winston from 'winston';
 import * as moment from 'moment';
 
-let GlobalLogger: Logger | undefined;
+import { Injectable } from '@nestjs/common';
+import { LogstashService } from '../logstash/logstash.service';
+
+let GlobalLogger: LoggerService | undefined;
+
+export function setLoggerInstance(service: LoggerService) {
+    GlobalLogger = service;
+}
 
 export function getLogger() {
-    if (!GlobalLogger) GlobalLogger = new Logger();
+    if (!GlobalLogger) throw new Error('LoggerService 尚未初始化！');
     return GlobalLogger.get();
 }
 
-const customLevels = {
-    levels: {
-        critical: 0,
-        error: 1,
-        warn: 2,
-        info: 3,
-        debug: 4,
-    },
-};
-
-export class Logger {
+@Injectable()
+export class LoggerService {
     private instance?: winston.Logger;
+    constructor(private tcpWritable: LogstashService) {}
+
+    customLevels = {
+        levels: {
+            critical: 0,
+            error: 1,
+            warn: 2,
+            info: 3,
+            debug: 4,
+        },
+    };
 
     customFormat = winston.format.printf(({ level, message }) => {
         const formattedTime = moment().format('YYYY/MM/DD HH:mm:ss');
@@ -28,13 +37,16 @@ export class Logger {
 
     init() {
         const logger = winston.createLogger({
-            levels: customLevels.levels,
+            levels: this.customLevels.levels,
             format: winston.format.combine(
                 this.customFormat,
                 winston.format.json(),
             ),
             transports: [
                 new winston.transports.Console(),
+                new winston.transports.Stream({
+                    stream: this.tcpWritable,
+                }),
                 new winston.transports.File({ filename: 'log/app.log' }),
             ],
         });
@@ -47,7 +59,7 @@ export class Logger {
 
         // 包裝: 支援 logger.info(TAG, msg)
         const wrappedLogger: any = {};
-        const levels = Object.keys(customLevels.levels);
+        const levels = Object.keys(this.customLevels.levels);
 
         levels.forEach((level) => {
             wrappedLogger[level] = (tag: string, ...msg: any[]) => {
@@ -57,7 +69,7 @@ export class Logger {
         });
 
         return wrappedLogger as Record<
-            keyof typeof customLevels.levels,
+            keyof typeof this.customLevels.levels,
             (tag: string, ...msg: any[]) => void
         >;
     }

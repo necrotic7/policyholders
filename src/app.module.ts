@@ -5,11 +5,15 @@ import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { PolicyModule } from './policies/policies.module';
-import { PolicyholderModule } from './policyholders/policyholders.module';
+import { PolicyModule } from './models/policies/policies.module';
+import { PolicyholderModule } from './models/policyholders/policyholders.module';
+import { LoggerModule } from './logger/logger.module';
+import { LogstashModule } from './logstash/logstash.module';
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }), // 載入 .env 設定
+        LogstashModule,
+        LoggerModule,
         DatabaseModule,
         PolicyModule,
         PolicyholderModule,
