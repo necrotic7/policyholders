@@ -16,13 +16,6 @@ const customLevels = {
         info: 3,
         debug: 4,
     },
-    colors: {
-        critical: 'red bold',
-        error: 'red',
-        warn: 'yellow',
-        info: 'green',
-        debug: 'blue',
-    },
 };
 
 export class Logger {
@@ -34,14 +27,16 @@ export class Logger {
     });
 
     init() {
-        winston.addColors(customLevels.colors);
         const logger = winston.createLogger({
             levels: customLevels.levels,
             format: winston.format.combine(
-                winston.format.colorize({ all: true }),
                 this.customFormat,
+                winston.format.json(),
             ),
-            transports: [new winston.transports.Console()],
+            transports: [
+                new winston.transports.Console(),
+                new winston.transports.File({ filename: 'log/app.log' }),
+            ],
         });
         this.instance = logger;
         return logger;
