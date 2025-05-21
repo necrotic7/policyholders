@@ -10,7 +10,6 @@ RUN ls -al
 
 # 安裝 Node 依賴
 RUN npm install
-RUN npx tsc --showConfig
 RUN npx tsc --project tsconfig.build.json --showConfig
 
 # 編譯 TypeScript 程式
