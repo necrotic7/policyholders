@@ -32,7 +32,7 @@ git push origin "$VERSION"
 echo "VERSION=$VERSION" >> deploy/.env
 
 echo "Building Policyholders Docker image..."
-docker build --progress=plain -f deploy/Dockerfile -t policyholders .
+docker build --progress=plain -f deploy/Dockerfile -t policyholders:$VERSION .
 if [ $? -ne 0 ]; then
     echo "Error: Failed to docker build policyholders"
     exit 1  # 停止腳本執行
