@@ -11,14 +11,17 @@ jobs:
     environment: prod
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 抓到全部 tag
 
       - name: Enable debug mode
         run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
 
       - name: Version Tag
         run: |
-            latestTag=$(git describe --tags --abbrev=0)
+            git fetch --tags
+            latestTag=$(git describe --tags `git rev-list --tags --max-count=1` || echo "v0.0.0")
             VERSION=$(echo $latestTag | awk -F. -v OFS=. '{$NF += 1; print}')
             git tag $VERSION
             git push origin $VERSION
