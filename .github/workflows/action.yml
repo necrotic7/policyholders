@@ -8,49 +8,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     environment: prod
     steps:
+      - name: Enable debug mode
+        run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # 抓到全部 tag
 
-      - name: Enable debug mode
-        run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
-
-      - name: Version Tag
-        run: |
-            git fetch --tags
-            latestTag=$(git describe --tags `git rev-list --tags --max-count=1` || echo "v0.0.0")
-            VERSION=$(echo $latestTag | awk -F. -v OFS=. '{$NF += 1; print}')
-            git tag $VERSION
-            git push origin $VERSION
-
-      # 設置環境變數
-      - name: Setup deploy env
-        run: |
-            echo "VERSION=$VERSION" > ./deploy/env
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> ./deploy/.env
-            echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> ./deploy/.env
-            echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> ./deploy/.env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ./deploy/.env
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> ./deploy/.env
-            echo "DB_PORT=${{ secrets.DB_PORT }}" >> ./deploy/.env
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> ./deploy/.env
-
       # 安裝 Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Run docker-build.sh
-        run: |
-          chmod +x ./deploy/remote/docker-build.sh
-          ./deploy/remote/docker-build.sh
-      
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+
+      # 設置環境變數
+      - name: Write deploy .env
+        run: echo "${{ secrets.DOT_ENV }}" > ./deploy/.env
 
       - name: Run deploy.sh
         run: |

@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   app:
-    image: ${DOCKER_USERNAME}/policyholders:${VERSION}
+    image: ${DOCKER_USERNAME}/policyholders:latest
     depends_on:
       - db
     container_name: policyholders
