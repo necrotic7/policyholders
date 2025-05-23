@@ -36,19 +36,23 @@ export class LoggerService {
     });
 
     init() {
+        const transports: any[] = [
+            new winston.transports.Console(),
+            new winston.transports.File({ filename: 'log/app.log' }),
+        ];
+        if (this.tcpWritable.available)
+            transports.push(
+                new winston.transports.Stream({
+                    stream: this.tcpWritable,
+                }),
+            );
         const logger = winston.createLogger({
             levels: this.customLevels.levels,
             format: winston.format.combine(
                 this.customFormat,
                 winston.format.json(),
             ),
-            transports: [
-                new winston.transports.Console(),
-                new winston.transports.Stream({
-                    stream: this.tcpWritable,
-                }),
-                new winston.transports.File({ filename: 'log/app.log' }),
-            ],
+            transports,
         });
         this.instance = logger;
         return logger;
