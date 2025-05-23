@@ -11,5 +11,5 @@ fi
 echo "Pushing to Docker Hub"
 echo "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-docker tag policyholders:latest $DOCKER_USERNAME/policyholders:latest
-docker push $DOCKER_USERNAME/policyholders:latest
+docker tag policyholders:$VERSION $DOCKER_USERNAME/policyholders:$VERSION
+docker push $DOCKER_USERNAME/policyholders:$VERSION
