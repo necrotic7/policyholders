@@ -38,6 +38,8 @@ jobs:
             chmod +x ./deploy/remote/deploy.sh
             ./deploy/remote/deploy.sh
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           SSH_USER: ${{ secrets.GCP_SSH_USER }}
           SSH_HOST: ${{ secrets.GCP_SSH_HOST }}
 
