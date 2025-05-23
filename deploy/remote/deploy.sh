@@ -29,7 +29,7 @@ git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${G
 git tag "$VERSION"
 git push origin "$VERSION"
 
-echo "\nVERSION=$VERSION" >> deploy/.env
+echo "VERSION=$VERSION" >> deploy/.env
 
 echo "Building Policyholders Docker image..."
 docker build --progress=plain -f deploy/Dockerfile -t policyholders .
