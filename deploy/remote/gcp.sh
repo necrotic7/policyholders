@@ -2,7 +2,7 @@
 source .env
 
 docker rm -f policyholders
-
+docker rmi -f $DOCKER_USERNAME:policyholders
 # 使用 docker-compose 啟動 postgresql & Policyholders 容器
 echo "Starting Policyholders container..."
 docker compose --env-file .env up -d
