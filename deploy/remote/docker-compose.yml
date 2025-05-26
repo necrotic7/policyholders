@@ -22,7 +22,7 @@ services:
     environment:
       DB_HOST: my_postgres
     env_file:
-      - ../.env
+      - .env
     ports:
       - "10300:10300"
 
