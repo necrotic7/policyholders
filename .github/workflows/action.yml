@@ -3,7 +3,7 @@ name: Docker Build and Push
 on:
   push:
     branches:
-      - 08-elk-stack  # 設定觸發條件
+      - master  # 設定觸發條件
 
 jobs:
   build:

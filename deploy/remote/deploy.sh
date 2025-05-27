@@ -1,33 +1,12 @@
 #!/bin/bash
 source deploy/.env
 
-# 1. 取得版號
-# 抓 git tags
-git fetch --tags
-
-# 判斷有沒有 tag，沒有就預設 v0.0.0
-if git tag | grep -q .; then
-  latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
-else
-  latestTag="v0.0.0"
-fi
-
-echo "最新 tag：$latestTag"
-# 升版號：最後一位 +1（v1.2.3 -> v1.2.4）
-VERSION=$(echo "$latestTag" | awk -F. -v OFS=. '{$NF += 1; print}')
-echo "新 tag：$VERSION"
-
-# GitHub Actions bot 設定身份
-git config --global user.name "github-actions[bot]"
-git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-# 改 remote，用 GITHUB_TOKEN 認證
-git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
-# 打 tag 並推上去
-git tag "$VERSION"
-git push origin "$VERSION"
-
+# 1. 更新版號
+echo "Start to update versions"
+LAST_VERSION=$(npm pkg get version | jq -r .)
+VERSION=$(npm version patch)
+echo "update version from($LAST_VERSION) to($VERSION)"
+# 將新版號寫入env
 echo "VERSION=$VERSION" >> deploy/.env
 
 # 3. build app

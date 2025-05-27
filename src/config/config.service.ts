@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
 import { Config } from './config.type';
+import pkg from '@/../package.json';
 
 @Injectable()
 export class ConfigService implements OnModuleInit {
@@ -9,7 +10,9 @@ export class ConfigService implements OnModuleInit {
 
     onModuleInit() {
         this.env = {
+            service: pkg.name,
             port: this.nestConfig.get<number>('API_PORT') ?? 3000,
+            version: pkg.version,
             db: {
                 username: this.nestConfig.get<string>('DB_USERNAME')!,
                 password: this.nestConfig.get<string>('DB_PASSWORD')!,

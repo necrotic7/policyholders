@@ -1,6 +1,5 @@
 import * as winston from 'winston';
-import * as moment from 'moment';
-
+import moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { LogstashService } from '../logstash/logstash.service';
 import { ConfigService } from '@/config/config.service';
@@ -37,6 +36,8 @@ export class LoggerService {
     customFormat = winston.format.printf(({ level, message }) => {
         const formattedTime = moment().format('YYYY/MM/DD HH:mm:ss');
         return JSON.stringify({
+            service: this.configService.env.service,
+            version: this.configService.env.version,
             time: formattedTime,
             level,
             message,

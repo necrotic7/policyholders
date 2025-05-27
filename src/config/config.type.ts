@@ -1,5 +1,7 @@
 export type Config = {
+    service: string;
     port: number;
+    version: string;
     log: {
         outLogPath: string;
     };
