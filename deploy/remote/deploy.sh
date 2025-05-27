@@ -12,14 +12,15 @@ git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${G
 echo "Start to update versions"
 LAST_VERSION=$(npm pkg get version | jq -r .)
 VERSION=$(npm version patch)
-echo "update version from($LAST_VERSION) to($VERSION)"
-# 將新版號寫入env
-echo "VERSION=$VERSION" >> deploy/.env
-
 if [ $? -ne 0 ]; then
     echo "Error: Failed to update version"
     exit 1
 fi
+
+echo "update version from($LAST_VERSION) to($VERSION)"
+# 將新版號寫入env
+echo "VERSION=$VERSION" >> deploy/.env
+
 
 
 # 3. build app
