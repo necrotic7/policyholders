@@ -40,10 +40,19 @@ export class LoggerService implements OnModuleInit {
     });
 
     onModuleInit() {
+        const outLogger = this.initLogger(
+            this.configService.env.log.outLogPath,
+        );
+        this.outLogInstance = outLogger;
+        GlobalLogger = this;
+        return;
+    }
+
+    initLogger(path: string) {
         const transports: any[] = [
             new winston.transports.Console(),
             new winston.transports.File({
-                filename: this.configService.env.log.outLogPath,
+                filename: path,
             }),
         ];
         if (this.tcpWritable.available)
@@ -57,8 +66,6 @@ export class LoggerService implements OnModuleInit {
             format: winston.format.combine(this.customFormat),
             transports,
         });
-        this.outLogInstance = logger;
-        GlobalLogger = this;
         return logger;
     }
 

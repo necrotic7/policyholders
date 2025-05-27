@@ -12,24 +12,31 @@ export class LogstashService extends Writable implements OnModuleInit {
         super();
     }
 
-    onModuleInit() {
+    connectSocket(
+        socket: net.Socket,
+        host: string,
+        port: number,
+    ): Promise<void> {
+        return new Promise((resolve, reject) => {
+            socket.once('connect', () => resolve());
+            socket.once('error', (err) => reject(err));
+            socket.connect(port, host);
+        });
+    }
+
+    async onModuleInit(): Promise<void> {
+        this.client = new net.Socket();
+
         try {
-            this.client = new net.Socket();
             const host = this.configService.env.logstash.host;
             const port = this.configService.env.logstash.port;
 
-            this.client.on('error', (err) => {
-                console.log(
-                    this.TAG,
-                    `connect to logstash fail: ${err}, skip...`,
-                );
-            });
-            this.client.connect(port, host, () => {
-                console.log(this.TAG, 'Connected to logstash');
-                this.available = true;
-            });
+            await this.connectSocket(this.client, host, port);
+
+            this.available = true;
+            console.log(this.TAG, '成功連線 Logstash');
         } catch (err) {
-            console.log(this.TAG, `connect to logstash fail:${err}, skip...`);
+            console.log(this.TAG, `連線 Logstash 失敗：${err}`);
         }
     }
 

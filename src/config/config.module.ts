@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from './config.service';
 
-@Global()
+@Global() // 註冊為全域模組，優先執行
 @Module({
     providers: [ConfigService],
     exports: [ConfigService],

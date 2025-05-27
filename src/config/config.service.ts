@@ -22,7 +22,8 @@ export class ConfigService implements OnModuleInit {
             },
             log: {
                 outLogPath:
-                    this.nestConfig.get<string>('OUTLOG_PATH') ?? 'log/app.log',
+                    this.nestConfig.get<string>('OUT_LOG_PATH') ??
+                    'log/out.log',
             },
             logstash: {
                 host:

@@ -1,10 +1,11 @@
 import { Module, Global, OnModuleInit } from '@nestjs/common';
 import { LoggerService } from './logger.service';
 import { LogstashService } from '@/logstash/logstash.service';
+import { LogstashModule } from '@/logstash/logstash.module';
 
-@Global() // 設定為全域模組，其他地方可以直接注入使用
 @Module({
-    providers: [LogstashService, LoggerService],
+    imports: [LogstashModule],
+    providers: [LoggerService],
     exports: [LoggerService],
 })
 export class LoggerModule {}
