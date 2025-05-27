@@ -11,27 +11,10 @@ if [ $? -ne 0 ]; then
 fi
 
 # 2. 取得版號
-echo "Start to get versions"
-# 用ssh clone repo時，要先打開ssh-agent
-# eval "$(ssh-agent -s)"
-# ssh-add ~/.ssh/id_rsa
-
-# 抓 git tags
-git fetch --tags
-
-# 判斷有沒有 tag，沒有就預設 v0.0.0
-if git tag | grep -q .; then
-  latestTag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
-else
-  latestTag="v0.0.0"
-fi
-
-echo "最新 tag：$latestTag"
-
-# 升版號：最後一位 +1（v1.2.3 -> v1.2.4）
-VERSION=$(echo "$latestTag" | awk -F. -v OFS=. '{$NF += 1; print}')
-
-echo "新 tag：$VERSION"
+echo "Start to update versions"
+LAST_VERSION=$(npm pkg get version | jq -r .)
+VERSION=$(npm version patch)
+echo "update version from($LAST_VERSION) to($VERSION)"
 
 echo "VERSION=$VERSION" >> deploy/.env
 
