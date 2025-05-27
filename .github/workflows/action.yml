@@ -1,14 +1,23 @@
 name: Docker Build and Push
 
 on:
+  # 可以從 github 上手動觸發 workflow
   workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: '部署環境'
+        required: true
+        options:
+          - prod
+        default: 'prod'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    environment: prod
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Enable debug mode
         run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
