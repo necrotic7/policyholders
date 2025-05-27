@@ -1,7 +1,8 @@
 #!/bin/bash
 source deploy/.env
 
-# 抓 tags
+# 1. 取得版號
+# 抓 git tags
 git fetch --tags
 
 # 判斷有沒有 tag，沒有就預設 v0.0.0
@@ -12,10 +13,8 @@ else
 fi
 
 echo "最新 tag：$latestTag"
-
 # 升版號：最後一位 +1（v1.2.3 -> v1.2.4）
 VERSION=$(echo "$latestTag" | awk -F. -v OFS=. '{$NF += 1; print}')
-
 echo "新 tag：$VERSION"
 
 # GitHub Actions bot 設定身份
@@ -31,6 +30,7 @@ git push origin "$VERSION"
 
 echo "VERSION=$VERSION" >> deploy/.env
 
+# 3. build app
 echo "Building Policyholders Docker image..."
 docker build --progress=plain -f deploy/Dockerfile -t policyholders:$VERSION .
 if [ $? -ne 0 ]; then
@@ -38,12 +38,14 @@ if [ $? -ne 0 ]; then
     exit 1  # 停止腳本執行
 fi
 
+# 4. push to docker hub
 echo "Pushing to Docker Hub"
 echo "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 docker tag policyholders:$VERSION $DOCKER_USERNAME/policyholders:$VERSION
 docker push $DOCKER_USERNAME/policyholders:$VERSION
 
+# 5. 部署到遠端機器 
 echo "Deploy to ${SSH_USER}@${SSH_HOST}..."
 SSH_CMD="ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST}"
 

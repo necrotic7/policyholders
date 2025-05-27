@@ -1,6 +1,6 @@
 #!/bin/bash
 source .env
-
+# 刪除已經存在的 app
 docker rm -f policyholders
 docker rmi -f $DOCKER_USERNAME:policyholders
 # 使用 docker-compose 啟動 postgresql & Policyholders 容器
