@@ -17,6 +17,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 git push origin
+git push origin $VERSION
 
 echo "update version from($LAST_VERSION) to($VERSION)"
 # 將新版號寫入env
