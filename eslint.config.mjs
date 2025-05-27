@@ -37,6 +37,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unnecessary-type-assertion': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
       'prettier/prettier': ["error", { tabWidth: 4, useTabs: false }]
     },
   },

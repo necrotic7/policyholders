@@ -1,23 +1,18 @@
 import * as winston from 'winston';
 import moment from 'moment';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { LogstashService } from '../logstash/logstash.service';
 import { ConfigService } from '@/config/config.service';
 
-let GlobalLogger: LoggerService | undefined;
-
-export function setLoggerInstance(service: LoggerService) {
-    GlobalLogger = service;
-}
+let GlobalLogger: LoggerService;
 
 export function getLogger() {
-    if (!GlobalLogger) throw new Error('LoggerService 尚未初始化！');
     return GlobalLogger.get();
 }
 
 @Injectable()
-export class LoggerService {
-    private instance?: winston.Logger;
+export class LoggerService implements OnModuleInit {
+    private outLogInstance: winston.Logger;
     constructor(
         private tcpWritable: LogstashService,
         private configService: ConfigService,
@@ -44,7 +39,7 @@ export class LoggerService {
         });
     });
 
-    init() {
+    onModuleInit() {
         const transports: any[] = [
             new winston.transports.Console(),
             new winston.transports.File({
@@ -62,12 +57,13 @@ export class LoggerService {
             format: winston.format.combine(this.customFormat),
             transports,
         });
-        this.instance = logger;
+        this.outLogInstance = logger;
+        GlobalLogger = this;
         return logger;
     }
 
     get() {
-        const baseLogger = this.instance ?? this.init();
+        const baseLogger = this.outLogInstance;
 
         // 包裝: 支援 logger.info(TAG, msg)
         const wrappedLogger: any = {};
