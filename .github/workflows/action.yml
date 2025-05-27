@@ -8,44 +8,36 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     environment: prod
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Enable debug mode
         run: set -x  # 打開 debug 模式，之後的指令都會顯示在 log 中
 
-      # 設置環境變數
-      - name: Setup deploy env
-        run: |
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > ./deploy/.env
-            echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> ./deploy/.env
-            echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> ./deploy/.env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ./deploy/.env
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> ./deploy/.env
-            echo "DB_PORT=${{ secrets.DB_PORT }}" >> ./deploy/.env
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> ./deploy/.env
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       # 安裝 Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Run docker-build.sh
-        run: |
-          chmod +x ./deploy/remote/docker-build.sh
-          ./deploy/remote/docker-build.sh
-      
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+
+      # 設置環境變數
+      - name: Write deploy .env
+        run: echo "${{ secrets.DOT_ENV }}" > ./deploy/.env
 
       - name: Run deploy.sh
         run: |
             chmod +x ./deploy/remote/deploy.sh
             ./deploy/remote/deploy.sh
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           SSH_USER: ${{ secrets.GCP_SSH_USER }}
           SSH_HOST: ${{ secrets.GCP_SSH_HOST }}
 

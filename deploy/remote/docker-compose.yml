@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   app:
-    image: ${DOCKER_USERNAME}/policyholders
+    image: ${DOCKER_USERNAME}/policyholders:${VERSION}
     depends_on:
       - db
     container_name: policyholders
@@ -22,7 +22,7 @@ services:
     environment:
       DB_HOST: my_postgres
     env_file:
-      - ../.env
+      - .env
     ports:
       - "10300:10300"
 

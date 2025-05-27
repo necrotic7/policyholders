@@ -10,18 +10,20 @@ if [ $? -ne 0 ]; then
     exit 1  # 停止腳本執行
 fi
 
-# 2. 使用 docker-compose 啟動 Policyholders 容器
+# 2. 更新版號
+echo "Start to update versions"
+LAST_VERSION=$(npm pkg get version | jq -r .)
+VERSION=$(npm version patch)
+echo "update version from($LAST_VERSION) to($VERSION)"
+# 將新版號寫入env
+echo "VERSION=$VERSION" >> deploy/.env
+
+# 3. 使用 docker-compose 啟動 Policyholders 容器
 echo "Starting Policyholders container..."
 docker-compose -f deploy/local/docker-compose.yml --env-file deploy/.env up -d
 if [ $? -ne 0 ]; then
     echo "Error: Failed to start policyholders"
     exit 1  # 停止腳本執行
 fi
-
-echo "Pushing to Docker Hub"
-echo "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-docker tag policyholders:latest $DOCKER_USERNAME/policyholders:latest
-docker push $DOCKER_USERNAME/policyholders:latest
 
 echo "Setup completed successfully!"

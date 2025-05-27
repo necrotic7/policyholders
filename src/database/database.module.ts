@@ -1,5 +1,6 @@
 import { Module, Global } from '@nestjs/common';
 import { DatabaseService } from './database.service';
+import { ConfigService } from '@/config/config.service';
 
 @Global() // 設定為全域模組，其他地方可以直接注入使用
 @Module({

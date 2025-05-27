@@ -3,7 +3,7 @@ import { PolicyholderData } from './types/policyholders.type';
 import { PolicyholdersRepository as Repository } from './policyholders.repository';
 import { PolicyholdersDB } from '@/database/schema/policyholders.schema';
 import { Policyholder } from './types/policyholders.gql.type';
-import { getLogger } from '@/utils/logger';
+import { getLogger } from '@/logger/logger.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyholderService {
