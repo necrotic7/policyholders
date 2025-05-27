@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Writable } from 'stream';
-import { ConfigService } from '@nestjs/config';
 import * as net from 'net';
+import { ConfigService } from '@/config/config.service';
 
 @Injectable()
 export class LogstashService extends Writable implements OnModuleInit {
@@ -15,10 +15,8 @@ export class LogstashService extends Writable implements OnModuleInit {
     onModuleInit() {
         try {
             this.client = new net.Socket();
-            const host =
-                this.configService.get<string>('LOGSTASH_HOST') ?? 'localhost';
-            const port =
-                this.configService.get<number>('LOGSTASH_PORT') ?? 50000;
+            const host = this.configService.env.logstash.host;
+            const port = this.configService.env.logstash.port;
 
             this.client.on('error', (err) => {
                 console.log(

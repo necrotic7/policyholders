@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { getLogger } from '@/logger/logger.service';
 import { DataSource } from 'typeorm';
+import { ConfigService } from '@/config/config.service';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
@@ -13,13 +13,14 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     async onModuleInit() {
         const logger = getLogger();
         try {
+            const { db } = this.configService.env;
             const AppDataSource = new DataSource({
                 type: 'postgres',
-                host: this.configService.get<string>('DB_HOST'),
-                port: this.configService.get<number>('DB_PORT'),
-                username: this.configService.get<string>('DB_USERNAME'),
-                password: this.configService.get<string>('DB_PASSWORD'),
-                database: this.configService.get<string>('DB_NAME'),
+                host: db.host,
+                port: db.port,
+                username: db.username,
+                password: db.password,
+                database: db.name,
                 logging: false,
                 entities: [
                     __dirname + '/schema/*.ts',

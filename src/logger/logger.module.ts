@@ -4,7 +4,7 @@ import { LogstashService } from '@/logstash/logstash.service';
 
 @Global() // 設定為全域模組，其他地方可以直接注入使用
 @Module({
-    providers: [LoggerService, LogstashService],
+    providers: [LogstashService, LoggerService],
     exports: [LoggerService],
 })
 export class LoggerModule implements OnModuleInit {

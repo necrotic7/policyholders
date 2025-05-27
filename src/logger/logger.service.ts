@@ -3,6 +3,7 @@ import * as moment from 'moment';
 
 import { Injectable } from '@nestjs/common';
 import { LogstashService } from '../logstash/logstash.service';
+import { ConfigService } from '@/config/config.service';
 
 let GlobalLogger: LoggerService | undefined;
 
@@ -18,7 +19,10 @@ export function getLogger() {
 @Injectable()
 export class LoggerService {
     private instance?: winston.Logger;
-    constructor(private tcpWritable: LogstashService) {}
+    constructor(
+        private tcpWritable: LogstashService,
+        private configService: ConfigService,
+    ) {}
 
     customLevels = {
         levels: {
@@ -32,13 +36,19 @@ export class LoggerService {
 
     customFormat = winston.format.printf(({ level, message }) => {
         const formattedTime = moment().format('YYYY/MM/DD HH:mm:ss');
-        return `[${formattedTime}][${level}] ${message}`;
+        return JSON.stringify({
+            time: formattedTime,
+            level,
+            message,
+        });
     });
 
     init() {
         const transports: any[] = [
             new winston.transports.Console(),
-            new winston.transports.File({ filename: 'log/app.log' }),
+            new winston.transports.File({
+                filename: this.configService.env.log.outLogPath,
+            }),
         ];
         if (this.tcpWritable.available)
             transports.push(
@@ -48,10 +58,7 @@ export class LoggerService {
             );
         const logger = winston.createLogger({
             levels: this.customLevels.levels,
-            format: winston.format.combine(
-                this.customFormat,
-                winston.format.json(),
-            ),
+            format: winston.format.combine(this.customFormat),
             transports,
         });
         this.instance = logger;
