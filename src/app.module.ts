@@ -1,5 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
@@ -24,6 +24,7 @@ import { ConfigModule } from './config/config.module';
             autoSchemaFile: 'schema.gql',
             // 禁用playground
             playground: false,
+            context: ({ req, res }) => ({ req, res }),
             // 啟用sandbox
             plugins: [ApolloServerPluginLandingPageLocalDefault()],
             buildSchemaOptions: {
@@ -37,4 +38,9 @@ import { ConfigModule } from './config/config.module';
         }),
     ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        // 可以在apply中註冊middleware
+        consumer.apply().forRoutes('*');
+    }
+}

@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { getLogger } from '@/logger/logger.service';
+import { getGeneralLogger } from '@/logger/logger.service';
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@/config/config.service';
 
@@ -11,7 +11,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
 
     // 初始化連線
     async onModuleInit() {
-        const logger = getLogger();
+        const logger = getGeneralLogger();
         try {
             const { db } = this.configService.env;
             const AppDataSource = new DataSource({
@@ -37,7 +37,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
 
     // 關閉連線
     async onModuleDestroy() {
-        const logger = getLogger();
+        const logger = getGeneralLogger();
         if (this.dataSource) {
             try {
                 await this.dataSource.destroy();

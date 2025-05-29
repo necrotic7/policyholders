@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../database/database.service';
 import { PolicyholderData } from './types/policyholders.type';
 import { PolicyholdersDB } from '@/database/schema/policyholders.schema';
-import { getLogger } from '@/logger/logger.service';
+import { getGeneralLogger } from '@/logger/logger.service';
 
 @Injectable()
 export class PolicyholdersRepository {
@@ -15,7 +15,7 @@ export class PolicyholdersRepository {
      */
     async queryPolicyDataByCode(code: number) {
         const TAG = '[透過保戶編號取得保戶資訊]';
-        const logger = getLogger();
+        const logger = getGeneralLogger();
 
         try {
             const db = this.db.dataSource;
@@ -65,7 +65,7 @@ export class PolicyholdersRepository {
      */
     async queryPolicyTopDataByChildCode(code: number) {
         const TAG = '[透過子代號取得父保戶資訊]';
-        const logger = getLogger();
+        const logger = getGeneralLogger();
         try {
             // 查詢指定保戶編號的父級資料與其下級
             const sql = `
@@ -112,7 +112,7 @@ export class PolicyholdersRepository {
      */
     async queryParentForCreate() {
         const TAG = '[找出新保戶的上線]';
-        const logger = getLogger();
+        const logger = getGeneralLogger();
         try {
             const sql = `
                 with p as (
@@ -159,7 +159,7 @@ export class PolicyholdersRepository {
         introducerId: number | undefined,
     ) {
         const TAG = '[寫入新保戶資料]';
-        const logger = getLogger();
+        const logger = getGeneralLogger();
         try {
             const repo = this.db.dataSource.getRepository(PolicyholdersDB);
             const newPolicyholder = repo.create({
@@ -182,7 +182,7 @@ export class PolicyholdersRepository {
         introducerId: number | undefined,
     ) {
         const TAG = '[更新保戶資訊]';
-        const logger = getLogger();
+        const logger = getGeneralLogger();
         try {
             const repo = this.db.dataSource.getRepository(PolicyholdersDB);
             const holder = await repo.findOneBy({ id });

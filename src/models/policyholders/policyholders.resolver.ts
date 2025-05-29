@@ -1,11 +1,12 @@
 import 'reflect-metadata';
-import { Query, Mutation, Resolver, Args } from '@nestjs/graphql';
+import { Query, Mutation, Resolver, Args, Context } from '@nestjs/graphql';
 import { PolicyholderService as Service } from './policyholders.service';
 import { Policyholder } from './types/policyholders.gql.type';
 import {
     CreatePolicyholderInput,
     UpdatePolicyholderInput,
 } from './types/policyholders.gql.type';
+import { Logger } from '@/logger/logger.type';
 
 @Resolver((_of) => Policyholder)
 export class PolicyholderResolver {
@@ -16,8 +17,10 @@ export class PolicyholderResolver {
         nullable: true,
     })
     async getPolicyholder(
+        @Context() ctx: any,
         @Args('code', { description: '保戶編號' }) code: number,
     ) {
+        this.service.Logger = ctx.logger;
         const result = await this.service.getPolicyholderByCode(code);
         return result;
     }

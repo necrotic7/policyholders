@@ -4,6 +4,7 @@ export type Config = {
     version: string;
     log: {
         outLogPath: string;
+        accessLogPath: string;
     };
     db: {
         username: string;

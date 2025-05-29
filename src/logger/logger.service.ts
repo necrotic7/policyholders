@@ -3,47 +3,52 @@ import moment from 'moment';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { LogstashService } from '../logstash/logstash.service';
 import { ConfigService } from '@/config/config.service';
+import { EnumLoggerLevel, EnumLoggerType, Logger } from './logger.type';
+import * as _ from 'lodash';
 
 let GlobalLogger: LoggerService;
 
-export function getLogger() {
-    return GlobalLogger.get();
+export function getGeneralLogger() {
+    return GlobalLogger.get(EnumLoggerType.out);
+}
+
+export function getLogger(type: EnumLoggerType, uuid?: string) {
+    return GlobalLogger.get(type, uuid);
 }
 
 @Injectable()
 export class LoggerService implements OnModuleInit {
-    private outLogInstance: winston.Logger;
+    outLogInstance: winston.Logger;
+    accessLogInstance: winston.Logger;
     constructor(
         private tcpWritable: LogstashService,
         private configService: ConfigService,
     ) {}
 
-    customLevels = {
-        levels: {
-            critical: 0,
-            error: 1,
-            warn: 2,
-            info: 3,
-            debug: 4,
+    customFormat = winston.format.printf(
+        ({ level, message, uuid, ...meta }) => {
+            const formattedTime = moment().format('YYYY/MM/DD HH:mm:ss');
+            return JSON.stringify({
+                service: this.configService.env.service,
+                version: this.configService.env.version,
+                time: formattedTime,
+                level,
+                uuid,
+                message,
+                ...meta, // 把其他 meta fields 展開進來
+            });
         },
-    };
-
-    customFormat = winston.format.printf(({ level, message }) => {
-        const formattedTime = moment().format('YYYY/MM/DD HH:mm:ss');
-        return JSON.stringify({
-            service: this.configService.env.service,
-            version: this.configService.env.version,
-            time: formattedTime,
-            level,
-            message,
-        });
-    });
+    );
 
     onModuleInit() {
         const outLogger = this.initLogger(
             this.configService.env.log.outLogPath,
         );
         this.outLogInstance = outLogger;
+        const accessLogger = this.initLogger(
+            this.configService.env.log.accessLogPath,
+        );
+        this.accessLogInstance = accessLogger;
         GlobalLogger = this;
         return;
     }
@@ -62,30 +67,41 @@ export class LoggerService implements OnModuleInit {
                 }),
             );
         const logger = winston.createLogger({
-            levels: this.customLevels.levels,
+            levels: Object(EnumLoggerLevel),
             format: winston.format.combine(this.customFormat),
             transports,
         });
         return logger;
     }
 
-    get() {
-        const baseLogger = this.outLogInstance;
+    getInstanceByType(type: EnumLoggerType) {
+        switch (type) {
+            case EnumLoggerType.access:
+                return this.accessLogInstance;
+            case EnumLoggerType.out:
+            default:
+                return this.outLogInstance;
+        }
+    }
 
+    get(type: EnumLoggerType, uuid?: string) {
+        const instance = this.getInstanceByType(type);
+        const baseLogger = instance.child({ uuid });
         // 包裝: 支援 logger.info(TAG, msg)
         const wrappedLogger: any = {};
-        const levels = Object.keys(this.customLevels.levels);
+        const levels = Object.keys(EnumLoggerLevel);
 
         levels.forEach((level) => {
-            wrappedLogger[level] = (tag: string, ...msg: any[]) => {
-                const fullMsg = `${tag} ${msg.join(' ')}`;
-                baseLogger.log(level, fullMsg);
+            wrappedLogger[level] = (tag: string, msg: any) => {
+                const isObj = _.isObject(msg);
+                if (isObj) {
+                    baseLogger.log(level, tag, msg);
+                } else {
+                    baseLogger.log(level, `${tag} ${msg}`); // msg 是字串就直接印
+                }
             };
         });
 
-        return wrappedLogger as Record<
-            keyof typeof this.customLevels.levels,
-            (tag: string, ...msg: any[]) => void
-        >;
+        return wrappedLogger as Logger;
     }
 }
