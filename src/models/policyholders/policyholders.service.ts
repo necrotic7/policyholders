@@ -2,7 +2,6 @@ import { Injectable, Scope } from '@nestjs/common';
 import { PolicyholderData } from '@/models/policyholders/types/policyholders.type';
 import { PolicyholdersRepository as Repository } from '@/models/policyholders/policyholders.repository';
 import { Policyholder } from '@/models/policyholders/types/policyholders.gql.type';
-import { getGeneralLogger } from '@/modules/logger/logger.service';
 import { ContextService } from '@/modules/context/context.service';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -83,7 +82,7 @@ export class PolicyholderService {
         introducerCode: number | undefined,
     ) {
         const TAG = '[更新保戶資訊]';
-        const logger = getGeneralLogger();
+        const logger = this.contextService.getLogger();
         if (!name && !introducerCode) {
             logger.error(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
             throw Error('invalid parameters');

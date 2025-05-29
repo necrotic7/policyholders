@@ -12,7 +12,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AccessInterceptor implements NestInterceptor {
-    TAG = '[Access]';
+    REQUEST_TAG = '[Request]';
+    RESPONSE_TAG = '[Response]';
 
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         const isGraphQL = (context.getType() as string) === 'graphql';
@@ -37,7 +38,7 @@ export class AccessInterceptor implements NestInterceptor {
 
         return next.handle().pipe(
             tap((data) => {
-                accessLogger.info(this.TAG, {
+                accessLogger.info(this.RESPONSE_TAG, {
                     method: req.method,
                     url: req.originalUrl,
                     statusCode: res.statusCode,
@@ -46,7 +47,7 @@ export class AccessInterceptor implements NestInterceptor {
             }),
             catchError((err) => {
                 // 失敗的情況也要記 log
-                accessLogger.error(this.TAG, {
+                accessLogger.error(this.RESPONSE_TAG, {
                     method: req.method,
                     url: req.originalUrl,
                     statusCode: res?.statusCode,
@@ -66,6 +67,6 @@ export class AccessInterceptor implements NestInterceptor {
             url: req.originalUrl,
             body: req.body,
         };
-        logger.info(this.TAG, info);
+        logger.info(this.REQUEST_TAG, info);
     }
 }
