@@ -1,12 +1,15 @@
-import { DatabaseService } from '../../database/database.service';
-import { Injectable } from '@nestjs/common';
-import { PoliciesDB } from '@/database/schema/policies.schema';
-import { PolicyData } from './types/policies.type';
-import { getLogger } from '@/logger/logger.service';
+import { DatabaseService } from '@/modules/database/database.service';
+import { Injectable, Scope } from '@nestjs/common';
+import { PoliciesDB } from '@/modules/database/schema/policies.schema';
+import { PolicyData } from '@/models/policies/types/policies.type';
+import { ContextService } from '@/modules/context/context.service';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class PolicyRepository {
-    constructor(private readonly db: DatabaseService) {}
+    constructor(
+        private readonly contextService: ContextService,
+        private readonly db: DatabaseService,
+    ) {}
 
     async queryPolicy({
         policyID,
@@ -16,7 +19,7 @@ export class PolicyRepository {
         policyholderCode?: number | undefined;
     }) {
         const TAG = '[透過保單編號取得保單]';
-        const logger = getLogger();
+        const logger = this.contextService.getLogger();
         try {
             const repo = this.db.dataSource
                 .getRepository(PoliciesDB)
@@ -51,7 +54,7 @@ export class PolicyRepository {
 
     async insertPolicy(description: string, holderId: number, premium: number) {
         const TAG = '[寫入保單]';
-        const logger = getLogger();
+        const logger = this.contextService.getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PoliciesDB);
             const newPolicy = repo.create({
@@ -73,7 +76,7 @@ export class PolicyRepository {
         premium: number | undefined,
     ) {
         const TAG = '[更新保單]';
-        const logger = getLogger();
+        const logger = this.contextService.getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PoliciesDB);
             const policy = await repo.findOneBy({ id });

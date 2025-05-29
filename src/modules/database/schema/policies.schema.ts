@@ -7,7 +7,7 @@ import {
     UpdateDateColumn,
     JoinColumn,
 } from 'typeorm';
-import { PolicyholdersDB } from './policyholders.schema';
+import { PolicyholdersDB } from '@/modules/database/schema/policyholders.schema';
 
 @Entity('policies')
 export class PoliciesDB {

@@ -1,13 +1,15 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { PolicyholderData } from './types/policyholders.type';
-import { PolicyholdersRepository as Repository } from './policyholders.repository';
-import { PolicyholdersDB } from '@/database/schema/policyholders.schema';
-import { Policyholder } from './types/policyholders.gql.type';
-import { getLogger } from '@/logger/logger.service';
+import { PolicyholderData } from '@/models/policyholders/types/policyholders.type';
+import { PolicyholdersRepository as Repository } from '@/models/policyholders/policyholders.repository';
+import { Policyholder } from '@/models/policyholders/types/policyholders.gql.type';
+import { ContextService } from '@/modules/context/context.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyholderService {
-    constructor(private readonly repository: Repository) {}
+    constructor(
+        private readonly contextService: ContextService,
+        private readonly repository: Repository,
+    ) {}
 
     /**
      * 執行 透過保戶編號取得保戶階層 流程
@@ -80,7 +82,7 @@ export class PolicyholderService {
         introducerCode: number | undefined,
     ) {
         const TAG = '[更新保戶資訊]';
-        const logger = getLogger();
+        const logger = this.contextService.getLogger();
         if (!name && !introducerCode) {
             logger.error(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
             throw Error('invalid parameters');

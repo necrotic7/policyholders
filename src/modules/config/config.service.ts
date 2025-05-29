@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
-import { Config } from './config.type';
+import { Config } from '@/modules/config/config.type';
 import pkg from '@/../package.json';
 
 @Injectable()
@@ -22,7 +22,11 @@ export class ConfigService implements OnModuleInit {
             },
             log: {
                 outLogPath:
-                    this.nestConfig.get<string>('OUTLOG_PATH') ?? 'log/app.log',
+                    this.nestConfig.get<string>('OUT_LOG_PATH') ??
+                    'log/out.log',
+                accessLogPath:
+                    this.nestConfig.get<string>('ACCESS_LOG_PATH') ??
+                    'log/access.log',
             },
             logstash: {
                 host:

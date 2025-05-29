@@ -1,19 +1,21 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from '@/modules/database/database.module';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import { PolicyModule } from './models/policies/policies.module';
-import { PolicyholderModule } from './models/policyholders/policyholders.module';
-import { LoggerModule } from './logger/logger.module';
-import { LogstashModule } from './logstash/logstash.module';
-import { ConfigModule } from './config/config.module';
+import { PolicyModule } from '@/models/policies/policies.module';
+import { PolicyholderModule } from '@/models/policyholders/policyholders.module';
+import { LoggerModule } from '@/modules/logger/logger.module';
+import { LogstashModule } from '@/modules/logstash/logstash.module';
+import { ConfigModule } from '@/modules/config/config.module';
+import { ContextModule } from '@/modules/context/context.module';
 @Module({
     imports: [
         NestConfigModule.forRoot({ isGlobal: true }), // 載入 .env 設定
         ConfigModule,
+        ContextModule,
         LogstashModule,
         LoggerModule,
         DatabaseModule,
@@ -24,6 +26,7 @@ import { ConfigModule } from './config/config.module';
             autoSchemaFile: 'schema.gql',
             // 禁用playground
             playground: false,
+            context: ({ req, res }) => ({ req, res }),
             // 啟用sandbox
             plugins: [ApolloServerPluginLandingPageLocalDefault()],
             buildSchemaOptions: {
@@ -37,4 +40,9 @@ import { ConfigModule } from './config/config.module';
         }),
     ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        // 可以在apply中註冊middleware
+        consumer.apply().forRoutes('*');
+    }
+}
