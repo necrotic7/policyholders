@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LogstashService } from './logstash.service';
+import { LogstashService } from '@/modules/logstash/logstash.service';
 
 @Module({
     providers: [LogstashService],

@@ -1,9 +1,8 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { PolicyholderData } from './types/policyholders.type';
-import { PolicyholdersRepository as Repository } from './policyholders.repository';
-import { Policyholder } from './types/policyholders.gql.type';
+import { PolicyholderData } from '@/models/policyholders/types/policyholders.type';
+import { PolicyholdersRepository as Repository } from '@/models/policyholders/policyholders.repository';
+import { Policyholder } from '@/models/policyholders/types/policyholders.gql.type';
 import { getGeneralLogger } from '@/modules/logger/logger.service';
-import { BaseService } from '@/base/base.service';
 import { ContextService } from '@/modules/context/context.service';
 
 @Injectable({ scope: Scope.REQUEST })

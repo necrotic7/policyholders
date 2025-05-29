@@ -1,6 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { DatabaseService } from '../../modules/database/database.service';
-import { PolicyholderData } from './types/policyholders.type';
+import { DatabaseService } from '@/modules/database/database.service';
+import { PolicyholderData } from '@/models/policyholders/types/policyholders.type';
 import { PolicyholdersDB } from '@/modules/database/schema/policyholders.schema';
 import { ContextService } from '@/modules/context/context.service';
 

@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 import { Query, Mutation, Resolver, Args, Context } from '@nestjs/graphql';
-import { PolicyholderService as Service } from './policyholders.service';
-import { Policyholder } from './types/policyholders.gql.type';
+import { PolicyholderService as Service } from '@/models/policyholders/policyholders.service';
+import { Policyholder } from '@/models/policyholders/types/policyholders.gql.type';
 import {
     CreatePolicyholderInput,
     UpdatePolicyholderInput,
-} from './types/policyholders.gql.type';
+} from '@/models/policyholders/types/policyholders.gql.type';
 import { ContextService } from '@/modules/context/context.service';
 
 @Resolver((_of) => Policyholder)

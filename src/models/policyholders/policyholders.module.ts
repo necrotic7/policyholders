@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PolicyholderResolver } from './policyholders.resolver';
-import { PolicyholderService } from './policyholders.service';
-import { PolicyholdersRepository } from './policyholders.repository';
+import { PolicyholderResolver } from '@/models/policyholders/policyholders.resolver';
+import { PolicyholderService } from '@/models/policyholders/policyholders.service';
+import { PolicyholdersRepository } from '@/models/policyholders/policyholders.repository';
 import { DatabaseModule } from '@/modules/database/database.module';
 
 @Module({

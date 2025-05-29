@@ -1,9 +1,13 @@
 import * as winston from 'winston';
 import moment from 'moment';
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { LogstashService } from '../logstash/logstash.service';
+import { LogstashService } from '@/modules/logstash/logstash.service';
 import { ConfigService } from '@/modules/config/config.service';
-import { EnumLoggerLevel, EnumLoggerType, Logger } from './logger.type';
+import {
+    EnumLoggerLevel,
+    EnumLoggerType,
+    Logger,
+} from '@/modules/logger/logger.type';
 import * as _ from 'lodash';
 
 let GlobalLogger: LoggerService;

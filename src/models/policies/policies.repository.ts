@@ -1,7 +1,7 @@
-import { DatabaseService } from '../../modules/database/database.service';
+import { DatabaseService } from '@/modules/database/database.service';
 import { Injectable } from '@nestjs/common';
 import { PoliciesDB } from '@/modules/database/schema/policies.schema';
-import { PolicyData } from './types/policies.type';
+import { PolicyData } from '@/models/policies/types/policies.type';
 import { getGeneralLogger } from '@/modules/logger/logger.service';
 
 @Injectable()

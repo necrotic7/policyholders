@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
-import { PolicyService as Service } from './policies.service';
-import { Policy } from './types/policies.gql.type';
-import { PolicyArgs } from './types/policies.gql.type';
+import { PolicyService as Service } from '@/models/policies/policies.service';
+import { Policy } from '@/models/policies/types/policies.gql.type';
+import { PolicyArgs } from '@/models/policies/types/policies.gql.type';
 import {
     CreatePolicyInput,
     UpdatePolicyInput,
-} from './types/policies.gql.type';
+} from '@/models/policies/types/policies.gql.type';
 @Resolver((_of) => Policy)
 export class PolicyResolver {
     constructor(private readonly service: Service) {}

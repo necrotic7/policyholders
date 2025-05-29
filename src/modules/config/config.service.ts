@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService as NestConfigService } from '@nestjs/config';
-import { Config } from './config.type';
+import { Config } from '@/modules/config/config.type';
 import pkg from '@/../package.json';
 
 @Injectable()

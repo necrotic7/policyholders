@@ -1,5 +1,5 @@
-import { PolicyRepository as Repository } from './policies.repository';
-import { PolicyData } from './types/policies.type';
+import { PolicyRepository as Repository } from '@/models/policies/policies.repository';
+import { PolicyData } from '@/models/policies/types/policies.type';
 import { Injectable, Scope } from '@nestjs/common';
 
 // 讓 Service 變成 Request Scoped，每個請求都會有新的 instance
