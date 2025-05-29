@@ -1,5 +1,5 @@
-import { getLogger } from '@/logger/logger.service';
-import { EnumLoggerType, Logger } from '@/logger/logger.type';
+import { getLogger } from '@/modules/logger/logger.service';
+import { EnumLoggerType, Logger } from '@/modules/logger/logger.type';
 import {
     Injectable,
     NestInterceptor,

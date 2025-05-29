@@ -6,11 +6,14 @@ import {
     CreatePolicyholderInput,
     UpdatePolicyholderInput,
 } from './types/policyholders.gql.type';
-import { Logger } from '@/logger/logger.type';
+import { ContextService } from '@/modules/context/context.service';
 
 @Resolver((_of) => Policyholder)
 export class PolicyholderResolver {
-    constructor(private readonly service: Service) {}
+    constructor(
+        private readonly contextService: ContextService,
+        private readonly service: Service,
+    ) {}
 
     @Query((_returns) => Policyholder, {
         description: '查詢保戶',
@@ -20,7 +23,7 @@ export class PolicyholderResolver {
         @Context() ctx: any,
         @Args('code', { description: '保戶編號' }) code: number,
     ) {
-        this.service.Logger = ctx.logger;
+        this.contextService.setLogger(ctx.logger);
         const result = await this.service.getPolicyholderByCode(code);
         return result;
     }

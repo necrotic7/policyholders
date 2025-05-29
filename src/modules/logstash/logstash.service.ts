@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Writable } from 'stream';
 import * as net from 'net';
-import { ConfigService } from '@/config/config.service';
+import { ConfigService } from '@/modules/config/config.service';
 
 @Injectable()
 export class LogstashService extends Writable implements OnModuleInit {

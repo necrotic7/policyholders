@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../../database/database.service';
+import { Injectable, Scope } from '@nestjs/common';
+import { DatabaseService } from '../../modules/database/database.service';
 import { PolicyholderData } from './types/policyholders.type';
-import { PolicyholdersDB } from '@/database/schema/policyholders.schema';
-import { getGeneralLogger } from '@/logger/logger.service';
+import { PolicyholdersDB } from '@/modules/database/schema/policyholders.schema';
+import { ContextService } from '@/modules/context/context.service';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class PolicyholdersRepository {
-    constructor(private readonly db: DatabaseService) {}
+    constructor(
+        private readonly contextService: ContextService,
+        private readonly db: DatabaseService,
+    ) {}
 
     /**
      * 透過代號取得保戶資訊
@@ -15,7 +18,7 @@ export class PolicyholdersRepository {
      */
     async queryPolicyDataByCode(code: number) {
         const TAG = '[透過保戶編號取得保戶資訊]';
-        const logger = getGeneralLogger();
+        const logger = this.contextService.getLogger();
 
         try {
             const db = this.db.dataSource;
@@ -65,7 +68,7 @@ export class PolicyholdersRepository {
      */
     async queryPolicyTopDataByChildCode(code: number) {
         const TAG = '[透過子代號取得父保戶資訊]';
-        const logger = getGeneralLogger();
+        const logger = this.contextService.getLogger();
         try {
             // 查詢指定保戶編號的父級資料與其下級
             const sql = `
@@ -112,7 +115,7 @@ export class PolicyholdersRepository {
      */
     async queryParentForCreate() {
         const TAG = '[找出新保戶的上線]';
-        const logger = getGeneralLogger();
+        const logger = this.contextService.getLogger();
         try {
             const sql = `
                 with p as (
@@ -159,7 +162,7 @@ export class PolicyholdersRepository {
         introducerId: number | undefined,
     ) {
         const TAG = '[寫入新保戶資料]';
-        const logger = getGeneralLogger();
+        const logger = this.contextService.getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PolicyholdersDB);
             const newPolicyholder = repo.create({
@@ -182,7 +185,7 @@ export class PolicyholdersRepository {
         introducerId: number | undefined,
     ) {
         const TAG = '[更新保戶資訊]';
-        const logger = getGeneralLogger();
+        const logger = this.contextService.getLogger();
         try {
             const repo = this.db.dataSource.getRepository(PolicyholdersDB);
             const holder = await repo.findOneBy({ id });

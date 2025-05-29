@@ -2,21 +2,16 @@ import { Injectable, Scope } from '@nestjs/common';
 import { PolicyholderData } from './types/policyholders.type';
 import { PolicyholdersRepository as Repository } from './policyholders.repository';
 import { Policyholder } from './types/policyholders.gql.type';
-import { getGeneralLogger } from '@/logger/logger.service';
-import { Logger } from '@/logger/logger.type';
+import { getGeneralLogger } from '@/modules/logger/logger.service';
+import { BaseService } from '@/base/base.service';
+import { ContextService } from '@/modules/context/context.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyholderService {
-    private logger: Logger;
-    constructor(private readonly repository: Repository) {}
-
-    set Logger(logger: Logger) {
-        this.logger = logger;
-    }
-
-    get Logger() {
-        return this.logger;
-    }
+    constructor(
+        private readonly contextService: ContextService,
+        private readonly repository: Repository,
+    ) {}
 
     /**
      * 執行 透過保戶編號取得保戶階層 流程
