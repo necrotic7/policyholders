@@ -6,7 +6,7 @@
 
 一個簡單的 Node.js API Server，負責管理保戶與保單，提供新增、修改、查詢等功能。  
 
-> 🚀 **當前 `master` 分支對應 `07-typeorm-postgresql`**
+> 🚀 **當前 `master` 分支對應 `08-log`**
 
 本專案透過不同分支（branch）來測試各種技術組合，每個分支代表不同的技術演進階段：  
 
@@ -19,7 +19,7 @@
 | 05-nestjs | TypeScript | NestJS | GraphQL | Oracle, nestjs/graphql, nestjs/apollo | 在 04 版基礎上，改用 NestJS 作為 API 框架，並使用 NestJS 相關套件來撰寫與編譯 Schema |
 | 06-deploy | TypeScript | NestJS | GraphQL | Oracle, nestjs/graphql, nestjs/apollo, Docker | 在 05 版基礎上，新增部署腳本，可透過 Docker 啟動本地 Oracle DB 與 API Server |
 | 07-typeorm-postgresql | TypeScript | NestJS | GraphQL | PostgreSql, typeorm, nestjs/graphql, nestjs/apollo, Docker | 在 06 版基礎上，將db換成postgresql並搭配typeorm做使用，並且調整部署腳本支援本地與遠端部署 |
-
+| 08-log | TypeScript | NestJS | GraphQL | PostgreSql, typeorm, nestjs/graphql, nestjs/apollo, Docker | 在 07 版基礎上，加上access log與out log，並支援將log寫入logstash，可直接搭配elk做使用 |
 
 # Local Startup
 
