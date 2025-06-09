@@ -47,4 +47,11 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
             }
         }
     }
+
+    async getTx() {
+        const qr = this.dataSource.createQueryRunner();
+        await qr.connect();
+        await qr.startTransaction();
+        return qr;
+    }
 }

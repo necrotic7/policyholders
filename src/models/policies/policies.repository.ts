@@ -1,14 +1,14 @@
-import { DatabaseService } from '@/modules/database/database.service';
 import { Injectable, Scope } from '@nestjs/common';
 import { PoliciesDB } from '@/modules/database/schema/policies.schema';
 import { PolicyData } from '@/models/policies/types/policies.type';
 import { ContextService } from '@/modules/context/context.service';
+import { RepositoryBase } from '@/modules/database/repository.base';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyRepository {
     constructor(
         private readonly contextService: ContextService,
-        private readonly db: DatabaseService,
+        readonly base: RepositoryBase,
     ) {}
 
     async queryPolicy({
@@ -21,8 +21,8 @@ export class PolicyRepository {
         const TAG = '[透過保單編號取得保單]';
         const logger = this.contextService.getLogger();
         try {
-            const repo = this.db.dataSource
-                .getRepository(PoliciesDB)
+            const repo = this.base
+                .getRepo(PoliciesDB)
                 .createQueryBuilder('p')
                 .select([
                     'p.id as id',
@@ -56,7 +56,7 @@ export class PolicyRepository {
         const TAG = '[寫入保單]';
         const logger = this.contextService.getLogger();
         try {
-            const repo = this.db.dataSource.getRepository(PoliciesDB);
+            const repo = this.base.getRepo(PoliciesDB);
             const newPolicy = repo.create({
                 description,
                 holderId,
@@ -78,7 +78,7 @@ export class PolicyRepository {
         const TAG = '[更新保單]';
         const logger = this.contextService.getLogger();
         try {
-            const repo = this.db.dataSource.getRepository(PoliciesDB);
+            const repo = this.base.getRepo(PoliciesDB);
             const policy = await repo.findOneBy({ id });
             if (!policy) throw Error(`cant find policy id (${id})`);
 

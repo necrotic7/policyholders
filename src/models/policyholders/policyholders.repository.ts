@@ -1,14 +1,14 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { DatabaseService } from '@/modules/database/database.service';
 import { PolicyholderData } from '@/models/policyholders/types/policyholders.type';
 import { PolicyholdersDB } from '@/modules/database/schema/policyholders.schema';
 import { ContextService } from '@/modules/context/context.service';
+import { RepositoryBase } from '@/modules/database/repository.base';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PolicyholdersRepository {
     constructor(
         private readonly contextService: ContextService,
-        private readonly db: DatabaseService,
+        readonly base: RepositoryBase,
     ) {}
 
     /**
@@ -21,7 +21,6 @@ export class PolicyholdersRepository {
         const logger = this.contextService.getLogger();
 
         try {
-            const db = this.db.dataSource;
             // 查詢指定保戶編號的資料與其下級
             const sql = `
                 WITH RECURSIVE tree AS (
@@ -46,7 +45,9 @@ export class PolicyholdersRepository {
                 FROM tree t
             `;
 
-            const result = (await db.query(sql, [code])) as PolicyholderData[];
+            const result = (await this.base.query(sql, [
+                code,
+            ])) as PolicyholderData[];
             if (!result || result?.length == 0) {
                 logger.error(TAG, `找不到保戶編號(${code})`);
                 throw Error('policy not found');
@@ -95,7 +96,7 @@ export class PolicyholdersRepository {
                 FROM tree t
             `;
 
-            const result = (await this.db.dataSource.query(sql, [
+            const result = (await this.base.query(sql, [
                 code,
             ])) as PolicyholderData[];
             if (!result || result?.length == 0) {
@@ -141,9 +142,7 @@ export class PolicyholdersRepository {
                 limit 1
             `;
 
-            const result = (await this.db.dataSource.query(
-                sql,
-            )) as PolicyholderData[];
+            const result = (await this.base.query(sql)) as PolicyholderData[];
 
             if (!result || result?.length != 1) {
                 logger.error(TAG, '找不到上線資料');
@@ -164,7 +163,7 @@ export class PolicyholdersRepository {
         const TAG = '[寫入新保戶資料]';
         const logger = this.contextService.getLogger();
         try {
-            const repo = this.db.dataSource.getRepository(PolicyholdersDB);
+            const repo = this.base.getRepo(PolicyholdersDB);
             const newPolicyholder = repo.create({
                 name,
                 parentId,
@@ -187,7 +186,7 @@ export class PolicyholdersRepository {
         const TAG = '[更新保戶資訊]';
         const logger = this.contextService.getLogger();
         try {
-            const repo = this.db.dataSource.getRepository(PolicyholdersDB);
+            const repo = this.base.getRepo(PolicyholdersDB);
             const holder = await repo.findOneBy({ id });
             if (!holder) throw Error(`cant find policyholder code ${id}`);
 

@@ -23,15 +23,24 @@ export class PolicyService {
         holderId: number,
         premium: number,
     ): Promise<PolicyData> {
-        const newPolicy = await this.repository.insertPolicy(
-            description,
-            holderId,
-            premium,
-        );
-        const result = await this.repository.queryPolicy({
-            policyID: newPolicy.id,
-        });
-        return result[0];
+        try {
+            // 初始化連線
+            await this.repository.base.getTransaction();
+            const newPolicy = await this.repository.insertPolicy(
+                description,
+                holderId,
+                premium,
+            );
+            await this.repository.base.commit();
+
+            const result = await this.repository.queryPolicy({
+                policyID: newPolicy.id,
+            });
+            return result[0];
+        } catch (err) {
+            await this.repository.base.rollback();
+            throw err;
+        }
     }
 
     async updatePolicy(
@@ -39,8 +48,17 @@ export class PolicyService {
         description: string | undefined,
         premium: number | undefined,
     ) {
-        await this.repository.updatePolicy(id, description, premium);
-        const result = await this.repository.queryPolicy({ policyID: id });
-        return result[0];
+        try {
+            // 初始化連線
+            await this.repository.base.getTransaction();
+            await this.repository.updatePolicy(id, description, premium);
+            await this.repository.base.commit();
+
+            const result = await this.repository.queryPolicy({ policyID: id });
+            return result[0];
+        } catch (err) {
+            await this.repository.base.rollback();
+            throw err;
+        }
     }
 }
