@@ -46,34 +46,40 @@ export class PolicyholderService {
      * 執行 新增保戶流程
      */
     async createPolicyholder(name: string, introducerCode?: number) {
-        const parentData =
-            (await this.repository.queryParentForCreate()) as PolicyholderData;
-        const newPolicyData = await this.repository.insertPolicyholder(
-            parentData?.code ?? 0,
-            name,
-            introducerCode,
-        );
-        if (parentData) {
-            if (!parentData.left_child_code) {
-                await this.repository.updatePolicyHolder(
-                    parentData.code,
-                    undefined,
-                    newPolicyData.id,
-                    undefined,
-                    undefined,
-                );
-            } else {
-                await this.repository.updatePolicyHolder(
-                    parentData.code,
-                    undefined,
-                    undefined,
-                    newPolicyData.id,
-                    undefined,
-                );
+        try {
+            await this.repository.base.getTransaction();
+            const parentData =
+                (await this.repository.queryParentForCreate()) as PolicyholderData;
+            const newPolicyData = await this.repository.insertPolicyholder(
+                parentData?.code ?? 0,
+                name,
+                introducerCode,
+            );
+            if (parentData) {
+                if (!parentData.left_child_code) {
+                    await this.repository.updatePolicyHolder(
+                        parentData.code,
+                        undefined,
+                        newPolicyData.id,
+                        undefined,
+                        undefined,
+                    );
+                } else {
+                    await this.repository.updatePolicyHolder(
+                        parentData.code,
+                        undefined,
+                        undefined,
+                        newPolicyData.id,
+                        undefined,
+                    );
+                }
             }
+            await this.repository.base.commit();
+            return this.getPolicyholderByCode(newPolicyData.id);
+        } catch (err) {
+            await this.repository.base.rollback();
+            throw err;
         }
-
-        return this.getPolicyholderByCode(newPolicyData.id);
     }
 
     async updatePolicyholder(
@@ -83,19 +89,25 @@ export class PolicyholderService {
     ) {
         const TAG = '[更新保戶資訊]';
         const logger = this.contextService.getLogger();
-        if (!name && !introducerCode) {
-            logger.error(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
-            throw Error('invalid parameters');
+        try {
+            await this.repository.base.getTransaction();
+            if (!name && !introducerCode) {
+                logger.error(TAG, `錯誤：name 與 introducer_code 至少需填一個`);
+                throw Error('invalid parameters');
+            }
+            await this.repository.updatePolicyHolder(
+                code,
+                name,
+                undefined,
+                undefined,
+                introducerCode,
+            );
+            await this.repository.base.commit();
+            return this.getPolicyholderByCode(code);
+        } catch (err) {
+            await this.repository.base.rollback();
+            throw err;
         }
-        await this.repository.updatePolicyHolder(
-            code,
-            name,
-            undefined,
-            undefined,
-            introducerCode,
-        );
-
-        return this.getPolicyholderByCode(code);
     }
 
     /**
